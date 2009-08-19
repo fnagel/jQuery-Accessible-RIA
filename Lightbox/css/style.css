@@ -1,0 +1,84 @@
+/* Demo styles
+----------------------------------*/
+body {
+	font-family: "Arial","Verdana","sans-serif";
+	margin: 1em;
+	font-size: 16px;
+}
+#wrapper {
+	width: 31.5em;
+}
+.sub {
+	font-size: 0.7em;
+}
+h1 {
+	font-family:"Trebuchet MS","Helvetica";
+	border-bottom: 1px solid #EEEEEE;
+}
+.ui-dialog-titlebar {
+	font-size: 1em;
+	padding:0.1em 0.3em;
+}
+.ui-dialog .ui-dialog-titlebar {
+	font-size: 0.9em;
+	padding:0 0.3em;
+	margin: 1em 0 0 0;
+}
+p {
+	font-size: 0.6em;
+}
+button {
+	font-size: 0.6em !important;
+}
+a img{
+	border: 0;
+}
+#copyright {
+font-size: 0.6em;
+}
+
+/* Lightbox Styles
+----------------------------------*/
+#ui-lightbox-wrapper {
+	display: none;
+	position: absolute;
+	width: 20em;
+	height: auto;
+}
+#ui-lightbox-image {
+	height: 10em;
+	margin: 1em 0 0 0;
+	background: url(ajax-loader.gif) no-repeat center center;
+}
+#ui-lightbox-image img{
+	display: none;
+}
+
+/* Picture Styles
+----------------------------------*/
+.ui-widget-content {
+	padding: 0 1em 1em 1em;
+}
+.ui-dialog{
+	padding: 0 1em 0 1em;
+}
+.box {
+	padding: 0 1em 1em 1em;
+	margin: 0 0 1em 0;
+}
+a.singleLightbox{
+	margin: 0 0.8em 0 0;
+}
+ul{
+	margin: 0;
+	padding: 0;
+}
+ul li{
+	float: left;
+	margin: 0 0.9em 0 0;
+	list-style-type:none;
+}
+ul li.last, 
+a.last{
+	margin: 0;
+}

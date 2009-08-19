@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
+	<title>ui.formValidator - jQuery UI</title>
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	<!--[if gte IE 6]>	
+		<style type="text/css">@import url(css/style_ie.css);</style>
+	<![endif]-->	
+</head>
+<body>
+<h1>jQuery UI - ui.formValidator</h1>
+<div id="controls">
+	<a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a> | <a href="#" id="send">send</a>
+</div>
+<div id="wrapper">
+	<form id="form" action="ui.formValidator.html" method="post" enctype="multipart/form-data">
+		<div id="ui-formular-info" class="info ui-state-highlight ui-corner-all">
+			<p>
+				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+				Felder mit einem <em>*</em> sind Pflichtfelder.
+			</p>
+		</div>
+		<div id="ui-formular-error"></div>
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Inputfelder</legend>
+			
+			<label for="inputtext">Einzeiliges Eingabefeld</label>
+			<input type="text" id="inputtext" name="inputtext" class="text ui-widget-content ui-corner-all" />
+						
+			<label for="txtarea">Mehrzeiliger Eingabebereich <em title="Pflichtfeld">*</em></label>
+			<textarea id="txtarea" name="txtarea" rows="" cols="" class="text ui-widget-content ui-corner-all"></textarea>
+						
+			<label for="password1">Passwortfeld <em title="Pflichtfeld">*</em></label>
+			<input name="password1" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
+			
+			<label for="password2">Passwortfeld Wiederholung <em title="Pflichtfeld">*</em></label>
+			<input name="password2" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
+		</fieldset>	
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Checkboxen</legend>
+			<div class="pair">
+				<input type="checkbox" id="checkbox_1" name="checkboxset" class="radio" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_1">Option 1</label>			
+			</div>	
+			<div class="pair">
+				<input type="checkbox" id="checkbox_2" name="checkboxset" class="radio" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_2">Option 2</label>				
+			</div>
+			<div class="pair">
+				<input type="checkbox" id="checkbox_3" name="checkboxset" class="radio" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_3">Option 3</label>			
+			</div>
+			<div class="pair">
+				<input type="checkbox" id="checkbox_4" name="checkboxset" class="radio" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_4">Option 4</label>			
+			</div>
+		</fieldset>	
+		
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Radioboxen</legend>
+			<div class="pair">
+				<input type="radio" id="vote_1" value="Option 1" name="vote" class="radio"/>
+                <label class="ui-widget-content ui-corner-all" for="vote_1">Option 1</label>
+			</div>	
+			<div class="pair">
+				<input type="radio" id="vote_2" name="vote" class="radio"/>
+                <label class="ui-widget-content ui-corner-all" for="vote_2">Option 2</label>
+			</div>	
+			<div class="pair">
+				<input type="radio" id="vote_3" name="vote" class="radio"/>
+                <label class="ui-widget-content ui-corner-all" for="vote_3">Option 3</label>	
+			</div>			
+		</fieldset>	
+					
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Sonstige Formularfelder</legend>
+
+			<label for="selectset">Auswahlliste</label>
+			<select name="selectset" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
+				<option>Option 1</option>
+				<option>Option 2</option>
+				<option>Option 3</option>
+				<option>Option 4</option>
+				<option>Option 5</option>
+			</select>		
+					
+			<label for="upload">Datei Upload</label>
+			<input type="file" name="upload" id="upload"  class="ui-widget-content" accept="image/jpeg, image/gif, image/png" />
+		</fieldset>		
+		
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
+			<div class="pair">
+				<input type="checkbox" id="confirm_1" name="confirm" class="radio" />
+                <label class="ui-widget-content ui-corner-all" for="confirm_1">Sind alle Angaben korrekt?</label>	
+			</div>	
+			
+			<label for="captcha">Capctha = 123456<em title="Pflichtfeld">*</em></label>
+			<input type="text" id="captcha" name="captcha" class="text ui-widget-content ui-corner-all" />
+			
+			<input type="submit" id="submit" value="Absenden" class="submit ui-state-default ui-corner-all" />
+			<input type="reset" value="Abbrechen" class="submit ui-state-default ui-corner-all" />
+		</fieldset>		
+	</form>
+</div>
+<div id="copyright">
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/80x15.png" /></a><br />Diese(s) Werk bzw. Inhalt von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Felix Nagel f&#252;r Namics (Deutschland) GmbH</span> steht unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Namensnennung-Weitergabe unter gleichen Bedingungen 3.0 Unported Lizenz</a>.<br />&#220;ber diese Lizenz hinausgehende Erlaubnisse erhalten Sie m&#246;glicherweise unter <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.felixnagel.com" rel="cc:morePermissions">http://www.felixnagel.com</a>.
+</div>	
+	
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/ui.core.js"></script>
+	<script type="text/javascript" src="js/ui.formValidator.js"></script>	
+	<script type="text/javascript">	
+		$(function() {			
+			var formular = $("#form").formValidator({
+				forms: {			
+					inputtext: {
+						rules: {
+							required: true,		
+							regEx: "email"
+						},
+						msg: {
+							required: "Der einzeilige Eingabebereich muss ausgefüllt werden.",	
+							regEx: "Das einzeilige Eingabefeld muss eine Email Adresse enthalten."
+						}
+					},
+					txtarea: {
+						rules: {
+							required: true,			
+							lengthMin: 2,
+							lengthMax: 10
+						},
+						msg: {
+							required: "Der mehrzeiliger Eingabebereich muss ausgefüllt werden.",		
+							length: "Das mehrzeilige Eingabefeld muss zwischen 2 und 10 Zeichen enthalten."
+						}
+					},
+					password1: {
+						rules: {
+							lengthMin: 6,
+							lengthMax: 15,
+							required: false
+						},
+						msg: {
+							required: "Das erste Passwortfeld muss ausgefüllt werden.",
+							length: "Das erste Passwortfeld muss muss zwischen 6 und 15 Zeichen enthalten."
+						}
+					},
+					password2: {
+						rules: {
+							required: false,
+							equalTo: "password1"
+						},
+						msg: {
+							required: "Das zweite Passwortfeld muss ausgefüllt werden.",
+							equalTo: "Die Passwörter müssen übereinstimmen."
+						}
+					},
+					checkboxset: {
+						rules: {
+							lengthMin: 2,
+							lengthMax: 3
+						},
+						msg: {
+							length: "Es müssen zwischen 2 und 3 Checkboxen aktiviert werden."
+						}
+					},
+					vote: {
+						rules: {
+							required: true
+						},
+						msg: {
+							required: "Eines der Radioboxen muss ausgefüllt werden."
+						}
+					},
+					selectset: {
+						rules: {
+							lengthMin: 2,
+							lengthMax: 3,
+							required: true
+						},
+						msg: {
+							length: "Es müssen zwischen 2 und 3 Einträge aktiviert werden.",
+							required: "Ein Eintrag muss gewählt werden."
+						}
+					},
+					upload: {
+						rules: {
+							required: false,
+							regEx: ".(?:jpg|jpeg|gif|png)"
+						},
+						msg: {
+							required: "Es muss eine Datei hochgeladen werden.",
+							regEx: "Die hochgeladene Datei muss ein Bild sein."
+						}
+					},					
+					confirm: {
+						rules: {
+							required: true
+						},
+						msg: {
+							required: "Bitte kontrollieren Sie die Daten."
+						}
+					},							
+					captcha: {
+						rules: {
+							required: true,
+							regEx: "captcha"
+						},
+						msg: {
+							required: "Das Captcha muss eingegeben werden.",
+							regEx: "Das Captcha ist falsch eingegeben"
+						}
+					}
+				},
+				validateLive: true,
+				disabled: false,
+				submitHowTo: "iframe",
+				submitUrl: "server.php",				
+				onInit: function(){ 
+					//console.warn("Init abgeschloßen");
+				},
+				onShowErrors: function(){ 
+					//console.warn("Error angezeigt");	
+				},
+				checkCaptcha: function(event, value){ 
+					return (value == "123456") ? true : false;					
+				}			
+			});	
+
+			$("#destroy").click(function (event) { 
+				formular.formValidator('destroy');
+			});		
+			$("#disable").click(function (event) { 
+				formular.formValidator('disable');
+			});		
+			$("#send").click(function (event) { 
+				formular.formValidator('formSubmitted');
+			});			
+			
+		});		
+	</script>
+</body>
+</html>

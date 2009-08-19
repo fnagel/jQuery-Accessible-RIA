@@ -1,0 +1,98 @@
+/* Demo styles
+----------------------------------*/
+body {
+	font-family: "Arial","Verdana","sans-serif";
+	margin: 1em;
+}
+#wrapper {
+	width: 20em;
+}
+h1 {
+	font-family:"Trebuchet MS","Helvetica";
+	border-bottom: 1px solid #EEEEEE;
+}
+p {
+	font-size: 0.8em;
+}
+#controls {
+	position: absolute;
+	font-size: 0.6em;
+	top: 0;
+}
+#controls a{
+	color: gray;
+}
+#copyright {
+font-size: 0.6em;
+}
+
+/* Form Styling
+----------------------------------*/
+fieldset {
+	border: 0;
+	margin: 0 0 1em 0;
+	padding: 1em;
+}
+*:first-child+html fieldset {
+	margin: 0 0 2em 0;
+}
+legend {
+	padding: 0.1em 0.3em;
+}
+*:first-child+html legend {
+	margin: -1.5em 0 1em 0;
+}
+label, input {
+	display:block;
+	font-size: 0.8em;
+}
+label {
+	cursor: pointer;
+}
+.text {
+	margin: 0 0 1em 0;
+	padding: 0.2em;
+	width: 97%;
+}
+
+input.radio {
+	float: left;
+	margin: 0.1em 1em 0 0;
+}
+.pair {
+	clear: both;
+	margin: 0.5em 0;
+}
+.pair input{
+	margin: 0.25em 0.5em 0 0.3em;
+}
+*:first-child+html .pair input,
+*:first-child+html .pair input {
+	margin: -0.05em 0.5em 0 0.1em;
+}
+* html .pair input {
+	margin: -0.07em 0.3em 0 -0;
+}
+.submit {
+	float: left;
+	margin: 0.5em 1em;
+	cursor: pointer;
+}
+
+
+/*Info and error boxes
+----------------------------------*/
+.info {
+	margin: 0 0 1em 0;
+	padding: 0.2em 0.5em;
+}
+#ui-formular-error li {
+	font-size: 0.8em;
+}
+
+#ui-formular-error{
+	position: absolute;
+	left: 22em;
+	top: 5.3em;
+	width: 20em;
+}

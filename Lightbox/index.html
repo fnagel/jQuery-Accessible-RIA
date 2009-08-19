@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=charset=ISO-8859-1" />
+	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
+	<title>ui.ariaLightbox - jQuery UI</title>
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="css/style.css" rel="stylesheet" />	
+</head>
+<body>
+<h1>jQuery UI - ui.ariaLightbox</h1>
+<div id="wrapper">
+	
+	<div class="box ui-widget-content ui-corner-all ui-helper-clearfix">
+		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Einzelbilder</h2>
+		<a class="singleLightbox" href="pics/DirtyFlowers.jpg"><img src="pics/thumb/DirtyFlowers.jpg" style="height: 7.5em; width: 5em;" alt="Dirty Flowers" title="Die Band Dirty Flowers beim Emergenza Semi-Finale in der Batschkapp Frankfurt am Main am 24.04.08" /></a>
+		<a class="singleLightbox" href="pics/RealKeepers.jpg"><img src="pics/thumb/RealKeepers.jpg" style="height: 7.5em; width: 5em;" alt="Real Keepers" title="Die Band Real Keepers beim Emergenza Regio-Finale in der Batschkapp Frankfurt am Main am 25.06.08" /></a>
+		<a class="singleLightbox" href="pics/WhiteLilium.jpg"><img src="pics/thumb/WhiteLilium.jpg" style="height: 7.5em; width: 5em;" alt="White Lilium" title="Die Band White Lilium beim Emergenza Semi-Finale im Knust in Hamburg am 02.05.09" /></a>
+		<a class="singleLightbox" href="pics/TheJerks.jpg"><img src="pics/thumb/TheJerks.jpg" style="height: 7.5em; width: 5em;" alt="The Jerks" title="Die Band The Jerks beim Emergenza Semi-Finale im Rind in Rüsselsheim am 16.05.08" /></a>
+		<a class="singleLightbox last" href="pics/LaRevolta.jpg"><img src="pics/thumb/LaRevolta.jpg" style="height: 7.5em; width: 5em;" alt="La Revolta" title="Die Band La Revolta beim Emergenza Semi-Finale in der Batschkapp Frankfurt am Main am 24.04.08" /></a>
+		<div class="sub">
+			<a href="#nogo" id="closelink1">close()</a>|
+			<a href="#nogo" id="destroylink1">destroy()</a>|
+			<a href="#nogo" id="disablelink1">disable()</a>
+		</div>
+	</div>
+	<div class=" box ui-widget-content ui-corner-all ui-helper-clearfix">
+		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Bilderserie</h2>
+		<ul>
+			<li>
+				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  alt="The Boss Hoss" title="Die Band The Boss Hoss auf dem Magik Bike Festival in Rüdesheim am Rhein (22.05.09)"/></a>
+			</li>
+			<li>
+				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" alt="The Boss Hoss" title="Die Band The Boss Hoss auf dem Magik Bike Festival in Rüdesheim am Rhein (22.05.09)" /></a>
+			</li>
+			<li class="last">
+				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" alt="The Boss Hoss" title="Die Band The Boss Hoss auf dem Magik Bike Festival in Rüdesheim am Rhein (22.05.09)" /></a>
+			</li>
+		</ul>
+		<div class="sub">
+			<a href="#nogo" id="gallerylink2">startGallery</a>|
+			<a href="#nogo" id="closelink2">close()</a>|
+			<a href="#nogo" id="destroylink2">destroy()</a>|
+			<a href="#nogo" id="disablelink2">disable()</a>|
+			<a href="#nogo" id="prevlink2">prev()</a>|
+			<a href="#nogo" id="nextlink2">next()</a>
+		</div>
+	</div>
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+</div>
+<div id="copyright">
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/80x15.png" /></a><br />Diese(s) Werk bzw. Inhalt von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Felix Nagel f&#252;r Namics (Deutschland) GmbH</span> steht unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Namensnennung-Weitergabe unter gleichen Bedingungen 3.0 Unported Lizenz</a>.<br />&#220;ber diese Lizenz hinausgehende Erlaubnisse erhalten Sie m&#246;glicherweise unter <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.felixnagel.com" rel="cc:morePermissions">http://www.felixnagel.com</a>.<br />
+Die Fotografien dürfen nicht kommerziell verwendet werden.
+</div>	
+<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/ui.core.js"></script>
+	<script type="text/javascript" src="js/ui.ariaLightbox.js"></script>	
+	<script type="text/javascript">
+		$(function() {	
+			var lightbox1 = $(".singleLightbox").ariaLightbox({
+				altText: "alt",
+				descText: "title",
+				useDimmer: false,
+				title: "Großansicht",
+				pos: "offset"
+			});
+			$("#closelink1").click(function (event) { 
+				lightbox1.ariaLightbox('close');
+			});
+			$("#destroylink1").click(function (event) { 
+				lightbox1.ariaLightbox('destroy');
+			});	
+			$("#disablelink1").click(function (event) { 
+				lightbox1.ariaLightbox('disable');
+			});	
+					
+			
+			var lightbox2 = $(".seriesLightbox").ariaLightbox({
+				imageArray: [],
+				altText: "alt",
+				descText: "title",
+				useDimmer: true,
+				pos: "auto",
+				title: "Bildergallerie",
+				em: false
+			});		
+			$("#destroylink2").click(function (event) { 
+				lightbox2.ariaLightbox('destroy');
+			});	
+			$("#disablelink2").click(function (event) { 
+				lightbox2.ariaLightbox('disable');
+			});	
+			$("#nextlink2").click(function (event) { 
+				lightbox2.ariaLightbox('next');
+			});	
+			$("#prevlink2").click(function (event) { 
+				lightbox2.ariaLightbox('prev');
+			});	
+			$("#gallerylink2").click(function (event) { 
+				lightbox2.ariaLightbox('startGallery', event);
+			});	
+			
+		});		
+
+			
+
+	</script>
+</body>
+</html>
