@@ -1,0 +1,33 @@
+/* Demo styles
+----------------------------------*/
+body {
+	font-family: "Arial","Verdana","sans-serif";
+	margin: 1em;
+	font-size: 16px;
+}
+#wrapper {
+	width: 15em;
+	margin: 10em auto;
+}
+.ui-dialog-titlebar {
+	font-size: 1em;
+	padding:0.1em 0.3em;
+}
+.ui-dialog .ui-dialog-titlebar {
+	font-size: 0.9em;
+	padding:0 0.3em;
+	margin: 1em 0 0 0;
+}
+p {
+	font-size: 1em;
+}
+.ui-widget-content {
+	padding: 0 1em 1em 1em;
+}
+.ui-dialog{
+	padding: 0 1em 0 1em;
+}
+.box {
+	padding: 0 1em 1em 1em;
+	margin: 0 0 1em 0;
+}
