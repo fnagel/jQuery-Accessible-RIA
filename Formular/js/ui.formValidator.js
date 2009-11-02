@@ -1,11 +1,12 @@
-/*
+/*!
  * jQuery UI FormValidator 1.0 (01.07.09)
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
  * 
  *  Depends: ui.core.js
- 
+ */
+/*
 USAGE:::::::::::::::::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example
  * To validate a form element specify its properties in the options forms array:
@@ -64,7 +65,7 @@ $.widget("ui.formValidator", {
 		var options = this.options, self = this;
 		
 		// add virtual budder form | should be added immediatly
-		self._updateVitualBuffer();
+		self._updateVirtualBuffer();
 		
 		// set sumitUrl to form action if no one is defined
 		if (options.submitUrl == "") options.submitUrl = self.element.attr("action");
@@ -84,7 +85,7 @@ $.widget("ui.formValidator", {
 			// add the deactivate live validation message
 			self.element.find("#ui-formular-info").append("\t<p><a id=\"ui-formular-live\" href=\"#nogo\">"+ options.validateOff +"</a></p>\n\t\t");
 			
-			self._updateVitualBuffer();
+			self._updateVirtualBuffer();
 		
 			// toggle live validating and text of the link
 			self.element.find("#ui-formular-live").toggle(
@@ -93,14 +94,14 @@ $.widget("ui.formValidator", {
 					$(this).attr("aria-live","polite")
 					.attr("aria-relevant","text")
 					.html(options.validateOn);
-					self._updateVitualBuffer();
+					self._updateVirtualBuffer();
 				},
 				function () {
 					options.validateLive = true;
 					$(this).attr("aria-live","polite")
 					.attr("aria-relevant","text")
 					.html(options.validateOff);
-					self._updateVitualBuffer();
+					self._updateVirtualBuffer();
 				}
 			);
 		}
@@ -120,7 +121,7 @@ $.widget("ui.formValidator", {
 			//check if radio group or checkbox group or single checkbox
 			if (!element.length) {
 				// get all group elements
-				element = self.element.find("input[name='"+id+"']");				
+				element = self.element.find("input."+id);				
 				// no element found? Only developers should see this
 				if (!element.length) {
 					alert("Error: Configuration corrupted!\n\nCan' find element with id or name = "+id);
@@ -406,7 +407,7 @@ $.widget("ui.formValidator", {
 			self._sendForm();
 		}
 		
-		self._updateVitualBuffer();		
+		self._updateVirtualBuffer();		
 		
 		// Callback
 		self._trigger("onShowErrors", 0);
@@ -498,7 +499,7 @@ $.widget("ui.formValidator", {
 		html += '		</div>'+"\n\t\t";
 		self.element.prepend(html); 
 		self.element.find("#ui-formular-success").attr("tabindex",-1).focus();	
-		self._updateVitualBuffer();
+		self._updateVirtualBuffer();
 		// Callback
 		self._trigger("onShowSuccess", 0);	
 	},
@@ -628,7 +629,7 @@ $.widget("ui.formValidator", {
 	},	
 	
 	// updates virtual buffer | for older screenreader
-	_updateVitualBuffer: function() {
+	_updateVirtualBuffer: function() {
 		var form = $("#virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")

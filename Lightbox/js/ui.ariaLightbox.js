@@ -284,7 +284,7 @@ $.widget("ui.ariaLightbox", {
 						// check if lightbox popup changed body dimension
 						if (options.useDimmer)	self._dimmerResize();
 						// update screenreader buffer
-						self._updateVitualBuffer();		
+						self._updateVirtualBuffer();		
 						// ARIA | manipulations finished
 						contentWrapper.attr("aria-busy", false);						
 						// Callback
@@ -484,7 +484,7 @@ $.widget("ui.ariaLightbox", {
 	},	
 	
 	// updates virtual buffer of older screenreader
-	_updateVitualBuffer: function() {
+	_updateVirtualBuffer: function() {
 		var form = $("#virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")
@@ -514,7 +514,7 @@ $.extend($.ui.ariaLightbox, {
 	version: "1.7.1",
 	defaults: {		
 		altText: "alt",
-		descText: "titleText",
+		descText: "title",
 		prevText: "vorheriges Bild",
 		nextText: "nächtes Bild",		
 		titleText: "Lightbox",

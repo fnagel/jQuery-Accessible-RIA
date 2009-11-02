@@ -10,6 +10,7 @@ body {
 }
 .sub {
 	font-size: 0.7em;
+	margin: 2em 0 0 0;
 }
 h1 {
 	font-family:"Trebuchet MS","Helvetica";
@@ -69,9 +70,16 @@ font-size: 0.6em;
 a.singleLightbox{
 	margin: 0 0.8em 0 0;
 }
+a.singleLightbox:hover,
+a.seriesLightbox:hover,
+a.singleLightbox:focus,
+a.seriesLightbox:focus{
+	border-bottom: #F6A828 10px solid;
+}
 ul{
 	margin: 0;
 	padding: 0;
+	display: block;
 }
 ul li{
 	float: left;

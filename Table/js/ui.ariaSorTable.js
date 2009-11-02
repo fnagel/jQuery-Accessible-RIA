@@ -226,7 +226,7 @@ $.widget("ui.ariaSorTable", {
 		.attr("aria-live", "polite")
 		.attr("aria-relevant","text");
 		// update virtual Buffer
-		self._updateVitualBuffer();
+		self._updateVirtualBuffer();
 		// Callback
 		self._trigger("onSetHTML", 0);
 	},
@@ -481,7 +481,7 @@ $.widget("ui.ariaSorTable", {
 	},	
 	
 	// updates virtual buffer | for older screenreader
-	_updateVitualBuffer: function() {
+	_updateVirtualBuffer: function() {
 		var form = $("#virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")
@@ -520,7 +520,7 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 		// build html to inject
 		var site = 0;
 		var y = 0;
-		var html = 	'<div id="ui-table-pager" aria-controls="ui-table-'+options.uid+'">'+"\n";
+		var html = 	'<div class="ui-table-pager" aria-controls="ui-table-'+options.uid+'">'+"\n";
 			html += 	'<span id="ui-table-'+options.uid+'-pager-title" class="ui-corner-all">'+options.textPager+'</span>'+"\n";						
 		while (y < options.tableData.length){
 			html += '	<button title="'+options.textPager+' '+ (site + 1) +'" type="button" class="ui-state-default ui-corner-all" aria-selected="false" aria-labelledby="ui-table-'+options.uid+'-pager-title">'+ (site + 1) +'</button>'+"\n";
@@ -530,7 +530,7 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 			html += '</div>'+"\n";			
 		self.element.after(html);
 		// ARIA
-		options.pager = $("#ui-table-pager")
+		options.pager = self.element.next(".ui-table-pager")
 		.attr("aria-valuemin", 1)
 		.attr("aria-valuemax", site);
 		
