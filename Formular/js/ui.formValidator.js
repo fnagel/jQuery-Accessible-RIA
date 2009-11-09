@@ -252,7 +252,10 @@ $.widget("ui.formValidator", {
 						break;
 					case "equalTo":
 						errors[id][rule] = self._whichError(self._equalTo(elementValue, ruleValue), errors[id][rule]);
-						break;
+						break; 
+					case "custom":
+                        errors[id][rule] = self._whichError(ruleValue(elementValue), errors[id][rule]);
+					   break;
 				}		
 			}
 		});
@@ -338,6 +341,9 @@ $.widget("ui.formValidator", {
 						case "equalTo":
 							msg = options.forms[id].msg.equalTo;
 							break;
+						case "custom":
+                            msg = options.forms[id].msg.custom;
+                            break;
 					}
 					msgs += '					<li><a href="#'+id+'">'+msg+"</a></li>\n";
 					// there are errors to show

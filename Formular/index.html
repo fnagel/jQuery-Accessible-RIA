@@ -4,7 +4,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
-	<title>ui.formValidator - jQuery UI</title>
+	<title>ui.formValidator - jQuery UI - Felix Nagel</title>
 	<link type="text/css" href="css/ui-lightness/jquery-ui-1.7.1.custom.css" rel="stylesheet" />	
 	<link type="text/css" href="css/style.css" rel="stylesheet" />
 	<!--[if gte IE 6]>	
@@ -77,6 +77,12 @@
 		</fieldset>	
 					
 		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Custom</legend>
+			<label for="mycustom">Custom check field (gerade Zahl)</label>
+			<input type="text" id="mycustom" name="mycustom" class="text ui-widget-content ui-corner-all" />
+		</fieldset>	
+					
+		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Sonstige Formularfelder</legend>
 
 			<label for="selectset">Auswahlliste</label>
@@ -96,7 +102,7 @@
 			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
 			<div class="pair">
 				<input type="checkbox" id="confirm_1" name="confirm-checkbox" class="radio confirm" />
-                <label class="ui-widget-content ui-corner-all" for="confirm_1">Sind alle Angaben korrekt?</label>	
+                <label class="ui-widget-content ui-corner-all" for="confirm_1">Sind alle Daten korrekt?</label>	
 			</div>	
 			
 			<label for="captcha">Capctha = 123456<em title="Pflichtfeld">*</em></label>
@@ -186,6 +192,17 @@
 						msg: {
 							length: "Es müssen zwischen 2 und 3 Einträge aktiviert werden.",
 							required: "Ein Eintrag muss gewählt werden."
+						}
+					},
+					mycustom: {
+						rules: {
+							required: false,
+							custom:	function (elementValue) {
+									return ((elementValue % 2 ) == 0) ? true : false; 
+								}
+						},
+						msg: {
+						   custom: "Es muss eine gerade Zahl eingegeben werden."
 						}
 					},
 					upload: {
