@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator 1.0 (01.07.09)
+ * jQuery UI FormValidator (09.11.09)
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
@@ -19,8 +19,9 @@ USAGE:::::::::::::::::::::::::::
 				required
 				lengthMin
 				lengthMax
-				equalTo 
-				regEx
+				equalTo (id of to be checked element)
+				regEx (set your own regex)
+				custom (make your own validation function - the fast way)
 * Use a regular expression or a predefined value for the RegEx rule:
 					number
 					numberDE
@@ -252,7 +253,10 @@ $.widget("ui.formValidator", {
 						break;
 					case "equalTo":
 						errors[id][rule] = self._whichError(self._equalTo(elementValue, ruleValue), errors[id][rule]);
-						break;
+						break; 
+					case "custom":
+                        errors[id][rule] = self._whichError(ruleValue(elementValue), errors[id][rule]);
+					   break;
 				}		
 			}
 		});
@@ -338,6 +342,9 @@ $.widget("ui.formValidator", {
 						case "equalTo":
 							msg = options.forms[id].msg.equalTo;
 							break;
+						case "custom":
+                            msg = options.forms[id].msg.custom;
+                            break;
 					}
 					msgs += '					<li><a href="#'+id+'">'+msg+"</a></li>\n";
 					// there are errors to show

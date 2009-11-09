@@ -1,5 +1,5 @@
 /*
- * jQuery UI ariaLightbox 1.0
+ * jQuery UI ariaLightbox (02.11.09)
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
@@ -12,7 +12,7 @@
 * There are to modes: singleview and gallerview defined with imageArray: []
 
  * Options	
-imageArray:		activates galleryview of set to imageArray: []
+imageArray:			activates galleryview of set to imageArray: []
 altText: 			which attr (within the image) as alt attr
 descText: 			which attr (within the image) as description text
 prevText: 			text on the button
@@ -25,7 +25,7 @@ pos: 				position of the lightbox, possbible values: auto, offset, or [x,y]
 autoHeight: 		margin to top when pos: auto is used
 offsetX: 			number: if pos:"offset" its the distance betwen lightbox and mousclick position
 offsetY:  			see above
-useDimmer: 		boolean, activate or deactivate dimmer
+useDimmer: 			boolean, activate or deactivate dimmer
 animationSpeed:		in mimmilseconds or jQuery keywors aka "slow", "fast"
 zIndex: 			number: z-index for overlay elements
 background: 		color in HTML notation
