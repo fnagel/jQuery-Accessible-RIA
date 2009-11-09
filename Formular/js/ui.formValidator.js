@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator 1.0 (01.07.09)
+ * jQuery UI FormValidator (02.11.09)
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)

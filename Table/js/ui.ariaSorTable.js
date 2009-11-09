@@ -1,5 +1,5 @@
 /*
- * jQuery UI ariaSorTable 1.0 (08.08.09)
+ * jQuery UI ariaSorTable (09.11.09)
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
@@ -12,8 +12,8 @@
 
 * Sorting CSS classes (apply to th elements)
 ui-table-number 		123 or 123.456
-ui-table-number-de 	123,456
-ui-table-date 		07/28/2009
+ui-table-number-de 		123,456
+ui-table-date 			07/28/2009
 ui-table-date-de		28.07.2009
 ui-table-date-iso		2009-07-28  
  ui-table-deactivate 	deactivates sorting for this col
@@ -22,14 +22,14 @@ ui-table-date-iso		2009-07-28
  * Options	
 rowToStart			row to start, begins with 1
 rowsToShow			How many rows to show? If not set, widget will show all rows
-colScopeRow		Which col has scope? Could be the UID or a names, begins with 1
+colScopeRow			Which col has scope? Could be the UID or a names, begins with 1
 defaultSortBy		first sorting action sould sort ascending or descending?
 colsToHide			array; set value true if col should be hided, example: colsToHide[3] = true;
 rowsToHide			array; set value true if row should be hided, example: rowsToHide[3] = true;
 keyboard			activate default keyboard control
 pager				add default pager control; (do use with rowsToShow < all rows in the original table)
 textPager			String pager
-textAsc			String for sorting ascending
+textAsc				String for sorting ascending
 textDesc			String for sorting descending
 disabled			deactivate the widget
 			
@@ -58,7 +58,13 @@ var sortIndex = 0;
 $.widget("ui.ariaSorTable", {
 
 	_init: function() {	
-		var options = this.options, self = this;		
+		var options = this.options, self = this;	
+		// init vars		
+		options.tableData = [];
+		options.originalData = [];
+		options.selectedCol = 0;
+		options.activeCol = 0;		
+		
 		// ARIA | make UID if no ID is set by default
 		var elementID = self.element.attr("id");
 		if (elementID != "") {
@@ -143,7 +149,6 @@ $.widget("ui.ariaSorTable", {
 		}
 		// set var to table length if no custom value
 		if (!options.rowsToShow) options.rowsToShow = rows.length;
-		
 		// update data to delete hided rows and cols
 		self.updateData(); 
 		// set new HTML (with ARIA)
@@ -505,12 +510,7 @@ $.extend($.ui.ariaSorTable, {
 		pager: false,
 		textPager: "Page:",
 		textAsc: "Sort ascending",
-		textDesc: "Sort descending",		
-		//do not alter these vars
-		selectedCol: 0,
-		activeCol: 0,
-		tableData: [],
-		originalData: []
+		textDesc: "Sort descending"
 	}
 });
 $.fn.extend($.ui.ariaSorTable.prototype,{
