@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (02.11.09)
+ * jQuery UI FormValidator (09.11.09)
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
@@ -19,8 +19,9 @@ USAGE:::::::::::::::::::::::::::
 				required
 				lengthMin
 				lengthMax
-				equalTo 
-				regEx
+				equalTo (id of to be checked element)
+				regEx (set your own regex)
+				custom (make your own validation function - the fast way)
 * Use a regular expression or a predefined value for the RegEx rule:
 					number
 					numberDE
