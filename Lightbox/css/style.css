@@ -61,20 +61,24 @@ font-size: 0.6em;
 	padding: 0 1em 1em 1em;
 }
 .ui-dialog{
-	padding: 0 1em 0 1em;
+	padding: 0 1em 0 1em !important;
 }
 .box {
 	padding: 0 1em 1em 1em;
 	margin: 0 0 1em 0;
+	height: 14em;
+}
+a.singleLightbox,
+a.seriesLightbox {
+	padding: 0 0 0.5em 0;
 }
 a.singleLightbox{
 	margin: 0 0.8em 0 0;
 }
-a.singleLightbox:hover,
-a.seriesLightbox:hover,
-a.singleLightbox:focus,
-a.seriesLightbox:focus{
-	border-bottom: #F6A828 10px solid;
+a.ui-state-focus,
+a.ui-state-hover {
+border-left: 0 !important;
+border-right: 0 !important;
 }
 ul{
 	margin: 0;

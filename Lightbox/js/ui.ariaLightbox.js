@@ -87,7 +87,7 @@ $.widget("ui.ariaLightbox", {
 		$(window).resize(function(){ 
 			self._dimmerResize();
 		});
-
+		self._makeHover(self.element);
 	},
 	
 	// call gallery from link

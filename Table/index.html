@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="js/ui.core.js"></script>
 	<script type="text/javascript" src="js/ui.ariaSorTable.js"></script>	
 	<script type="text/javascript" src="js/demo.js"></script>	
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>	
 	<script type="text/javascript">	
 		$(function() {			
 			var table1 = $("table").ariaSorTable({
@@ -33,7 +34,11 @@
 			});		
 			$("#disable").click(function (event) { 
 				table1.ariaSorTable('disable');
-			});					
+			});			
+			
+			// theme switcher
+			$("#ui-table-control").prepend('<div id="switcher"></div><br />');
+			$('#switcher').themeswitcher();	
 		});		
 	</script>
 </head>
@@ -48,14 +53,14 @@
 			<caption class="ui-state-highlight ui-corner-all">Functional demo table</caption>
 			<thead>
 				<tr>
-					<th class="ui-table-asc ui-state-active ui-table-number" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
-					<th class="ui-table-number" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
-					<th class="ui-table-number-de" style="min-width: 10em;">Decimal DE</th>
-					<th class="ui-table-number" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
-					<th class="ui-table-date-de" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
-					<th class="ui-table-date-iso ui-table-deactivate" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
-					<th class="ui-table-text" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
-					<th class="ui-table-deactivate" style="min-width: 12em;"><a href="#server_site_order_only">false</a></th>
+					<th class="ui-table-asc ui-state-active ui-table-number ui-state-default" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
+					<th class="ui-table-number ui-state-default" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
+					<th class="ui-table-number-de ui-state-default" style="min-width: 10em;">Decimal DE</th>
+					<th class="ui-table-number ui-state-default" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
+					<th class="ui-table-date-de ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
+					<th class="ui-table-date-iso ui-table-deactivate ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
+					<th class="ui-table-text ui-state-default" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
+					<th class="ui-table-deactivate ui-state-default" style="min-width: 12em;"><a href="#server_site_order_only">false</a></th>
 				</tr>
 			</thead>
 			<tbody>  
