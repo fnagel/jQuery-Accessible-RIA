@@ -58,18 +58,14 @@ table th a ,
 table th a:active  {
   outline: none;
 }
-th { 
-	padding: 0; 
-	font-weight: bold; 
-	text-align: left;
-	border: 1px solid #e78f08; 
-	background: #f6a828 url(ui-lightness/images/ui-bg_gloss-wave_35_f6a828_500x100.png) 50% 50% repeat-x;
-}
 td { 
 	text-align: right; 
 	padding: 0.3em 0.5em; 
 	border-left: 1px solid #cccccc; 
 	border-right: 1px solid #cccccc; 
+}
+th { 	
+	border: 1px solid #cccccc; 
 }
 tr { 
 	background: #f6f6f6 url(ui-lightness/images/ui-bg_glass_100_f6f6f6_1x400.png) 50% 50% repeat-x;

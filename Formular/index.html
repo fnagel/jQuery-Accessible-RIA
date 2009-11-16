@@ -17,6 +17,8 @@
 	<a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a> | <a href="#" id="send">send</a>
 </div>
 <div id="wrapper">
+	<div id="switcher"></div>
+	<br />
 	<form id="form" action="ui.formValidator.html" method="post" enctype="multipart/form-data">
 		<div id="ui-formular-info" class="info ui-state-highlight ui-corner-all">
 			<p>
@@ -119,7 +121,8 @@
 	
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/ui.core.js"></script>
-	<script type="text/javascript" src="js/ui.formValidator.js"></script>	
+	<script type="text/javascript" src="js/ui.formValidator.js"></script>
+	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>	
 	<script type="text/javascript">	
 		$(function() {			
 			var formular = $("#form").formValidator({
@@ -259,6 +262,8 @@
 				formular.formValidator('formSubmitted');
 			});			
 			
+			// theme switcher
+			$('#switcher').themeswitcher();
 		});		
 	</script>
 </body>
