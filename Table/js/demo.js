@@ -1,7 +1,7 @@
 function demoControl() {
 	var widget = $("table");
 	var headers = widget.ariaSorTable("option", "headers");				
-	var colsToHide = widget.ariaSorTable("option", "colsToHide");		
+	var colsToHide = widget.ariaSorTable("option", "colsToHide");	
 		var html = 	'<div id="ui-table-control">';
 		html +=		'	<fieldset class="ui-widget-content ui-corner-all">';
 		html +=		'		<legend class="ui-widget-header ui-corner-all">Row Control</legend>';
@@ -54,7 +54,7 @@ function demoControl() {
 		for (var x = 0; x < checkboxes.length; x++) {
 			var test = ($(checkboxes[x]).filter(':checked').length) ? false : true;
 			colsToHide[x] = test;
-		}					
+		}			
 		widget.ariaSorTable('updateData');
 		widget.ariaSorTable('setHTML');
 	});	
@@ -93,7 +93,7 @@ function demoControl() {
 		widget.ariaSorTable("option", "rowsToShow", tableData.length);	
 		widget.ariaSorTable("option", "rowToStart", 1);	
 		widget.ariaSorTable('setHTML');
-		$("#ui-table-pager").fadeOut();
+		$(".ui-table-pager").fadeOut();
 		$("#ui-table-control #colSelect").parent().fadeOut();
 		
 	});	
