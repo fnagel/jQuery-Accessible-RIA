@@ -117,7 +117,7 @@ $.widget("ui.ariaLightbox", {
 		
 		// build html 
 		var html = "\n";
-		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-titleText-dialog">'+"\n";
+		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
 		html += '	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+"\n";
 		html += '		<span class="ui-dialog-title" id="ui-dialog-title-dialog">'+ options.titleText +'</span>'+"\n";
 		html += '		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="'+ options.closeText +'" role="button">'+"\n";
