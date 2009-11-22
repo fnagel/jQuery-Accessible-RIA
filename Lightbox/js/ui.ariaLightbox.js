@@ -1,11 +1,13 @@
-/*
- * jQuery UI ariaLightbox (02.11.09)
+/*!
+ * jQuery UI ariaLightbox (22.11.09)
+ * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
  * 
  *  Depends: ui.core.js
- 
+ */
+/*
  USAGE:::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example
 * The widget gets all the elements in the document which matches choosen selector

@@ -1,5 +1,6 @@
-/*
- * jQuery UI ariaTabs (19.08.09)
+/*!
+ * jQuery UI ariaTabs (22.11.09)
+ * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
@@ -7,7 +8,8 @@
  *   Depends: 	ui.core.js
  *   			ui.tabs.js
  *  			ui.sortable.js (optional, see tabs docu)
- 
+*/
+/* 
  USAGE:::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example
 * Simply add the js file uner the regular ui.tabs.js script tag
