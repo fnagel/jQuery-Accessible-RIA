@@ -1,11 +1,13 @@
-/*
- * jQuery UI ariaSorTable (09.11.09)
+/*!
+ * jQuery UI ariaSorTable (22.11.09)
+ * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
  * 
  *  Depends: ui.core.js
-
+ */
+/*
  USAGE:::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example
 * To set sorting method add css classes, default is text, alphabetically 
@@ -24,8 +26,8 @@ rowToStart			row to start, begins with 1
 rowsToShow			How many rows to show? If not set, widget will show all rows
 colScopeRow			Which col has scope? Could be the UID or a names, begins with 1
 defaultSortBy		first sorting action sould sort ascending or descending?
-colsToHide			array; set value true if col should be hided, example: colsToHide[3] = true;
-rowsToHide			array; set value true if row should be hided, example: rowsToHide[3] = true;
+colsToHide			array; set value true if col should be hidden, example: colsToHide[3] = true;
+rowsToHide			array; set value true if row should be hidden, example: rowsToHide[3] = true;
 keyboard			activate default keyboard control
 pager				add default pager control; (do use with rowsToShow < all rows in the original table)
 textPager			String pager

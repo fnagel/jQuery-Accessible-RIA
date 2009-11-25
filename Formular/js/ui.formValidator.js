@@ -1,5 +1,6 @@
 /*!
- * jQuery UI FormValidator (09.11.09)
+ * jQuery UI FormValidator (22.11.09)
+ * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
@@ -125,7 +126,7 @@ $.widget("ui.formValidator", {
 				element = self.element.find("input."+id);				
 				// no element found? Only developers should see this
 				if (!element.length) {
-					alert("Error: Configuration corrupted!\n\nCan' find element with id or name = "+id);
+					alert("Error: Configuration corrupted!\n\nCan't find element with id or name = "+id);
 				} else {
 					value = "group";
 					// change label class when hover the label
@@ -160,7 +161,7 @@ $.widget("ui.formValidator", {
 			if (options.validateLive) {
 				// necessary for not getting too much events
 				if (options.forms[id].type != "group") {
-					var eventBinder = "keypress";
+					var eventBinder = "keyup";
 					// options need change events
 					if (options.forms[id].type == "select") eventBinder = "change";
 				} else {

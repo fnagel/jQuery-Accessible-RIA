@@ -1,11 +1,13 @@
-/*
- * jQuery UI ariaLightbox (02.11.09)
+/*!
+ * jQuery UI ariaLightbox (22.11.09)
+ * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
  * 
  *  Depends: ui.core.js
- 
+ */
+/*
  USAGE:::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example
 * The widget gets all the elements in the document which matches choosen selector
@@ -117,7 +119,7 @@ $.widget("ui.ariaLightbox", {
 		
 		// build html 
 		var html = "\n";
-		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-titleText-dialog">'+"\n";
+		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
 		html += '	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+"\n";
 		html += '		<span class="ui-dialog-title" id="ui-dialog-title-dialog">'+ options.titleText +'</span>'+"\n";
 		html += '		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="'+ options.closeText +'" role="button">'+"\n";
@@ -516,7 +518,7 @@ $.extend($.ui.ariaLightbox, {
 		altText: "alt",
 		descText: "title",
 		prevText: "vorheriges Bild",
-		nextText: "nächtes Bild",		
+		nextText: "nächstes Bild",		
 		titleText: "Lightbox",
 		pictureText: "Bild",
 		ofText: "von",
