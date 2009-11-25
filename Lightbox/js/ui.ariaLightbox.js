@@ -518,7 +518,7 @@ $.extend($.ui.ariaLightbox, {
 		altText: "alt",
 		descText: "title",
 		prevText: "vorheriges Bild",
-		nextText: "nächtes Bild",		
+		nextText: "nächstes Bild",		
 		titleText: "Lightbox",
 		pictureText: "Bild",
 		ofText: "von",
