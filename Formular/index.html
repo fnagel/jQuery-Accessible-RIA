@@ -36,10 +36,10 @@
 			<label for="txtarea">Mehrzeiliger Eingabebereich <em title="Pflichtfeld">*</em></label>
 			<textarea id="txtarea" name="txtarea" rows="" cols="" class="text ui-widget-content ui-corner-all"></textarea>
 						
-			<label for="password1">Passwortfeld <em title="Pflichtfeld">*</em></label>
+			<label for="password1">Passwortfeld</label>
 			<input name="password1" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
 			
-			<label for="password2">Passwortfeld Wiederholung <em title="Pflichtfeld">*</em></label>
+			<label for="password2">Passwortfeld Wiederholung</label>
 			<input name="password2" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
 		</fieldset>	
 		<fieldset class="ui-widget-content ui-corner-all">
@@ -63,7 +63,7 @@
 		</fieldset>	
 		
 		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Radioboxen</legend>
+			<legend class="ui-widget-header ui-corner-all">Radioboxen <em title="Pflichtfeld">*</em></legend>
 			<div class="pair">
 				<input type="radio" id="vote_1" value="Option 1" name="vote" class="radio vote"/>
                 <label class="ui-widget-content ui-corner-all" for="vote_1">Option 1</label>
@@ -87,7 +87,7 @@
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Sonstige Formularfelder</legend>
 
-			<label for="selectset">Auswahlliste</label>
+			<label for="selectset">Auswahlliste <em title="Pflichtfeld">*</em></label>
 			<select name="selectset" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
 				<option>Option 1</option>
 				<option>Option 2</option>
@@ -104,7 +104,7 @@
 			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
 			<div class="pair">
 				<input type="checkbox" id="confirm_1" name="confirm-checkbox" class="radio confirm" />
-                <label class="ui-widget-content ui-corner-all" for="confirm_1">Sind alle Daten korrekt?</label>	
+                <label class="ui-widget-content ui-corner-all" for="confirm_1">Sind alle Daten korrekt? <em title="Pflichtfeld">*</em></label>	
 			</div>	
 			
 			<label for="captcha">Capctha = 123456<em title="Pflichtfeld">*</em></label>
@@ -129,12 +129,10 @@
 				forms: {			
 					inputtext: {
 						rules: {
-							required: true,		
-							regEx: "email"
+							required: true
 						},
 						msg: {
-							required: "Der einzeilige Eingabebereich muss ausgefüllt werden.",	
-							regEx: "Das einzeilige Eingabefeld muss eine Email Adresse enthalten."
+							required: "Der einzeilige Eingabebereich muss ausgefüllt werden."
 						}
 					},
 					txtarea: {

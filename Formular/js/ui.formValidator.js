@@ -126,7 +126,7 @@ $.widget("ui.formValidator", {
 				element = self.element.find("input."+id);				
 				// no element found? Only developers should see this
 				if (!element.length) {
-					alert("Error: Configuration corrupted!\n\nCan' find element with id or name = "+id);
+					alert("Error: Configuration corrupted!\n\nCan't find element with id or name = "+id);
 				} else {
 					value = "group";
 					// change label class when hover the label
@@ -161,7 +161,7 @@ $.widget("ui.formValidator", {
 			if (options.validateLive) {
 				// necessary for not getting too much events
 				if (options.forms[id].type != "group") {
-					var eventBinder = "keypress";
+					var eventBinder = "keyup";
 					// options need change events
 					if (options.forms[id].type == "select") eventBinder = "change";
 				} else {
