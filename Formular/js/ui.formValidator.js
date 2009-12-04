@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (22.11.09)
+ * jQuery UI FormValidator (04.12.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -49,7 +49,7 @@ disabled 		Boolean 	disable widget
 onInit
 onformSubmitted
 onShowErrors
-onShowSuccess
+onShowSuccess (returns true or a string)
 checkCaptcha (must deliver a boolean value)
 
 * public Methods
@@ -483,16 +483,15 @@ $.widget("ui.formValidator", {
 		// chose icon to show | choose message
 		switch (value) {
 			case "true":
+			case "1":
 				msg = options.submitSuccess;
 				icon = "check";
 				break;
-			case "false":
-				msg = options.submitError;
+			default: 
+				if (value == "") msg = options.submitError;
+				else msg = value;
 				icon = "alert";
 				break;
-			default: 
-				msg = value;
-				icon = "alert";
 		}
 		
 		//build up HTML
@@ -509,7 +508,7 @@ $.widget("ui.formValidator", {
 		self.element.find("#ui-formular-success").attr("tabindex",-1).focus();	
 		self._updateVirtualBuffer();
 		// Callback
-		self._trigger("onShowSuccess", 0);	
+		self._trigger("onShowSuccess", null, value);
 	},
 	
 	// decides if error is new, old or corrected

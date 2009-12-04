@@ -245,6 +245,15 @@
 				onShowErrors: function(){ 
 					//console.warn("Error angezeigt");	
 				},
+				onShowSuccess: function(event, value){ 
+						if (value == "true") {
+							window.setTimeout(function() {
+								formular.fadeOut();
+							}, 1000);		
+						} else {
+							console.warn("Server said: not sended :-(");
+						}
+				},
 				checkCaptcha: function(event, value){ 
 					return (value == "123456") ? true : false;					
 				}			
