@@ -119,14 +119,15 @@ $.widget("ui.formValidator", {
 			errors[id] = [];
 			
 			// save element and which form type | add event handler | ARIA
+			//  search for "single" elements (which sould be defined by their ID)
 			var element = self.element.find("#"+id);
-			//check if radio group or checkbox group or single checkbox
+			//check if radio group or checkbox group or single checkbox (which sould be defined by their class)
 			if (!element.length) {
 				// get all group elements
-				element = self.element.find("input."+id);				
+				element = self.element.find("input."+id);	
 				// no element found? Only developers should see this
 				if (!element.length) {
-					alert("Error: Configuration corrupted!\n\nCan't find element with id or name = "+id);
+					alert("Error: Configuration corrupted!\n\nCan't find element with id or class = "+id);
 				} else {
 					value = "group";
 					// change label class when hover the label
