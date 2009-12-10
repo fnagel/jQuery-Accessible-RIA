@@ -23,27 +23,27 @@
 		<div id="ui-formular-info" class="info ui-state-highlight ui-corner-all">
 			<p>
 				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
-				Felder mit einem <em>*</em> sind Pflichtfelder.
+				Fields with an asterix (<em>*</em>) are needed.
 			</p>
 		</div>
 		<div id="ui-formular-error"></div>
 		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Inputfelder</legend>
+			<legend class="ui-widget-header ui-corner-all">Input's</legend>
 			
-			<label for="inputtext">Einzeiliges Eingabefeld</label>
+			<label for="inputtext">Text Input (email) <em title="Needed">*</em></label>
 			<input type="text" id="inputtext" name="inputtext" class="text ui-widget-content ui-corner-all" />
 						
-			<label for="txtarea">Mehrzeiliger Eingabebereich <em title="Pflichtfeld">*</em></label>
+			<label for="txtarea">Textarea <em title="Needed">*</em></label>
 			<textarea id="txtarea" name="txtarea" rows="" cols="" class="text ui-widget-content ui-corner-all"></textarea>
 						
-			<label for="password1">Passwortfeld</label>
+			<label for="password1">Password</label>
 			<input name="password1" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
 			
-			<label for="password2">Passwortfeld Wiederholung</label>
+			<label for="password2">Password repeat</label>
 			<input name="password2" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
 		</fieldset>	
 		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Checkboxen</legend>
+			<legend class="ui-widget-header ui-corner-all">Checkboxes</legend>
 			<div class="pair">
 				<input type="checkbox" id="checkbox_1" name="checkbox-1" class="radio checkboxset" />
 				<label class="ui-widget-content ui-corner-all" for="checkbox_1">Option 1</label>			
@@ -63,7 +63,7 @@
 		</fieldset>	
 		
 		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Radioboxen <em title="Pflichtfeld">*</em></legend>
+			<legend class="ui-widget-header ui-corner-all">Radioboxes <em title="Needed">*</em></legend>
 			<div class="pair">
 				<input type="radio" id="vote_1" value="Option 1" name="vote" class="radio vote"/>
                 <label class="ui-widget-content ui-corner-all" for="vote_1">Option 1</label>
@@ -79,15 +79,15 @@
 		</fieldset>	
 					
 		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Custom</legend>
-			<label for="mycustom">Custom check field (gerade Zahl)</label>
+			<legend class="ui-widget-header ui-corner-all">Custom Validating</legend>
+			<label for="mycustom">Custom check field ( = 0,2,4,6,8,...)</label>
 			<input type="text" id="mycustom" name="mycustom" class="text ui-widget-content ui-corner-all" />
 		</fieldset>	
 					
 		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Sonstige Formularfelder</legend>
+			<legend class="ui-widget-header ui-corner-all">Others</legend>
 
-			<label for="selectset">Auswahlliste <em title="Pflichtfeld">*</em></label>
+			<label for="selectset">Selectbox <em title="Needed">*</em></label>
 			<select name="selectset" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
 				<option>Option 1</option>
 				<option>Option 2</option>
@@ -96,7 +96,7 @@
 				<option>Option 5</option>
 			</select>		
 					
-			<label for="upload">Datei Upload</label>
+			<label for="upload">File-Upload</label>
 			<input type="file" name="upload" id="upload"  class="ui-widget-content" accept="image/jpeg, image/gif, image/png" />
 		</fieldset>		
 		
@@ -104,14 +104,14 @@
 			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
 			<div class="pair">
 				<input type="checkbox" id="confirm_1" name="confirm-checkbox" class="radio confirm" />
-                <label class="ui-widget-content ui-corner-all" for="confirm_1">Sind alle Daten korrekt? <em title="Pflichtfeld">*</em></label>	
+                <label class="ui-widget-content ui-corner-all" for="confirm_1">Please check your input <em title="Needed">*</em></label>	
 			</div>	
 			
-			<label for="captcha">Capctha = 123456<em title="Pflichtfeld">*</em></label>
+			<label for="captcha">Capctha ( = 123456) <em title="Needed">*</em></label>
 			<input type="text" id="captcha" name="captcha" class="text ui-widget-content ui-corner-all" />
 			
-			<input type="submit" id="submit" value="Absenden" class="submit ui-state-default ui-corner-all" />
-			<input type="reset" value="Abbrechen" class="submit ui-state-default ui-corner-all" />
+			<input type="submit" id="submit" value="Send" class="submit ui-state-default ui-corner-all" />
+			<input type="reset" value="Reset" class="submit ui-state-default ui-corner-all" />
 		</fieldset>		
 	</form>
 </div>
@@ -129,10 +129,12 @@
 				forms: {			
 					inputtext: {
 						rules: {
-							required: true
+							required: true,
+							regEx: "email"
 						},
 						msg: {
-							required: "Der einzeilige Eingabebereich muss ausgefüllt werden."
+							required: "Please enter a valid email adress in the first field",
+							regEx: "Please enter a valid email adress."
 						}
 					},
 					txtarea: {
@@ -142,8 +144,8 @@
 							lengthMax: 10
 						},
 						msg: {
-							required: "Der mehrzeiliger Eingabebereich muss ausgefüllt werden.",		
-							length: "Das mehrzeilige Eingabefeld muss zwischen 2 und 10 Zeichen enthalten."
+							required: "Please enter some text in the textarea.",		
+							length: "the textare must have entered 2 chars min and 10 chars max."
 						}
 					},
 					password1: {
@@ -153,8 +155,8 @@
 							required: false
 						},
 						msg: {
-							required: "Das erste Passwortfeld muss ausgefüllt werden.",
-							length: "Das erste Passwortfeld muss muss zwischen 6 und 15 Zeichen enthalten."
+							required: "Please enter a password.",
+							length: "Your Password must have between 6 and 15 chars."
 						}
 					},
 					password2: {
@@ -163,8 +165,8 @@
 							equalTo: "password1"
 						},
 						msg: {
-							required: "Das zweite Passwortfeld muss ausgefüllt werden.",
-							equalTo: "Die Passwörter müssen übereinstimmen."
+							required: "Please reenter your passowrd.",
+							equalTo: "Your passowrds need to be equal."
 						}
 					},
 					checkboxset: {
@@ -173,7 +175,7 @@
 							lengthMax: 3
 						},
 						msg: {
-							length: "Es müssen zwischen 2 und 3 Checkboxen aktiviert werden."
+							length: "Please select between 2 and 3 Options within the chexboxes."
 						}
 					},
 					vote: {
@@ -181,18 +183,16 @@
 							required: true
 						},
 						msg: {
-							required: "Eines der Radioboxen muss ausgefüllt werden."
+							required: "You have to check a radio button."
 						}
 					},
 					selectset: {
 						rules: {
 							lengthMin: 2,
-							lengthMax: 3,
-							required: true
+							lengthMax: 3
 						},
 						msg: {
-							length: "Es müssen zwischen 2 und 3 Einträge aktiviert werden.",
-							required: "Ein Eintrag muss gewählt werden."
+							length: "Please select between 2 and 3 options within the select element."
 						}
 					},
 					mycustom: {
@@ -203,17 +203,15 @@
 								}
 						},
 						msg: {
-						   custom: "Es muss eine gerade Zahl eingegeben werden."
+						   custom: "Please enter a number which can be devided by 2."
 						}
 					},
 					upload: {
 						rules: {
-							required: false,
 							regEx: ".(?:jpg|jpeg|gif|png)"
 						},
 						msg: {
-							required: "Es muss eine Datei hochgeladen werden.",
-							regEx: "Die hochgeladene Datei muss ein Bild sein."
+							regEx: "Please select a picture (jpg, gif, png) as a file upload."
 						}
 					},					
 					confirm: {
@@ -221,7 +219,7 @@
 							required: true
 						},
 						msg: {
-							required: "Bitte kontrollieren Sie die Daten."
+							required: "Please recheck your input."
 						}
 					},							
 					captcha: {
@@ -230,8 +228,8 @@
 							regEx: "captcha"
 						},
 						msg: {
-							required: "Das Captcha muss eingegeben werden.",
-							regEx: "Das Captcha ist falsch eingegeben"
+							required: "Please enter the captcha code.",
+							regEx: "Please reenter the captcha code."
 						}
 					}
 				},
@@ -242,8 +240,17 @@
 				onInit: function(){ 
 					//console.warn("Init abgeschloßen");
 				},
-				onShowErrors: function(){ 
-					//console.warn("Error angezeigt");	
+				onError: function(event, id){ 
+					// console.warn("Error was found in element: "+id);	
+				},
+				onShowSuccess: function(event, value){ 
+						if (value == "true") {
+							window.setTimeout(function() {
+								formular.fadeOut();
+							}, 1000);		
+						} else {
+							// console.warn("Server said: not sended :-(");
+						}
 				},
 				checkCaptcha: function(event, value){ 
 					return (value == "123456") ? true : false;					

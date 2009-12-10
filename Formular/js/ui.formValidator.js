@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (22.11.09)
+ * jQuery UI FormValidator (09.12.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -48,8 +48,10 @@ disabled 		Boolean 	disable widget
 * Callbacks
 onInit
 onformSubmitted
+onError
+onErrors
 onShowErrors
-onShowSuccess
+onShowSuccess (returns true or a string)
 checkCaptcha (must deliver a boolean value)
 
 * public Methods
@@ -119,14 +121,15 @@ $.widget("ui.formValidator", {
 			errors[id] = [];
 			
 			// save element and which form type | add event handler | ARIA
+			//  search for "single" elements (which sould be defined by their ID)
 			var element = self.element.find("#"+id);
-			//check if radio group or checkbox group or single checkbox
+			//check if radio group or checkbox group or single checkbox (which sould be defined by their class)
 			if (!element.length) {
 				// get all group elements
-				element = self.element.find("input."+id);				
+				element = self.element.find("input."+id);	
 				// no element found? Only developers should see this
 				if (!element.length) {
-					alert("Error: Configuration corrupted!\n\nCan't find element with id or name = "+id);
+					alert("Error: Configuration corrupted!\n\nCan't find element with id or class = "+id);
 				} else {
 					value = "group";
 					// change label class when hover the label
@@ -325,6 +328,8 @@ $.widget("ui.formValidator", {
 					target.removeClass("ui-state-error");
 					// ARIA: old error deleted
 					removeError = true;
+					// execute callback for every corrected element; returns the id of the element
+					self._trigger("onValid", null, id);
 				}	
 				if(errors[id][rule] == "new" || errors[id][rule] == "old") {
 					switch (rule) {
@@ -350,6 +355,8 @@ $.widget("ui.formValidator", {
 					msgs += '					<li><a href="#'+id+'">'+msg+"</a></li>\n";
 					// there are errors to show
 					isError = failure = true;
+					// execute callback for every element with wrong input; returns the id of the element
+					self._trigger("onError", null, id);
 				}
 				if(errors[id][rule] == "new") {
 					// ARIA: new error added
@@ -410,6 +417,8 @@ $.widget("ui.formValidator", {
 			});
 			// focus error box when form is submitted
 			if (submitted) errorElement.attr("tabindex",-1).focus();
+			// Callback fired when error exists
+			self._trigger("onErrors", 0);
 		// send data if no errors found
 		} else if(submitted) {
 			self._sendForm();
@@ -483,16 +492,15 @@ $.widget("ui.formValidator", {
 		// chose icon to show | choose message
 		switch (value) {
 			case "true":
+			case "1":
 				msg = options.submitSuccess;
 				icon = "check";
 				break;
-			case "false":
-				msg = options.submitError;
+			default: 
+				if (value == "") msg = options.submitError;
+				else msg = value;
 				icon = "alert";
 				break;
-			default: 
-				msg = value;
-				icon = "alert";
 		}
 		
 		//build up HTML
@@ -509,7 +517,7 @@ $.widget("ui.formValidator", {
 		self.element.find("#ui-formular-success").attr("tabindex",-1).focus();	
 		self._updateVirtualBuffer();
 		// Callback
-		self._trigger("onShowSuccess", 0);	
+		self._trigger("onShowSuccess", null, value);
 	},
 	
 	// decides if error is new, old or corrected
@@ -650,16 +658,16 @@ $.widget("ui.formValidator", {
 
 $.extend($.ui.formValidator, {
 	version: "1.7.1",
-	defaults: {
+	defaults: {		
 		validateLive: true,
 		validateTimeout: 500,
-		validateOff: "Bitte klicken Sie hier um die Live Validierung zu deaktivieren.",
-		validateOn: "Bitte klicken Sie hier um die Live Validierung zu aktivieren.",
-		errorsTitle: "Bitte korrigieren Sie folgende Fehler:",		
+		validateOff: "Please click here to deactivate live validating of this form.",
+		validateOn: "Please clkick here to activate live form validating.",
+		errorsTitle: "Please check the following errors:",		
 		submitHowTo: "ajax",
 		submitUrl: "",
-		submitError: "Bei der Datenübertragung ist ein Fehler aufgetreten. Entschuldigen Sie bitte und versuchen Sie es noch einmal.",
-		submitSuccess: "Die Daten wurden erfolgreich übermittelt. Vielen Dank!",		
+		submitError: "Something wen't wrong while sending your data. Please retry.",
+		submitSuccess: "Your data was succefully submitted, thank you!",		
 		//do not alter these vars
 		errorsArray: [],
 		originalUrl: ""

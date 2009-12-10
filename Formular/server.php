@@ -5,5 +5,5 @@
 	} else {
 		echo "Es ist ein technischer Fehler aufgetreten";
 	}
-	print_r($_POST);
+	// print_r($_POST);
 ?>
