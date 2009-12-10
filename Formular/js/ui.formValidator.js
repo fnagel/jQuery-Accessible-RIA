@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (04.12.09)
+ * jQuery UI FormValidator (09.12.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -48,6 +48,8 @@ disabled 		Boolean 	disable widget
 * Callbacks
 onInit
 onformSubmitted
+onError
+onErrors
 onShowErrors
 onShowSuccess (returns true or a string)
 checkCaptcha (must deliver a boolean value)
@@ -326,6 +328,8 @@ $.widget("ui.formValidator", {
 					target.removeClass("ui-state-error");
 					// ARIA: old error deleted
 					removeError = true;
+					// execute callback for every corrected element; returns the id of the element
+					self._trigger("onValid", null, id);
 				}	
 				if(errors[id][rule] == "new" || errors[id][rule] == "old") {
 					switch (rule) {
@@ -351,6 +355,8 @@ $.widget("ui.formValidator", {
 					msgs += '					<li><a href="#'+id+'">'+msg+"</a></li>\n";
 					// there are errors to show
 					isError = failure = true;
+					// execute callback for every element with wrong input; returns the id of the element
+					self._trigger("onError", null, id);
 				}
 				if(errors[id][rule] == "new") {
 					// ARIA: new error added
@@ -411,6 +417,8 @@ $.widget("ui.formValidator", {
 			});
 			// focus error box when form is submitted
 			if (submitted) errorElement.attr("tabindex",-1).focus();
+			// Callback fired when error exists
+			self._trigger("onErrors", 0);
 		// send data if no errors found
 		} else if(submitted) {
 			self._sendForm();
@@ -650,16 +658,16 @@ $.widget("ui.formValidator", {
 
 $.extend($.ui.formValidator, {
 	version: "1.7.1",
-	defaults: {
+	defaults: {		
 		validateLive: true,
 		validateTimeout: 500,
-		validateOff: "Bitte klicken Sie hier um die Live Validierung zu deaktivieren.",
-		validateOn: "Bitte klicken Sie hier um die Live Validierung zu aktivieren.",
-		errorsTitle: "Bitte korrigieren Sie folgende Fehler:",		
+		validateOff: "Please click here to deactivate live validating of this form.",
+		validateOn: "Please clkick here to activate live form validating.",
+		errorsTitle: "Please check the following errors:",		
 		submitHowTo: "ajax",
 		submitUrl: "",
-		submitError: "Bei der Datenübertragung ist ein Fehler aufgetreten. Entschuldigen Sie bitte und versuchen Sie es noch einmal.",
-		submitSuccess: "Die Daten wurden erfolgreich übermittelt. Vielen Dank!",		
+		submitError: "Something wen't wrong while sending your data. Please retry.",
+		submitSuccess: "Your data was succefully submitted, thank you!",		
 		//do not alter these vars
 		errorsArray: [],
 		originalUrl: ""
