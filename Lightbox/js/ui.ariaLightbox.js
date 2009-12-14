@@ -1,5 +1,5 @@
 /*!
- * jQuery UI ariaLightbox (22.11.09)
+ * jQuery UI ariaLightbox (14.12.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -11,7 +11,7 @@
  USAGE:::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example
 * The widget gets all the elements in the document which matches choosen selector
-* There are to modes: singleview and gallerview defined with imageArray: []
+* There are to modes: singleview and galleryview defined with imageArray: []
 
  * Options	
 imageArray:			activates galleryview of set to imageArray: []
@@ -19,7 +19,7 @@ altText: 			which attr (within the image) as alt attr
 descText: 			which attr (within the image) as description text
 prevText: 			text on the button
 nextText: 			see above
-titleText: 				titleText of the lightbox
+titleText: 			titleText of the lightbox
 pictureText: 		string: picture
 ofText: 			string: of
 closeText: 			string: close element
@@ -28,7 +28,7 @@ autoHeight: 		margin to top when pos: auto is used
 offsetX: 			number: if pos:"offset" its the distance betwen lightbox and mousclick position
 offsetY:  			see above
 useDimmer: 			boolean, activate or deactivate dimmer
-animationSpeed:		in mimmilseconds or jQuery keywors aka "slow", "fast"
+animationSpeed:		in millseconds or jQuery keywors aka "slow", "fast"
 zIndex: 			number: z-index for overlay elements
 background: 		color in HTML notation
 opacity: 			decimal betwen 1-0
@@ -59,31 +59,23 @@ $.widget("ui.ariaLightbox", {
 	_init: function() {	
 		var options = this.options, self = this;
 		
-		// set trigger events | gallery mode
-		if (options.imageArray) {	
-			// save all elements
-			options.imageArray[options.imageArray.length] = this.element;
-			var index = options.imageArray.length;
-			
-			this.element.click(function (event) { 
-				// set active element
-				self.options.activeImage = index-1;	
-				// only activate when widget isnt disabled
-				if (!options.disabled) {
-					event.preventDefault();
-					self._open($(this), event);
+		// set trigger events			
+		this.element.click(function (event) { 
+			// only activate when widget isnt disabled
+			if (!options.disabled) {
+				// we need to do some more gallery mode is activated
+				if (options.imageArray) {	
+					// save all elements
+					options.imageArray[options.imageArray.length] = this.element;
+					var index = options.imageArray.length;
+					// set active element
+					self.options.activeImage = index-1;	
 				}
-			});	
-		// single image mode 
-		} else {
-			self.element.click(function (event) { 	
-				// only activate when widget isnt disabled								
-				if (!options.disabled) {
-					event.preventDefault();
-					self._open($(this), event);
-				}
-			});
-		}	
+				event.preventDefault();
+				self._open($(this), event);
+			}
+		});	
+		
 		// only set resize event when lightbox is activated
 		if (options.useDimmer)
 		$(window).resize(function(){ 
@@ -100,9 +92,9 @@ $.widget("ui.ariaLightbox", {
 	
 	// check if lightbox is already opened
 	_open: function (element, event){
-		var options = this.options, self = this;			
-		// save clicked element
-		options.clickedElement = event.target;	
+		var options = this.options, self = this;	
+		// save clicked element (needed if lightbox is controlled by keyboard only)
+		options.clickedElement = event.currentTarget;
 		
 		// if wrapper element isnt found, create it
 		options.wrapperElement = $("#ui-lightbox-wrapper");
@@ -113,7 +105,7 @@ $.widget("ui.ariaLightbox", {
 		}
 	},
 	
-	// called when lightbox wrapper element is not injected yet
+	// called if lightbox wrapper element is not injected yet
 	_show: function (element, event){
 		var options = this.options, self = this;		
 		
@@ -129,7 +121,7 @@ $.widget("ui.ariaLightbox", {
 		html += '	<div id="ui-lightbox-content">'+"\n";
 		html += '		<div id="ui-lightbox-image"><img src="" aria-describedby="ui-lightbox-description" /></div>'+"\n";
 		html += '		<p id="ui-lightbox-description"></p>'+"\n";
-		// show pager and rage description if its an array of images
+		// show pager and range description if its an array of images
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
@@ -148,6 +140,7 @@ $.widget("ui.ariaLightbox", {
 		
 		// Callback
 		self._trigger("onShow", 0);
+		// get lightbox element
 		options.wrapperElement = $("#ui-lightbox-wrapper");			
 		
 		// enable keyboard navigation 
@@ -340,6 +333,8 @@ $.widget("ui.ariaLightbox", {
 		});
 		// remove dimmer
 		if (options.useDimmer) $("#ui-lightbox-screendimmer").fadeOut(options.animationSpeed, function() { $(this).remove(); });
+		// refocus original clicked element
+		$(options.clickedElement).focus();
 		// Callback
 		self._trigger("onClose", 0);
 	},		
