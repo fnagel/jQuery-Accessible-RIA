@@ -27,6 +27,8 @@ pos: 				position of the lightbox, possbible values: auto, offset, or [x,y]
 autoHeight: 		margin to top when pos: auto is used
 offsetX: 			number: if pos:"offset" its the distance betwen lightbox and mousclick position
 offsetY:  			see above
+disableWidth: 		min width of the screen (otherwise widget is disabled)
+disableHeight: 		max width of the screen
 useDimmer: 			boolean, activate or deactivate dimmer
 animationSpeed:		in millseconds or jQuery keywors aka "slow", "fast"
 zIndex: 			number: z-index for overlay elements
@@ -59,28 +61,29 @@ $.widget("ui.ariaLightbox", {
 	_init: function() {	
 		var options = this.options, self = this;
 		
+		// save all elements if its a gallery
+		if (options.imageArray) {	
+			options.imageArray[options.imageArray.length] = this.element;
+			var index = options.imageArray.length;
+		}
+				
 		// set trigger events			
 		this.element.click(function (event) { 
-			// only activate when widget isnt disabled
-			if (!options.disabled) {
-				// we need to do some more gallery mode is activated
-				if (options.imageArray) {	
-					// save all elements
-					options.imageArray[options.imageArray.length] = this.element;
-					var index = options.imageArray.length;
-					// set active element
-					self.options.activeImage = index-1;	
-				}
+			// only activate when widget isnt disabled and screen isn't to small
+			if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {	
+				// set active element if gallery mode is activated
+				if (options.imageArray)	self.options.activeImage = index-1;
 				event.preventDefault();
 				self._open($(this), event);
 			}
 		});	
-		
+
 		// only set resize event when lightbox is activated
 		if (options.useDimmer)
 		$(window).resize(function(){ 
-			self._dimmerResize();
+			if (!options.disabled) self._dimmerResize();
 		});
+		
 		self._makeHover(self.element);
 	},
 	
@@ -372,8 +375,8 @@ $.widget("ui.ariaLightbox", {
 		// set attributes
 		$("#ui-lightbox-screendimmer")
 			.css({
-				width: 		self._dimmerWidth(),
-				height: 	self._dimmerHeight(),
+				width: 		self._dimmerWidth() + 'px',
+				height: 	self._dimmerHeight() + 'px',
 				zIndex: 	options.zIndex,
 				background: options.background,
 				position: 	"absolute",
@@ -391,20 +394,22 @@ $.widget("ui.ariaLightbox", {
 	// resize dimmer
 	_dimmerResize: function() {
 		var self = this;		
-		var dimmer = $("#ui-lightbox-screendimmer");	
-		// make dimmer div small | necassary to check if content is smaller than the dimmer div
-		dimmer.css({
-			width: 	0,
-			height: 0
-		});		
-		// check real body dimension
-		var dimension = self._pageScroll();
-		// if page is not scrolled without dimmer div use normal width
-		var dimensionX = (dimension[0] == 0) ? self._dimmerWidth() : dimension[0];			
-		dimmer.css({
-			width: 	dimensionX,
-			height: self._dimmerHeight()
-		});
+		var dimmer = $("#ui-lightbox-screendimmer");
+		if (dimmer.length) {
+			// make dimmer div small | necassary to check if content is smaller than the dimmer div
+			dimmer.css({
+				width: 	0,
+				height: 0
+			});		
+			// check real body dimension
+			var dimension = self._pageScroll();
+			// if page is not scrolled without dimmer div use normal width
+			var dimensionX = (dimension[0] == 0) ? self._dimmerWidth() : dimension[0];			
+			dimmer.css({
+				width: 	dimensionX + 'px',
+				height: self._dimmerHeight() + 'px'
+			});
+		}
 	},
 	
 	// get body hight
@@ -420,13 +425,13 @@ $.widget("ui.ariaLightbox", {
 				document.body.offsetHeight
 			);
 			if (scrollHeight < offsetHeight) {
-				return $(window).height() + 'px';
+				return $(window).height();
 			} else {
-				return scrollHeight + 'px';
+				return scrollHeight;
 			}
 		// handle "good" browsers
 		} else {
-			return $(document).height() + 'px';
+			return $(document).height();
 		}
 	},
 	
@@ -443,13 +448,13 @@ $.widget("ui.ariaLightbox", {
 				document.body.offsetWidth
 			);
 			if (scrollWidth < offsetWidth) {
-				return $(window).width() + 'px';
+				return $(window).width();
 			} else {
-				return scrollWidth + 'px';
+				return scrollWidth;
 			}
 		// handle "good" browsers
 		} else {
-			return $(document).width() + 'px';
+			return $(document).width();
 		}
 	},
 	
@@ -509,7 +514,8 @@ $.widget("ui.ariaLightbox", {
 
 $.extend($.ui.ariaLightbox, {
 	version: "1.7.1",
-	defaults: {		
+	defaults: {	
+		// text strings
 		altText: "alt",
 		descText: "title",
 		prevText: "previous picture",
@@ -518,10 +524,14 @@ $.extend($.ui.ariaLightbox, {
 		pictureText: "Picture",
 		ofText: "of",
 		closeText: "Close [ESC]",
+		// positioning
 		pos: "auto",
 		autoHeight: 50,
 		offsetX: 10,
 		offsetY:  10,
+		// disable lightbox if screens below:
+		disableWidth: 550,
+		disableHeight: 550,
 		// config screen dimmer
 		useDimmer: true,
 		animationSpeed: "slow",		
