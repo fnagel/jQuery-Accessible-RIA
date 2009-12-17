@@ -14,7 +14,7 @@
 <body>
 <h1>jQuery UI - ui.formValidator</h1>
 <div id="controls">
-	<a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a> | <a href="#" id="send">send</a>
+	<a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a> | <a href="#" id="send">send</a> | <a href="#" id="validate">validate email</a>
 </div>
 <div id="wrapper">
 	<div id="switcher"></div>
@@ -265,6 +265,9 @@
 			});		
 			$("#send").click(function (event) { 
 				formular.formValidator('formSubmitted');
+			});			
+			$("#validate").click(function (event) { 
+				formular.formValidator('validate', "inputtext");
 			});			
 			
 			// theme switcher

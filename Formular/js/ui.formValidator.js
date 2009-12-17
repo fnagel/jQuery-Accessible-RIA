@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (09.12.09)
+ * jQuery UI FormValidator (17.12.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -59,6 +59,7 @@ disable
 destroy
 enable
 formSubmitted	submits the form	
+validate 		parameter is string (id attribut); validates a single form element
  
  */
 (function($) {
@@ -111,14 +112,11 @@ $.widget("ui.formValidator", {
 		}
 		// set hover and focus for reset and submit buttons 
 		self._makeHover(self.element.find("input:submit, input:reset"));
-		
-		// get the error array	
-		errors = self.options.errorsArray;
-		
+				
 		// go trough every given form element
 		$.each(options.forms, function(id){
 			// instance the associative arry with index = id of the form element
-			errors[id] = [];
+			options.errorsArray[id] = [];
 			
 			// save element and which form type | add event handler | ARIA
 			//  search for "single" elements (which sould be defined by their ID)
@@ -184,22 +182,24 @@ $.widget("ui.formValidator", {
 						}
 						// wait before fire event
 						options.forms[id].timeout = window.setTimeout(function() {
-							self._validator(options.forms[id].element, id, errors);	
+							self._validator(options.forms[id].element, id);	
 							self._showErrors(false);	
 						}, time);
 					}
 				});
 			}
 		});	
-		// save empty errors array
-		options.errorsArray = errors;
 		// Callback
 		self._trigger("onInit", 0);
 	},
 	
 	// called when interact with the form | validates the forms | manages which rule applies to which element
-	_validator: function(element, id, errors) {
+	_validator: function(element, id) {
 		var options = this.options, self = this;
+		
+		// get error array
+		var errors = options.errorsArray;
+		
 		// get value of the form element(s)
 		var elementValue = self._getValue(id);	
 		
@@ -277,9 +277,6 @@ $.widget("ui.formValidator", {
 		// delete success or error message 
 		self.element.find("#ui-formular-success").remove();
 		
-		// get errors array
-		errors = self.options.errorsArray;
-		
 		// got trough every given form element 
 		$.each(options.forms, function(id){
 			// is a group of radio buttons or checkboxes already validated?
@@ -288,13 +285,13 @@ $.widget("ui.formValidator", {
 			//var element = self.element.find("#"+id);
 			var element = options.forms[id].element;
 			if (options.forms[id].type == "single")  {
-				self._validator(element, id, errors);	
+				self._validator(element, id);	
 			// if not it must be a radiobox group or a checkbox group				
 			} else {
 				// check if the is already validated
 				if (!groupValidated) {
 					groupValidated = true;
-					self._validator(element, id, errors);
+					self._validator(element, id);
 				}
 			}
 		});		
@@ -302,13 +299,22 @@ $.widget("ui.formValidator", {
 		self._showErrors(true);	
 	},
 	
+	// validates a single element
+	validate: function(id) {
+		var options = this.options, self = this;
+		
+		self._validator(options.forms[id].element, id);	
+		self._showErrors(false);	
+	},
+	
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
 	_showErrors: function(submitted){	
 		var options = this.options, self = this;
 		var isError, addError, removeError = false;
-		var msgs = msg = "";		
+		var msgs = msg = "";	
+		
 		// get error array
-		var errors = self.options.errorsArray;
+		var errors = options.errorsArray;
 		
 		// got trough every error form element 
 		for (var id in errors){
@@ -424,7 +430,10 @@ $.widget("ui.formValidator", {
 			self._sendForm();
 		}
 		
-		self._updateVirtualBuffer();		
+		self._updateVirtualBuffer();	
+
+		// save error Array
+		options.errorsArray = errors;
 		
 		// Callback
 		self._trigger("onShowErrors", 0);
