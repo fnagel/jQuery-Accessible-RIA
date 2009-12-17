@@ -38,7 +38,7 @@ a img{
 font-size: 0.6em;
 }
 
-/* Lightbox Styles
+/* Lightbox Styles (some are needed)
 ----------------------------------*/
 #ui-lightbox-wrapper {
 	display: none;
@@ -77,8 +77,8 @@ a.singleLightbox{
 }
 a.ui-state-focus,
 a.ui-state-hover {
-border-left: 0 !important;
-border-right: 0 !important;
+	border-left: 0 !important;
+	border-right: 0 !important;
 }
 ul{
 	margin: 0;
