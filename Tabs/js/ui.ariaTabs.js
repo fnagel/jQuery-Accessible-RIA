@@ -1,14 +1,13 @@
 /*!
- * jQuery UI ariaTabs (22.11.09)
+ * jQuery UI AriaTabs (22.11.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
- * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
- * 
- *   Depends: 	ui.core.js
- *   			ui.tabs.js
- *  			ui.sortable.js (optional, see tabs docu)
-*/
+ * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+ *
+ * Depends: ui.core.js
+ *   		ui.tabs.js
+ */ 
 /* 
  USAGE:::::::::::::
 * Take a look in the html file or the (german) pdf file delivered with this example

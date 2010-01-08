@@ -1,11 +1,11 @@
 /*!
- * jQuery UI ariaLightbox (14.12.09)
+ * jQuery UI AriaLightbox (14.12.09)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
- * Licensed under Creative Commens Attribution-Share Alike 3.0 Unported (http://creativecommons.org/licenses/by-sa/3.0/)
- * 
- *  Depends: ui.core.js
+ * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+ *
+ * Depends: ui.core.js
  */
 /*
  USAGE:::::::::::::
