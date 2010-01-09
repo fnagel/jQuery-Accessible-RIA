@@ -1,2 +1,5 @@
 #ignore thumbnails created by windows
 Thumbs.db
+*.pdf
+license.txt
+readme
