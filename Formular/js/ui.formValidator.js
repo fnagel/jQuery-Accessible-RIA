@@ -13,7 +13,7 @@ USAGE:::::::::::::::::::::::::::
  * To validate a form element specify its properties in the options forms array:
  options
 	forms
-		ID [of the element]
+		ID [or class of the element]
 			rules
 			msgs
 * Forms Array and its children are necessary, possbile values for rules and msg are:
