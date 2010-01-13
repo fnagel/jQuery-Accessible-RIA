@@ -80,14 +80,14 @@
 					
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Custom Validating</legend>
-			<label for="mycustom">Custom check field ( = 0,2,4,6,8,...)</label>
+			<label for="mycustom">Custom check field (even number = 0,2,4,6,8,...)</label>
 			<input type="text" id="mycustom" name="mycustom" class="text ui-widget-content ui-corner-all" />
 		</fieldset>	
 					
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Others</legend>
 
-			<label for="selectset">Selectbox <em title="Needed">*</em></label>
+			<label for="selectset">Multiple Selectbox <em title="Needed">*</em></label>
 			<select name="selectset-name" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
 				<option>Option 1</option>
 				<option>Option 2</option>
@@ -96,6 +96,14 @@
 				<option>Option 5</option>
 			</select>		
 					
+			<label for="salutation">Selectbox<em title="Needed">*</em></label>
+			<select name="salutation-name" id="salutation" size="1" class="text ui-widget-content ui-corner-all">
+				<option value="default">Please choose...</option>
+				<option value="Mr.">Mr.</option>
+				<option value="Ms.">Ms.</option>
+				<option value="Mrs.">Mrs.</option>
+			</select>
+			
 			<label for="upload">File-Upload</label>
 			<input type="file" name="upload-name" id="upload"  class="ui-widget-content" accept="image/jpeg, image/gif, image/png" />
 		</fieldset>		
@@ -193,7 +201,15 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 							lengthMax: 3
 						},
 						msg: {
-							length: "Please select between 2 and 3 options within the select element."
+							length: "Please select between 2 and 3 or none options within the select element. You have to press [shift]."
+						}
+					},
+					salutation: {
+						rules: {
+							required: true
+						},
+						msg: {
+							required: "Please select a salutation."
 						}
 					},
 					mycustom: {
