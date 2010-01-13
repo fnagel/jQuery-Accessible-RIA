@@ -31,16 +31,16 @@
 			<legend class="ui-widget-header ui-corner-all">Input's</legend>
 			
 			<label for="inputtext">Text Input (email) <em title="Needed">*</em></label>
-			<input type="text" id="inputtext" name="inputtext" class="text ui-widget-content ui-corner-all" />
+			<input type="text" id="inputtext" name="inputtext-name" class="text ui-widget-content ui-corner-all" />
 						
 			<label for="txtarea">Textarea <em title="Needed">*</em></label>
 			<textarea id="txtarea" name="txtarea" rows="" cols="" class="text ui-widget-content ui-corner-all"></textarea>
 						
 			<label for="password1">Password</label>
-			<input name="password1" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
+			<input name="password1-name" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
 			
 			<label for="password2">Password repeat</label>
-			<input name="password2" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
+			<input name="password2-name" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
 		</fieldset>	
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Checkboxes</legend>
@@ -80,15 +80,15 @@
 					
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Custom Validating</legend>
-			<label for="mycustom">Custom check field ( = 0,2,4,6,8,...)</label>
+			<label for="mycustom">Custom check field (even number = 0,2,4,6,8,...)</label>
 			<input type="text" id="mycustom" name="mycustom" class="text ui-widget-content ui-corner-all" />
 		</fieldset>	
 					
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Others</legend>
 
-			<label for="selectset">Selectbox <em title="Needed">*</em></label>
-			<select name="selectset" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
+			<label for="selectset">Multiple Selectbox <em title="Needed">*</em></label>
+			<select name="selectset-name" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
 				<option>Option 1</option>
 				<option>Option 2</option>
 				<option>Option 3</option>
@@ -96,15 +96,23 @@
 				<option>Option 5</option>
 			</select>		
 					
+			<label for="salutation">Selectbox<em title="Needed">*</em></label>
+			<select name="salutation-name" id="salutation" size="1" class="text ui-widget-content ui-corner-all">
+				<option value="default">Please choose...</option>
+				<option value="Mr.">Mr.</option>
+				<option value="Ms.">Ms.</option>
+				<option value="Mrs.">Mrs.</option>
+			</select>
+			
 			<label for="upload">File-Upload</label>
-			<input type="file" name="upload" id="upload"  class="ui-widget-content" accept="image/jpeg, image/gif, image/png" />
+			<input type="file" name="upload-name" id="upload"  class="ui-widget-content" accept="image/jpeg, image/gif, image/png" />
 		</fieldset>		
 		
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
 			<div class="pair">
-				<input type="checkbox" id="confirm_1" name="confirm-checkbox" class="radio confirm" />
-                <label class="ui-widget-content ui-corner-all" for="confirm_1">Please check your input <em title="Needed">*</em></label>	
+				<input type="checkbox" id="confirm-checkbox" name="confirm-checkbox" class="radio confirm" />
+                <label class="ui-widget-content ui-corner-all" for="confirm-checkbox">Please check your input <em title="Needed">*</em></label>	
 			</div>	
 			
 			<label for="captcha">Capctha ( = 123456) <em title="Needed">*</em></label>
@@ -193,7 +201,15 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 							lengthMax: 3
 						},
 						msg: {
-							length: "Please select between 2 and 3 options within the select element."
+							length: "Please select between 2 and 3 or none options within the select element. You have to press [shift]."
+						}
+					},
+					salutation: {
+						rules: {
+							required: true
+						},
+						msg: {
+							required: "Please select a salutation."
 						}
 					},
 					mycustom: {
@@ -220,7 +236,7 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 							required: true
 						},
 						msg: {
-							required: "Please recheck your input."
+							required: "Please check your input again."
 						}
 					},							
 					captcha: {

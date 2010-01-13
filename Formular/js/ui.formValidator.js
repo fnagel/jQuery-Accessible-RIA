@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (17.12.09)
+ * jQuery UI FormValidator (13.01.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -13,7 +13,7 @@ USAGE:::::::::::::::::::::::::::
  * To validate a form element specify its properties in the options forms array:
  options
 	forms
-		ID [of the element]
+		ID [or class of the element]
 			rules
 			msgs
 * Forms Array and its children are necessary, possbile values for rules and msg are:
@@ -109,7 +109,9 @@ $.widget("ui.formValidator", {
 					self._updateVirtualBuffer();
 				}
 			);
+		
 		}
+		
 		// set hover and focus for reset and submit buttons 
 		self._makeHover(self.element.find("input:submit, input:reset"));
 				
@@ -202,7 +204,6 @@ $.widget("ui.formValidator", {
 		
 		// get value of the form element(s)
 		var elementValue = self._getValue(id);	
-		
 		// got trough every rule and its ruleValue of every given form element 
 		$.each(options.forms[id].rules, function(rule, ruleValue){
 			if (elementValue == "") {
@@ -557,11 +558,15 @@ $.widget("ui.formValidator", {
 				break;
 			case "group":
 					var result = options.forms[id].element.filter(':checked');
-					value = (result.length) ? result : "";	
+					if (result.length) value = result;	
 				break;
 			case "select":
 					var result = options.forms[id].element.find("option").filter(':selected');
-					value = (result.length) ? result : "";
+					// check if its an array (how much items)
+					if (result.length) {
+						// if not multiple items selected, there could be a default option 
+						value =  (result.val() == "default") ? 0 : result;
+					}
 				break;
 		}
 		return value;
