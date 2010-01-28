@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (14.12.09)
+ * jQuery UI AriaLightbox (28.01.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -82,7 +82,7 @@ $.widget("ui.ariaLightbox", {
 		if (options.useDimmer)
 		$(window).resize(function(){ 
 			if (!options.disabled) self._dimmerResize();
-		});
+		});		
 		
 		self._makeHover(self.element);
 	},
@@ -235,10 +235,10 @@ $.widget("ui.ariaLightbox", {
 			// preload image
 			var image = new Image();
 			image.onload = function() {	
-				//  set new picture properties			
+				//  set new picture properties	
 				imageElement
 					.attr('src', element.attr("href"))
-					.attr('alt', element.find("img").attr(options.altText));
+					.attr('alt', options.altText.call(element));
 					
 				// if em isnt deactivated calculate relative size
 				var calculatedX = (options.em) ? image.width*options.em+"em" : image.width;
@@ -274,7 +274,7 @@ $.widget("ui.ariaLightbox", {
 						imageElement.fadeIn(options.animationSpeed);
 						// change description of the picture
 						options.wrapperElement.find("#ui-lightbox-description")
-							.text(element.find("img").attr(options.descText));
+							.text(options.descText.call(element));
 						// if it is a gallery change the pager text
 						if (options.imageArray)
 						options.wrapperElement.find("#ui-lightbox-pager")
@@ -515,9 +515,14 @@ $.widget("ui.ariaLightbox", {
 $.extend($.ui.ariaLightbox, {
 	version: "1.7.1",
 	defaults: {	
-		// text strings
-		altText: "alt",
-		descText: "title",
+		// text strings		
+		altText: function() {
+			// $(this) is the triggered element (in this case the link element)
+			return $(this).find("img").attr("alt");
+		},
+		descText: function() {
+			return $(this).find("img").attr("title");
+		},
 		prevText: "previous picture",
 		nextText: "next picture",		
 		titleText: "Lightbox",
