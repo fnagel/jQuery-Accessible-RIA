@@ -69,8 +69,6 @@ Die Fotografien dürfen nicht kommerziell verwendet werden.
 	<script type="text/javascript">
 		$(function() {	
 			var lightbox1 = $(".singleLightbox").ariaLightbox({
-				altText: "alt",
-				descText: "title",
 				useDimmer: false,
 				pos: "offset"
 			});
@@ -83,12 +81,16 @@ Die Fotografien dürfen nicht kommerziell verwendet werden.
 			$("#disablelink1").click(function (event) { 
 				lightbox1.ariaLightbox('disable');
 			});	
-					
 			
 			var lightbox2 = $(".seriesLightbox").ariaLightbox({
 				imageArray: [],
-				altText: "alt",
-				descText: "title",
+				altText: function() {
+					// $(this) is the triggered element (in this case the link element)
+					return $(this).find("img").attr("alt");
+				},
+				descText: function() {
+					return $(this).find("img").attr("title");
+				},
 				useDimmer: true,
 				pos: "auto",
 				titleText: "Gallery",
