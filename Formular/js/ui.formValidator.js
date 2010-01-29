@@ -312,7 +312,8 @@ $.widget("ui.formValidator", {
 	_showErrors: function(submitted){	
 		var options = this.options, self = this;
 		var isError, addError, removeError = false;
-		var msgs = msg = "";	
+		var msgs = "";
+		var msg = "";	
 		
 		// get error array
 		var errors = options.errorsArray;
@@ -390,7 +391,7 @@ $.widget("ui.formValidator", {
 		if (addError || removeError) aria += '"';	
 		
 		// build up HTML | no content if no error is found
-		var html = "\n"
+		var html = "\n";
 		if (isError) {
 			html += '			<div'+aria+' class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
 			html += '				<p id="ui-error-title">'+"\n";
@@ -514,7 +515,7 @@ $.widget("ui.formValidator", {
 		}
 		
 		//build up HTML
-		var html = "\n"
+		var html = "\n";
 		html += '		<div id="ui-formular-success">'+"\n";
 		html += '			<div aria-live="assertive" class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
 		html += '				<p>'+"\n";
