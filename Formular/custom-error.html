@@ -206,7 +206,9 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 				errorSummery: "onSubmit",
 				disabled: false,
 				submitHowTo: "iframe",
-				submitUrl: "server.php",					
+				submitUrl: "server.php",		
+				// this is an example how to use the customError callback
+				// im using a modified version of the dev version of jQuery UI tooltip, which is ARIA enabled
 				customError: function(event, data){ 
 					for (var error in data["errors"]){
 						if (data.errors[error] == "new") {	

@@ -37,11 +37,11 @@ USAGE:::::::::::::::::::::::::::
 * Other widget options are:
 validateLive 			Boolean / String	turn on or off live validation; set to "blur" if validation should start when leaving form elements
 validateLiveMsg			Boolean				Disable the "click here to disable live validation" message
-validateTimeout			Number / String		time till live validation, use "Blur" to validate on lost focus
+validateTimeout			Number / String		time till live validation, use "blur" to validate on lost focus
 validateTimeoutCaptcha	Number				multiplied with validateTimeout to protect your server from to much load
 validateOff 			String				msg for disabling live validation
 validateOn 				String				msg for disabling live validation
-errorSummery			Boolean				deactivate error summery
+errorSummery			Boolean / String	deactivate error summery, use "onSubmit" for displaying summery when form is submitted
 submitHowTo 			String 				ajax, iframe (for "ajax" and file upload), post (native)
 submitUrl 				String 				url for ajax and iframe submition
 submitError 			String 				predefined error msg
