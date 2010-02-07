@@ -96,3 +96,10 @@ input.radio {
 	top: 5.3em;
 	width: 20em;
 }
+/* Chrome css bug (would change styles of other browsers too, only to see where the problem is */
+´/* 
+select.ui-state-error, 
+.ui-widget-content  select.ui-state-error {
+color: black;
+}
+ */
