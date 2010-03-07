@@ -522,6 +522,9 @@ $.widget("ui.formValidator", {
 		// reenable the widget 
 		options.disabled = false;
 		
+		// fix for safari bug
+		if (jQuery.browser.safari) self.element.find(".ui-formular-success").remove();
+		
 		// chose icon to show | choose message
 		switch (value) {
 			case "true":

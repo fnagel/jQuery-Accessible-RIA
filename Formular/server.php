@@ -1,9 +1,9 @@
 <?php
 	// checking correkt data transfer
-	if (!empty($_POST['inputtext']) || !empty($_POST['txtarea']) || !empty($_POST['checkboxset']) || !empty($_POST['confirm'])) {
+	if ($_POST != "") {
 		echo "true";
-	} else {
-		echo "Es ist ein technischer Fehler aufgetreten";
+	} else {	
+		echo "There is a technical problem while receiving your data!";
 	}
 	// print_r($_POST);
 ?>
