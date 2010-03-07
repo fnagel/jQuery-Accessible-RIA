@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (28.01.10)
+ * jQuery UI AriaLightbox (07.03.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -183,7 +183,7 @@ $.widget("ui.ariaLightbox", {
 		
 		// add hover and close event
 		var closeElement = options.wrapperElement.find("#ui-lightbox-close");
-		closeElement.click( function() { self.close(); });
+		closeElement.click( function() { self.close(); return false; });
 		self._makeHover(closeElement);
 		
 		// decide which position is set
