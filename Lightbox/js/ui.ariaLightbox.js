@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (07.03.10)
+ * jQuery UI AriaLightbox (29.03.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -128,8 +128,8 @@ $.widget("ui.ariaLightbox", {
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
-		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">nächtes Bild</button>'+"\n";
-		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">vorheriges Bild</button>'+"\n";
+		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
+		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
 		html += '		</div>'+"\n";
 		}
 		html += '	</div>	'+"\n";
