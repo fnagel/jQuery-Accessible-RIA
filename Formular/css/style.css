@@ -86,11 +86,11 @@ input.radio {
 	margin: 0 0 1em 0;
 	padding: 0.2em 0.5em;
 }
-#ui-formular-error li {
+.ui-formular-error li {
 	font-size: 0.8em;
 }
 
-#ui-formular-error{
+.ui-formular-error{
 	position: absolute;
 	left: 22em;
 	top: 5.3em;

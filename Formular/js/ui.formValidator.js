@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (07.02.10)
+ * jQuery UI FormValidator (07.03.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -94,6 +94,14 @@ $.widget("ui.formValidator", {
 		// add virtual buffer form | should be added immediatly
 		self._updateVirtualBuffer();
 		
+		// set UID for later usage
+		var elementID = self.element.attr("id");
+		if (elementID != "") {
+			options.uid = elementID;
+		} else {
+			options.uid = new Date().getTime();
+		}		
+		
 		// set sumitUrl to form action if no one is defined
 		if (options.submitUrl == "") options.submitUrl = self.element.attr("action");
 		
@@ -110,12 +118,12 @@ $.widget("ui.formValidator", {
 		// add info Text and provide link to prevent live validating
 		if(options.validateLive && !options.disabled && options.validateLiveMsg) {
 			// add the deactivate live validation message
-			self.element.find("#ui-formular-info").append("\t<p><a id=\"ui-formular-live\" href=\"#nogo\">"+ options.validateOff +"</a></p>\n\t\t");
+			self.element.find(".ui-formular-info").append("\t<p><a class=\"ui-formular-live\" href=\"#nogo\">"+ options.validateOff +"</a></p>\n\t\t");
 			
 			self._updateVirtualBuffer();
 		
 			// toggle live validating and text of the link
-			self.element.find("#ui-formular-live").toggle(
+			self.element.find(".ui-formular-live").toggle(
 				function () {
 					options.validateLive = false;
 					$(this).attr("aria-live","polite")
@@ -313,7 +321,7 @@ $.widget("ui.formValidator", {
 		self._trigger("onformSubmitted", 0);	
 		
 		// delete success or error message 
-		self.element.find("#ui-formular-success").remove();
+		self.element.find(".ui-formular-success").remove();
 		
 		// got trough every given form element 
 		$.each(options.forms, function(id){
@@ -419,17 +427,17 @@ $.widget("ui.formValidator", {
 		var html = "\n";
 		if (data["isError"]) {
 			html += '			<div'+aria+' class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
-			html += '				<p id="ui-error-title">'+"\n";
+			html += '				<p id="ui-error-title-'+options.uid+'">'+"\n";
 			html += '					<span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>'+"\n";
 			html += '					'+options.errorsTitle+"\n";
 			html += '				</p>'+"\n";
-			html += '				<ul aria-labelledby="ui-error-title">'+"\n";
+			html += '				<ul aria-labelledby="ui-error-title-'+options.uid+'">'+"\n";
 			html += data["msgs"];
 			html += '				</ul>'+"\n";
 			html += '			</div>'+"\n\t\t";
 		}
 		// inject error HTML and make onclick event for direct error correction
-		errorElement = self.element.find("#ui-formular-error");
+		errorElement = self.element.find(".ui-formular-error");
 		errorElement.html(html);
 		
 		// no click events if no error is defined
@@ -530,7 +538,7 @@ $.widget("ui.formValidator", {
 		
 		//build up HTML
 		var html = "\n";
-		html += '		<div id="ui-formular-success">'+"\n";
+		html += '		<div class="ui-formular-success">'+"\n";
 		html += '			<div aria-live="assertive" class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
 		html += '				<p>'+"\n";
 		html += '					<span class="ui-icon ui-icon-'+icon+'" style="float: left; margin-right: 0.3em;"></span>'+"\n";
@@ -539,7 +547,7 @@ $.widget("ui.formValidator", {
 		html += '			</div>'+"\n\t\t";
 		html += '		</div>'+"\n\t\t";
 		self.element.prepend(html); 
-		self.element.find("#ui-formular-success").attr("tabindex",-1).focus();	
+		self.element.find(".ui-formular-success").attr("tabindex",-1).focus();	
 		self._updateVirtualBuffer();
 		// Callback
 		self._trigger("onShowSuccess", null, value);
@@ -664,7 +672,7 @@ $.widget("ui.formValidator", {
 		// set original action url if changed
 		if (options.originalUrl != "") this.element.attr("action", options.originalUrl);
 		// remove injected elements
-		this.element.find("#ui-formular-live, #ui-formular-error, #ui-formular-success").remove();	
+		this.element.find(".ui-formular-live, .ui-formular-error, .ui-formular-success").remove();	
 		$("#virtualBufferForm").parent().remove();	
 	},	
 	
