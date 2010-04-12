@@ -1,11 +1,11 @@
 /*!
- * jQuery UI AriaTabs (22.11.09)
+ * jQuery UI AriaTabs legacy (12.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js
+ * Depends: ui.core.js 1.7.x
  *   		ui.tabs.js
  */ 
 /* 

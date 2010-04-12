@@ -1,11 +1,11 @@
 /*!
- * jQuery UI FormValidator (07.03.10)
+ * jQuery UI FormValidator legacy (12.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js
+ * Depends: ui.core.js 1.7.x
  */
 /*
 USAGE:::::::::::::::::::::::::::
@@ -70,24 +70,6 @@ validate 			parameter is string (id attribut); validates a single form element
 (function($) {
 
 $.widget("ui.formValidator", {
-
-	// delete options if your using jQuery UI 1.7.x
-	options: {		
-		validateLive: true,
-		validateLiveMsg: true,
-		validateTimeout: 500, // or "blur"
-		validateTimeoutCaptcha: 3,
-		validateOff: "Please click here to deactivate live validating of this form.",
-		validateOn: "Please clkick here to activate live form validating.",
-		errorSummery: true,
-		errorsTitle: "Please check the following errors:",		
-		submitHowTo: "ajax",
-		submitUrl: "",
-		submitError: "Something wen't wrong while sending your data. Please retry.",
-		submitSuccess: "Your data was succefully submitted, thank you!",
-		originalUrl: "",
-		selectDefault: "default"
-	},
 
 	_init: function() {	
 		var options = this.options, self = this;		
@@ -692,8 +674,7 @@ $.widget("ui.formValidator", {
 });
 
 $.extend($.ui.formValidator, {
-	// version: '1.8rc1',
-	// delete defaults if your using jQuery UI 1.8.x
+	version: "1.7.1",
 	defaults: {		
 		validateLive: true,
 		validateLiveMsg: true,
