@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (22.11.09)
+ * jQuery UI AriaSorTable (12.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -59,7 +59,22 @@ destroy
 var sortIndex = 0;
 $.widget("ui.ariaSorTable", {
 
-	_init: function() {	
+	version: '1.8',
+	options: {
+		rowToStart: 1,
+		rowsToShow: false,
+		colScopeRow: 1,
+		defaultSortBy: "asc",
+		colsToHide: false,
+		rowsToHide: false,
+		keyboard: true,
+		pager: false,
+		textPager: "Page:",
+		textAsc: "Sort ascending",
+		textDesc: "Sort descending"
+	},
+	
+	_create: function() {	
 		var options = this.options, self = this;	
 		// init vars		
 		options.tableData = [];
@@ -499,22 +514,6 @@ $.widget("ui.ariaSorTable", {
 	}
 });
 
-$.extend($.ui.ariaSorTable, {
-	version: "1.7.1",
-	defaults: {
-		rowToStart: 1,
-		rowsToShow: false,
-		colScopeRow: 1,
-		defaultSortBy: "asc",
-		colsToHide: false,
-		rowsToHide: false,
-		keyboard: true,
-		pager: false,
-		textPager: "Page:",
-		textAsc: "Sort ascending",
-		textDesc: "Sort descending"
-	}
-});
 $.fn.extend($.ui.ariaSorTable.prototype,{
 	// build a pager
 	buildPager: function () {		

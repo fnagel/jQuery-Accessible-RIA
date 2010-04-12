@@ -1,11 +1,11 @@
 /*!
- * jQuery UI AriaTabs (22.11.09)
+ * jQuery UI AriaTabs (12.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js
+ * Depends: ui.core.js 1.8
  *   		ui.tabs.js
  */ 
 /* 
@@ -19,12 +19,11 @@
 (function($) {
 	$.fn.extend($.ui.tabs.prototype,{
 	
-		_original_init: $.ui.tabs.prototype._init,
 		// when widget is initiated
-		_init: function() {
+		_create: function() {
 			var self = this, options = this.options;			
 			// fire original function
-			self._original_init();			
+			self._tabify(true);		
 			// ARIA
 			self.element.attr("role", "application");
 			self.list.attr("role", "tablist");	
@@ -168,8 +167,6 @@
 		// removes all the setted attributes
 		destroy: function() {
 			var self = this, options = this.options;
-			// fire original function
-			this._original_destroy();	
 			// remove ARIA attribute
 			// wrapper element
 			self.element
@@ -198,6 +195,8 @@
 					.removeAttr("aria-relevant")
 					.removeAttr("role");
 			}
+			// fire original function
+			this._original_destroy();	
 		}		
 	});
 })(jQuery); 

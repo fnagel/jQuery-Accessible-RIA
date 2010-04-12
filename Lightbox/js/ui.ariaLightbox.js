@@ -1,11 +1,11 @@
 /*!
- * jQuery UI AriaLightbox (29.03.10)
+ * jQuery UI AriaLightbox (12.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js
+ * Depends: ui.core.js 1.8
  */
 /*
  USAGE:::::::::::::
@@ -58,7 +58,42 @@ destroy
 
 $.widget("ui.ariaLightbox", {
 
-	_init: function() {	
+	version: '1.8',
+	options: {	
+		// text strings		
+		altText: function() {
+			// $(this) is the triggered element (in this case the link element)
+			return $(this).find("img").attr("alt");
+		},
+		descText: function() {
+			return $(this).find("img").attr("title");
+		},
+		prevText: "previous picture",
+		nextText: "next picture",		
+		titleText: "Lightbox",
+		pictureText: "Picture",
+		ofText: "of",
+		closeText: "Close [ESC]",
+		// positioning
+		pos: "auto",
+		autoHeight: 50,
+		offsetX: 10,
+		offsetY:  10,
+		// disable lightbox if screens below:
+		disableWidth: 550,
+		disableHeight: 550,
+		// config screen dimmer
+		useDimmer: true,
+		animationSpeed: "slow",		
+		zIndex: 1000,
+		background: "black",
+		opacity: 0.8,
+		em: 0.0568182,
+		// don not alter this var
+		activeImage: 0
+	},
+	
+	_create: function() {	
 		var options = this.options, self = this;
 		
 		// save all elements if its a gallery
@@ -510,42 +545,5 @@ $.widget("ui.ariaLightbox", {
 		$("#ui-lightbox-screendimmer").remove();	
 		$("#ui-lightbox-wrapper").unbind("keydown").remove();
 	}	
-});
-
-$.extend($.ui.ariaLightbox, {
-	version: "1.7.1",
-	defaults: {	
-		// text strings		
-		altText: function() {
-			// $(this) is the triggered element (in this case the link element)
-			return $(this).find("img").attr("alt");
-		},
-		descText: function() {
-			return $(this).find("img").attr("title");
-		},
-		prevText: "previous picture",
-		nextText: "next picture",		
-		titleText: "Lightbox",
-		pictureText: "Picture",
-		ofText: "of",
-		closeText: "Close [ESC]",
-		// positioning
-		pos: "auto",
-		autoHeight: 50,
-		offsetX: 10,
-		offsetY:  10,
-		// disable lightbox if screens below:
-		disableWidth: 550,
-		disableHeight: 550,
-		// config screen dimmer
-		useDimmer: true,
-		animationSpeed: "slow",		
-		zIndex: 1000,
-		background: "black",
-		opacity: 0.8,
-		em: 0.0568182,
-		// don not alter this var
-		activeImage: 0
-	}
 });
 })(jQuery);
