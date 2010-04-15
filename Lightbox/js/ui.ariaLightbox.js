@@ -200,7 +200,7 @@ $.widget("ui.ariaLightbox", {
 					self.prev(); 
 				}
 			});	
-			options.buttonpane = options.wrapperElement.find("#ui-dialog-buttonpane")
+			options.buttonpane = options.wrapperElement.find("#ui-dialog-buttonpane");
 			// check button state
 			self._setButtonState();		
 			
@@ -293,6 +293,7 @@ $.widget("ui.ariaLightbox", {
 						}, options.animationSpeed);
 						break;						
 					case "auto":
+					default:
 						options.wrapperElement.animate({
 							left: (($(document).width() - image.width)/2)+"px",
 							width: calculatedX
