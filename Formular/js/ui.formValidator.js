@@ -302,7 +302,7 @@ $.widget("ui.formValidator", {
 					case "custom":
                         errors[rule] = self._whichError(ruleValue(elementValue), errors[rule]);
 					   break;
-				}		
+		}		
 			}
 		});
 		
@@ -468,6 +468,7 @@ $.widget("ui.formValidator", {
 		var options = this.options, self = this;
 		
 		switch (options.submitHowTo) {
+			default:
 			case "post":
 				// prevents revalidating but activates native form event
 				options.disabled = true;
