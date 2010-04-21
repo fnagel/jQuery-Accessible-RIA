@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable legacy (12.04.10)
+ * jQuery UI AriaSorTable legacy (18.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -18,6 +18,8 @@ ui-table-number-de 		123,456
 ui-table-date 			07/28/2009
 ui-table-date-de		28.07.2009
 ui-table-date-iso		2009-07-28  
+ui-table-text			defautl: sorts text
+ui-table-text-html		for sorting text with html tags
  ui-table-deactivate 	deactivates sorting for this col
  ui-state-active 		class to set a col as pre sorted (server site)
 
@@ -259,7 +261,10 @@ $.widget("ui.ariaSorTable", {
 			options.tableData.sort(self._sortDateDE);
 		} else if (th.hasClass("ui-table-date-iso")) {
 			options.tableData.sort(self._sortDateISO);
-		} else {
+		} else if (th.hasClass("ui-table-text-html")) {
+			options.tableData.sort(self._sortTextHTML);
+		} else { 
+			// default is text
 			options.tableData.sort(self._sortText);
 		}
 		
@@ -330,11 +335,19 @@ $.widget("ui.ariaSorTable", {
 		var aDate = a[sortIndex].substr(5,2) + "/" + a[sortIndex].substr(8,2) + "/" + a[sortIndex].substr(0,4);
 		var bDate = b[sortIndex].substr(5,2) + "/" + b[sortIndex].substr(8,2) + "/" + b[sortIndex].substr(0,4);	
 		return (Date.parse(aDate) < Date.parse(bDate));
+	},	
+	_sortTextHTML: function (a, b) {
+		// Text with html
+		var x = $(a[sortIndex]).text().toLowerCase();
+		var y = $(b[sortIndex]).text().toLowerCase();
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	_sortText: function (a, b) {
 		// 20:00:13
-		// Text, no html
-		return (a[sortIndex] > b[sortIndex]);
+		// Text without (!) html
+		var x = a[sortIndex].toLowerCase();
+		var y = b[sortIndex].toLowerCase();
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	
 	// set keyboard control
