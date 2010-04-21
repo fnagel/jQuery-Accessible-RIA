@@ -4,12 +4,12 @@
 	<meta http-equiv="content-type" content="text/html; charset=charset=ISO-8859-1" />
 	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
-	<title>ui.ariaLightbox - jQuery UI</title>
+	<title>ui.ariaLightbox - jQuery UI - Felix Nagel</title>
 	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
 	<link type="text/css" href="css/style.css" rel="stylesheet" />	
 </head>
 <body>
-<h1>jQuery UI - ui.ariaLightbox</h1>
+<h1>jQuery UI - Standard Demo - ui.ariaLightbox</h1>
 <div id="wrapper">
 	<div id="switcher"></div>
 	<br />
@@ -26,9 +26,10 @@
 		<a class="singleLightbox" href="pics/TheJerks.jpg"><img src="pics/thumb/TheJerks.jpg" style="height: 7.5em; width: 5em;" alt="The Jerks" title="The Jerks at Emergenza Semi-Finale im Rind in Rüsselsheim - 16.05.08)" /></a>
 		<a class="singleLightbox last" href="pics/LaRevolta.jpg"><img src="pics/thumb/LaRevolta.jpg" style="height: 7.5em; width: 5em;" alt="La Revolta" title="La Revolta at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
 	</div>
-	<div class=" box ui-widget-content ui-corner-all ui-helper-clearfix">
+	<div id="gallery" class="box ui-widget-content ui-corner-all ui-helper-clearfix">
 		<div class="sub">
-			<a href="#nogo" id="gallerylink2">startGallery</a>|
+			<a href="#nogo" id="gallerylink1">startGallery</a>|
+			<a href="#nogo" id="gallerylink2">startGallery (second pic)</a>|
 			<a href="#nogo" id="closelink2">close()</a>|
 			<a href="#nogo" id="destroylink2">destroy()</a>|
 			<a href="#nogo" id="disablelink2">disable()</a>|
@@ -48,6 +49,17 @@
 			</li>
 		</ul>
 	</div>
+	<div class="box ui-widget-content ui-corner-all ui-helper-clearfix">
+		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">In Text Gallery</h2>
+		<p>
+			Lorem ipsum dolor sit amet, <a class="textLightbox" href="pics/TheBossHoss_1.jpg" title="1 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 1</a>
+			consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+			<a class="textLightbox" href="pics/TheBossHoss_2.jpg" title="2 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 2</a>					
+			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
+			<a class="textLightbox" href="pics/TheBossHoss_3.jpg" title="3 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 3</a>					
+			At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+		</p>		
+	</div>
 	<br  /><br />
 	<br  /><br />
 	<br  /><br />
@@ -57,17 +69,17 @@
 	<br  /><br />
 </div>
 <div id="copyright"> 
-Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+Copyright (c) 2009-2010 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 <br />
-Die Fotografien dürfen nicht kommerziell verwendet werden.
+Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a>.
 </div>		
 	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
 	
 	<script type="text/javascript" src="js/ui.ariaLightbox.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>		
+	<!-- <script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>	-->	
 	<script type="text/javascript">
 		$(function() {	
 			var lightbox1 = $(".singleLightbox").ariaLightbox({
@@ -84,8 +96,8 @@ Die Fotografien dürfen nicht kommerziell verwendet werden.
 				lightbox1.ariaLightbox('disable');
 			});	
 			
-			var lightbox2 = $(".seriesLightbox").ariaLightbox({
-				imageArray: [],
+			var lightbox2 = $("#gallery").ariaLightbox({
+				imageArray: "a.seriesLightbox",
 				altText: function() {
 					// $(this) is the triggered element (in this case the link element)
 					return $(this).find("img").attr("alt");
@@ -110,12 +122,30 @@ Die Fotografien dürfen nicht kommerziell verwendet werden.
 			$("#prevlink2").click(function (event) { 
 				lightbox2.ariaLightbox('prev');
 			});	
-			$("#gallerylink2").click(function (event) { 
+			$("#gallerylink1").click(function (event) { 
 				lightbox2.ariaLightbox('startGallery', event);
 			});	
+			$("#gallerylink2").click(function (event) { 
+				lightbox2.ariaLightbox('startGallery', event, 1);
+			});	
+						
+			var lightbox3 = $("body").ariaLightbox({
+				imageArray: "a.textLightbox",
+				altText: function() {
+					// $(this) is the triggered element (in this case the link)
+					return $(this).attr("title");
+				},
+				descText: function() {
+					return $(this).attr("title");
+				},
+				useDimmer: false,
+				titleText: "All pictures in Text",
+				em: false,
+				makeHover: false
+			});		
 			
 			// theme switcher
-			$('#switcher').themeswitcher();
+			//$('#switcher').themeswitcher();
 		});		
 
 			

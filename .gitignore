@@ -1,4 +1,9 @@
 #ignore thumbnails created by windows
+<<<<<<< HEAD
 Thumbs.db
 *.pdf
 license.txt
+=======
+*.db
+*.pdf
+>>>>>>> master

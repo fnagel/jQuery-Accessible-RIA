@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (12.04.10)
+ * jQuery UI AriaLightbox (22.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -23,7 +23,7 @@ titleText: 			titleText of the lightbox
 pictureText: 		string: picture
 ofText: 			string: of
 closeText: 			string: close element
-pos: 				position of the lightbox, possbible values: auto, offset, or [x,y]
+pos: 				position of the lightbox, possbible values: auto, offset, or [x,y] (like pos: "100,300")
 autoHeight: 		margin to top when pos: auto is used
 offsetX: 			number: if pos:"offset" its the distance betwen lightbox and mousclick position
 offsetY:  			see above
@@ -88,6 +88,8 @@ $.widget("ui.ariaLightbox", {
 		zIndex: 1000,
 		background: "black",
 		opacity: 0.8,
+		// misc
+		makeHover: true,
 		em: 0.0568182,
 		// don not alter this var
 		activeImage: 0
@@ -98,48 +100,59 @@ $.widget("ui.ariaLightbox", {
 		
 		// save all elements if its a gallery
 		if (options.imageArray) {	
-			options.imageArray[options.imageArray.length] = this.element;
-			var index = options.imageArray.length;
+			options.selector = options.imageArray;
+			options.imageArray = self.element.find(options.imageArray);
+			// make hover
+			if (options.makeHover) options.imageArray.each(function() { self._makeHover($(this)); });
+		} else {
+			// make hover
+			if (options.makeHover) self._makeHover(self.element);
 		}
-				
-		// set trigger events			
-		this.element.click(function (event) { 
-			// only activate when widget isnt disabled and screen isn't to small
-			if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {	
-				// set active element if gallery mode is activated
-				if (options.imageArray)	self.options.activeImage = index-1;
-				event.preventDefault();
+		
+		// set trigger event			
+		self.element.click(function (event) {	
+			// single image?
+			if (!options.imageArray) {
 				self._open($(this), event);
-			}
+				return false; // do not follow link
+			} else {			
+				// get the a tag with our selector within the choosen context
+				target = $(event.target).closest(options.selector, self.element);
+				if (target.length) { 	
+					// set active element if gallery mode is activated
+					options.activeImage = options.imageArray.index(target);
+					self._open(target, event);
+					return false; // do not follow link
+				}
+			}					
 		});	
 
 		// only set resize event when lightbox is activated
 		if (options.useDimmer)
 		$(window).resize(function(){ 
 			if (!options.disabled) self._dimmerResize();
-		});		
-		
-		self._makeHover(self.element);
+		});				
 	},
 	
 	// call gallery from link
-	startGallery: function (event){
-		var options = this.options, self = this;	
-		self._open($(options.imageArray[0]), event);
+	startGallery: function (event, index){
+		index = (index) ? index : 0;
+		this.options.activeImage = index;
+		this._open($(this.options.imageArray[index]), event);
 	},
 	
 	// check if lightbox is already opened
 	_open: function (element, event){
 		var options = this.options, self = this;	
-		// save clicked element (needed if lightbox is controlled by keyboard only)
-		options.clickedElement = event.currentTarget;
-		
-		// if wrapper element isnt found, create it
-		options.wrapperElement = $("#ui-lightbox-wrapper");
-		if(!options.wrapperElement.length){
-			self._show(element, event);
-		} else {
-			self._changePicture(element, event);
+		// only activate when widget isnt disabled and screen isn't to small
+		if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {
+			// save clicked element (needed if lightbox is controlled by keyboard only)
+			options.clickedElement = event.currentTarget;
+			
+			// if wrapper element isnt found, create it
+			options.wrapperElement = $("#ui-lightbox-wrapper");
+			if(!options.wrapperElement.length) self._show(element, event);
+			else self._changePicture(element, event);
 		}
 	},
 	
@@ -163,8 +176,8 @@ $.widget("ui.ariaLightbox", {
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
-		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
-		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
+		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
+		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
 		html += '		</div>'+"\n";
 		}
 		html += '	</div>	'+"\n";
@@ -200,7 +213,7 @@ $.widget("ui.ariaLightbox", {
 					self.prev(); 
 				}
 			});	
-			options.buttonpane = options.wrapperElement.find("#ui-dialog-buttonpane")
+			options.buttonpane = options.wrapperElement.find("#ui-dialog-buttonpane");
 			// check button state
 			self._setButtonState();		
 			
@@ -293,6 +306,7 @@ $.widget("ui.ariaLightbox", {
 						}, options.animationSpeed);
 						break;						
 					case "auto":
+					default:
 						options.wrapperElement.animate({
 							left: (($(document).width() - image.width)/2)+"px",
 							width: calculatedX
@@ -533,6 +547,17 @@ $.widget("ui.ariaLightbox", {
 	
 	destroy: function() {
 		var options = this.options;	
+		
+		if (options.makeHover) {	
+			if (options.imageArray) {
+				options.imageArray.each(function() { 
+					// remove events
+					$(this).unbind("mouseleave mouseenter focus blur");
+				});
+			} else {
+				this.element.unbind("mouseleave mouseenter focus blur");
+			}
+		} 
 		
 		this.element
 			// remove events
