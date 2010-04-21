@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox legacy (12.04.10)
+ * jQuery UI AriaLightbox legacy (21.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -73,8 +73,8 @@ $.widget("ui.ariaLightbox", {
 			if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {	
 				// set active element if gallery mode is activated
 				if (options.imageArray)	self.options.activeImage = index-1;
-				event.preventDefault();
 				self._open($(this), event);
+				return false;
 			}
 		});	
 
