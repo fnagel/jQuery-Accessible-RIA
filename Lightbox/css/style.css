@@ -68,6 +68,9 @@ font-size: 0.6em;
 	margin: 0 0 1em 0;
 	height: 14em;
 }
+#mass .box {
+	height: auto;
+}
 a.singleLightbox,
 a.seriesLightbox {
 	padding: 0 0 0.5em 0;
@@ -90,6 +93,10 @@ ul li{
 	margin: 0 0.9em 0 0;
 	list-style-type:none;
 }
+#mass ul li{
+	margin: 0 0.85em 0 0;
+}
+#mass ul li.last, 
 ul li.last, 
 a.last{
 	margin: 0;

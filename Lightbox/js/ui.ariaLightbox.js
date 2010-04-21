@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (12.04.10)
+ * jQuery UI AriaLightbox (22.04.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -109,12 +109,14 @@ $.widget("ui.ariaLightbox", {
 			if (options.makeHover) self._makeHover(self.element);
 		}
 		
-		// set trigger events			
+		// set trigger event			
 		self.element.click(function (event) {	
+			// single image?
 			if (!options.imageArray) {
 				self._open($(this), event);
 				return false; // do not follow link
 			} else {			
+				// get the a tag with our selector within the choosen context
 				target = $(event.target).closest(options.selector, self.element);
 				if (target.length) { 	
 					// set active element if gallery mode is activated
@@ -545,6 +547,17 @@ $.widget("ui.ariaLightbox", {
 	
 	destroy: function() {
 		var options = this.options;	
+		
+		if (options.makeHover) {	
+			if (options.imageArray) {
+				options.imageArray.each(function() { 
+					// remove events
+					$(this).unbind("mouseleave mouseenter focus blur");
+				});
+			} else {
+				this.element.unbind("mouseleave mouseenter focus blur");
+			}
+		} 
 		
 		this.element
 			// remove events
