@@ -84,13 +84,14 @@ $.widget("ui.ariaLightbox", {
 			if (!options.disabled) self._dimmerResize();
 		});		
 		
-		self._makeHover(self.element);
+		if (options.makeHover) self._makeHover(self.element);
 	},
 	
 	// call gallery from link
-	startGallery: function (event){
-		var options = this.options, self = this;	
-		self._open($(options.imageArray[0]), event);
+	startGallery: function (event, index){
+		index = (index) ? index : 0;
+		this.options.activeImage = index;
+		this._open($(this.options.imageArray[index]), event);
 	},
 	
 	// check if lightbox is already opened
@@ -128,8 +129,8 @@ $.widget("ui.ariaLightbox", {
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
-		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
-		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
+		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
+		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
 		html += '		</div>'+"\n";
 		}
 		html += '	</div>	'+"\n";
@@ -543,6 +544,8 @@ $.extend($.ui.ariaLightbox, {
 		zIndex: 1000,
 		background: "black",
 		opacity: 0.8,
+		// misc
+		makeHover: true,
 		em: 0.0568182,
 		// don not alter this var
 		activeImage: 0
