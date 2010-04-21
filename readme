@@ -1,5 +1,7 @@
 The branch gh-pages is used for hosting the demo pages. 
 
+Demo Pages are using the master branch files (which means jQuery 1.4.x and jQueryUI 1.8.x).
+
 Please use the master branch as these files are not always up to date.
 
 Take a look in the Wiki:
