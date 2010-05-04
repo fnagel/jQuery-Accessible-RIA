@@ -34,6 +34,7 @@ animationSpeed:		in millseconds or jQuery keywors aka "slow", "fast"
 zIndex: 			number: z-index for overlay elements
 background: 		color in HTML notation
 opacity: 			decimal betwen 1-0
+makeHover: 			deactivate hover events for images
 em: 				muliplicator for relative width (em) calculation, normally not to be edited
  
 * Callbacks
