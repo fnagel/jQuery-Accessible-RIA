@@ -21,16 +21,23 @@
 	
 		// when widget is initiated
 		_create: function() {
-			var self = this, options = this.options;			
+			var self = this, options = this.options;	
+
+			// add jQuery adress stuff
+			if ($.address) var anchorId = "#" + $.address.value().replace("/", '');
+
 			// fire original function
 			self._tabify(true);		
+			
 			// ARIA
 			self.element.attr("role", "application");
 			self.list.attr("role", "tablist");	
-			// init aria atrributes for each panel and anchor
 			for (var x = 0; x < self.anchors.length; x++) {
+				// add jQuery adress stuff | get proper tab by anchor
+				if ($.address && anchorId != "#" && $(self.anchors[x]).attr("href") == anchorId) self.select(x);
+				// init aria atrributes for each panel and anchor
 				self._ariaInit(x);
-			}		
+			}	
 			
 			// keyboard
 			self.element.keydown( function(event){
@@ -60,7 +67,18 @@
 						self.select(0);
 						break;				
 				}
-			});	
+			});		
+			
+			// add jQuery address stuff
+			if ($.address) {
+				$.address.externalChange(function(event) {
+					// Select the proper tab
+					anchor = "#" + event.value.replace("/", '');
+					for (var x = 0; x < self.anchors.length; x++) {
+						if ($(self.anchors[x]).attr("href") == anchorId) self.select(x);
+					}				
+				});
+			}
 		},
 		
 		_original_load: $.ui.tabs.prototype.load,
@@ -84,7 +102,14 @@
 					.attr("aria-busy", "true");
 			}		
 			// fire original function
-			this._original_load(index);			
+			this._original_load(index);
+			
+			// add jQuery adress stuff
+			if ($.address) {
+				$.address.title($.address.title().split(' | ')[0] + ' | ' + $(this.anchors[index]).text());
+				$.address.value($(this.anchors[index]).attr("href").replace(/^#/, ''));
+			}
+			
 			// is remote? end ARIA busy
 			if($.data(this.anchors[index], 'href.tabs')) {
 				$(this.panels[index])
