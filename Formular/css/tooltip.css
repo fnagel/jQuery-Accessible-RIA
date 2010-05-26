@@ -1,8 +1,0 @@
-/*Tooltip and Pointer CSS*/
-.ui-tooltip { 
-padding:8px; 
-z-index:9999; 
-border-width:2px; 
-font-size: 0.8em;
-width: 300px;
-}

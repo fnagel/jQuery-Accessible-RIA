@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=charset=ISO-8859-1" />
+	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
+	<title>ui.ariaLightbox - jQuery UI - Felix Nagel</title>
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="css/style.css" rel="stylesheet" />	
+</head>
+<body>
+<h1>jQuery UI - Standard Demo - ui.ariaLightbox</h1>
+<div id="wrapper">
+	<div id="gallery" style="height: auto;" class="box ui-widget-content ui-corner-all ui-helper-clearfix">
+		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Gallery</h2>
+		<ul class="ui-helper-clearfix">
+			<li>
+				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  alt="The Boss Hoss" title="1 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)"/></a>
+			</li>
+			<li>
+				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" alt="The Boss Hoss" title="2 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
+			</li>
+			<li class="last">
+				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" alt="The Boss Hoss" title="3 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
+			</li>
+		</ul>
+		<br />
+		<ul class="ui-helper-clearfix">
+			<li>
+				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  alt="The Boss Hoss" title="4 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)"/></a>
+			</li>
+			<li>
+				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" alt="The Boss Hoss" title="5 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
+			</li>
+			<li class="last">
+				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" alt="The Boss Hoss" title="6 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
+			</li>
+		</ul>
+	</div>
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+	<br  /><br />
+</div>
+<div id="copyright"> 
+Copyright (c) 2009-2010 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+<br />
+Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a>.
+<br />
+Please notice that jQuery Adress is not part of my widgets.
+</div>		
+	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="js/jquery.address-1.2.1.js?strict=0"></script>
+	
+	<script type="text/javascript" src="js/ui.ariaLightbox.js"></script>
+	<script type="text/javascript">
+		$(function() {	
+			var lightbox = $("#gallery").ariaLightbox({
+				imageArray: "a.seriesLightbox",
+				altText: function() {
+					// $(this) is the triggered element (in this case the link element)
+					return $(this).find("img").attr("alt");
+				},
+				descText: function() {
+					return $(this).find("img").attr("title");
+				},
+				useDimmer: true,
+				pos: "auto",
+				titleText: "Gallery",
+				makeHover: false
+			});		
+		});		
+
+			
+
+	</script>
+</body>
+</html>
