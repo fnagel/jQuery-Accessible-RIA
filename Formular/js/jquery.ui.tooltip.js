@@ -43,20 +43,18 @@ $.widget("ui.tooltip", {
 			.addClass("ui-tooltip ui-widget ui-corner-all")
 			.addClass(this.options.tooltipClass)
 			.appendTo(document.body)
-			// .hide();
-		this.opacity = this.tooltip.css("opacity");
-		this.tooltip.css("opacity", 0);
+			.hide();
 		this.tooltipContent = $("<div></div>")
 			.addClass("ui-tooltip-content")
 			.appendTo(this.tooltip);
-		// this.opacity = this.tooltip.css("opacity");
+		this.opacity = this.tooltip.css("opacity");
 		if (!this.options.noHover) 
 		this.element
 			.bind("focus.tooltip mouseenter.tooltip", function(event) {
-				self.open();
+				self.open( event );
 			})
 			.bind("blur.tooltip mouseleave.tooltip", function(event) {
-				self.close();
+				self.close( event );
 			});
 	},
 	
@@ -77,7 +75,7 @@ $.widget("ui.tooltip", {
 		return this.tooltip;
 	},
 	
-	open: function() {
+	open: function(event) {
 		var target = this.element;
 		// already visible? possible when both focus and mouseover events occur
 		if (this.current && this.current[0] == target[0])
@@ -88,14 +86,14 @@ $.widget("ui.tooltip", {
 		var content = this.options.content.call(target[0], function(response) {
 			// ignore async responses that come in after the tooltip is already hidden
 			if (self.current == target)
-				self._show(target, response);
+				self._show(event, target, response);
 		});
 		if (content) {
-			self._show(target, content);
+			self._show(event, target, content);
 		}
 	},
 	
-	_show: function(target, content) {
+	_show: function(event, target, content) {
 		if (!content)
 			return;
 		
@@ -108,9 +106,9 @@ $.widget("ui.tooltip", {
 		this.tooltip.css({
 			top: 0,
 			left: 0
-		}).position($.extend(this.options.position, {
+		}).show().position($.extend(this.options.position, {
 			of: target
-		}));
+		})).hide();
 		
 		this.tooltip.attr("aria-hidden", "false");
 		target.attr("aria-describedby", this.tooltip.attr("id"));
@@ -120,10 +118,10 @@ $.widget("ui.tooltip", {
 		else
 			this.tooltip.is(':visible') ? this.tooltip.fadeTo("normal", this.opacity) : this.tooltip.fadeIn();
 
-		this._trigger( "open" );
+		this._trigger( "open", event );
 	},
 	
-	close: function() {
+	close: function(event) {
 		if (!this.current)
 			return;
 		
@@ -137,11 +135,13 @@ $.widget("ui.tooltip", {
 		this.tooltip.attr("aria-hidden", "true");
 		
 		if (this.tooltip.is(':animated'))
-				this.tooltip.stop().fadeTo("normal", 0);
+				this.tooltip.stop().fadeTo("normal", 0, function() {
+					$(this).hide().css("opacity", "");
+				});
 			else
 				this.tooltip.stop().fadeOut();
 		
-		this._trigger( "close" );
+		this._trigger( "close", event );
 	}
 	
 });
