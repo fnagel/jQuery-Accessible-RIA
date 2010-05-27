@@ -19,7 +19,11 @@
 	<script type="text/javascript">
 		$(function() {
 			var tabs1 = $("#tabs")			
-			.tabs(); 			
+			.tabs({
+				jqAdress: {
+					split: " ~ "
+				}
+			}); 			
 			
 			$("#destroylink").click(function (event) { 
 				tabs1.tabs('destroy');

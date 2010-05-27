@@ -21,9 +21,14 @@
 	
 		// when widget is initiated
 		_create: function() {
+			// add jQuery address default options
+			if (!this.options.jqAdress && $.address) {
+				this.options["jqAdress"] = [];
+				this.options["jqAdress"]["split"] = ' | ';
+			}
 			var self = this, options = this.options;	
 
-			// add jQuery adress stuff
+			// add jQuery Address stuff
 			if ($.address) var anchorId = "#" + $.address.value().replace("/", '');
 
 			// fire original function
@@ -33,7 +38,7 @@
 			self.element.attr("role", "application");
 			self.list.attr("role", "tablist");	
 			for (var x = 0; x < self.anchors.length; x++) {
-				// add jQuery adress stuff | get proper tab by anchor
+				// add jQuery Address stuff | get proper tab by anchor
 				if ($.address && anchorId != "#" && $(self.anchors[x]).attr("href") == anchorId) self.select(x);
 				// init aria atrributes for each panel and anchor
 				self._ariaInit(x);
@@ -109,16 +114,17 @@
 			// fire original function
 			this._original_load(index);
 			
-			// add jQuery adress stuff
+			// add jQuery Address stuff
 			if ($.address) {
-				$.address.title($.address.title().split(' | ')[0] + ' | ' + $(this.anchors[index]).text());
+				$.address.title($.address.title().split(this.options.jqAdress.split)[0] + this.options.jqAdress.split + $(this.anchors[index]).text());
 				$.address.value($(this.anchors[index]).attr("href").replace(/^#/, ''));
 			}
 			
 			// is remote? end ARIA busy
 			if($.data(this.anchors[index], 'href.tabs')) {
 				$(this.panels[index])
-					.attr("aria-busy", "false");
+					.attr("aria-busy", "false");				
+					// TO DO jQuery Address: title is wrong when using Ajax Tab
 			}			
 			// set state for the activated tab
 			this._ariaSet(index, true);
