@@ -73,10 +73,15 @@
 			if ($.address) {
 				$.address.externalChange(function(event) {
 					// Select the proper tab
-					anchor = "#" + event.value.replace("/", '');
-					for (var x = 0; x < self.anchors.length; x++) {
-						if ($(self.anchors[x]).attr("href") == anchorId) self.select(x);
-					}				
+					var anchorId = "#" + event.value.replace("/", '');
+					var x = 0;
+					while (x < self.anchors.length) {
+						if ($(self.anchors[x]).attr("href") == anchorId) {
+							self.select(x); 
+							return;
+						}
+						x++;						
+					}	
 				});
 			}
 		},
