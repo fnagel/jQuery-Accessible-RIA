@@ -93,7 +93,11 @@ $.widget("ui.ariaLightbox", {
 		makeHover: true,
 		em: 0.0568182,
 		// don not alter this var
-		activeImage: 0
+		activeImage: 0,
+		// jQuery Adress
+		jqAdress: {
+			split: ' | '
+		}
 	},
 	
 	_create: function() {	
@@ -108,6 +112,28 @@ $.widget("ui.ariaLightbox", {
 		} else {
 			// make hover
 			if (options.makeHover) self._makeHover(self.element);
+		}		
+		
+		// add jQuery address stuff
+		if ($.address) {
+			$.address.externalChange(function(event) {		
+				// Select the proper picture		
+				if (event.value == "" && options.wrapperElement) self.close();
+				else if (options.imageArray) {	
+					for (var x = 0; x < options.imageArray.length; x++) {
+						if ($(options.imageArray[x]).attr("href") == event.value) {
+							options.activeImage = x;
+							// no second argument as there is no mouse click event
+							self._open($(options.imageArray[x]));
+							self._setButtonState();
+							return;
+						}
+					}
+				} else {
+					// no second argument as there is no mouse click event
+					if (self.element.attr("href") == event.value) self._open(self.element);
+				}		
+			});
 		}
 		
 		// set trigger event			
@@ -148,7 +174,7 @@ $.widget("ui.ariaLightbox", {
 		// only activate when widget isnt disabled and screen isn't to small
 		if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {
 			// save clicked element (needed if lightbox is controlled by keyboard only)
-			options.clickedElement = event.currentTarget;
+			if (event) options.clickedElement = event.currentTarget;
 			
 			// if wrapper element isnt found, create it
 			options.wrapperElement = $("#ui-lightbox-wrapper");
@@ -236,6 +262,7 @@ $.widget("ui.ariaLightbox", {
 		self._makeHover(closeElement);
 		
 		// decide which position is set
+		if (!event && options.pos == "offset") options.pos = "auto";
 		switch (options.pos) {
 			case "auto":
 				var viewPos = 	self._pageScroll();
@@ -298,6 +325,7 @@ $.widget("ui.ariaLightbox", {
 					height: calculatedY
 				});
 				// decide which position is set and animate the width of the ligthbox element
+				if (!event && options.pos == "offset") options.pos = "auto";
 				switch (options.pos) {
 					case "offset":
 						options.wrapperElement.animate({
@@ -334,7 +362,14 @@ $.widget("ui.ariaLightbox", {
 						// update screenreader buffer
 						self._updateVirtualBuffer();		
 						// ARIA | manipulations finished
-						contentWrapper.attr("aria-busy", false);						
+						contentWrapper.attr("aria-busy", false);
+						
+						// add jQuery adress stuff
+						if ($.address) {
+							$.address.title($.address.title().split(options.jqAdress.split)[0] + options.jqAdress.split + options.altText.call(element));
+							$.address.value(element.attr("href"));
+						}
+						
 						// Callback
 						self._trigger("onChangePicture", 0);
 						// END of image changing
@@ -388,6 +423,8 @@ $.widget("ui.ariaLightbox", {
 		if (options.useDimmer) $("#ui-lightbox-screendimmer").fadeOut(options.animationSpeed, function() { $(this).remove(); });
 		// refocus original clicked element
 		$(options.clickedElement).focus();
+		// add jQuery address stuff
+		if ($.address) $.address.title($.address.title().split(options.jqAdress.split)[0]);
 		// Callback
 		self._trigger("onClose", 0);
 	},		

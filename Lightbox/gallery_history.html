@@ -9,40 +9,16 @@
 	<link type="text/css" href="css/style.css" rel="stylesheet" />	
 </head>
 <body>
-<h1>jQuery UI - Standard Demo - ui.ariaLightbox</h1>
+<h1>jQuery UI - Single Demo with History support via jQuery Adress- ui.ariaLightbox</h1>
 <div id="wrapper">
-	<div id="gallery" style="height: auto;" class="box ui-widget-content ui-corner-all ui-helper-clearfix">
+	<div id="gallery" class="box ui-widget-content ui-corner-all ui-helper-clearfix">
 		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Gallery</h2>
-		<ul class="ui-helper-clearfix">
-			<li>
-				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  alt="The Boss Hoss" title="1 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)"/></a>
-			</li>
-			<li>
-				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" alt="The Boss Hoss" title="2 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
-			</li>
-			<li class="last">
-				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" alt="The Boss Hoss" title="3 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
-			</li>
-		</ul>
-		<br />
-		<ul class="ui-helper-clearfix">
-			<li>
-				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  alt="The Boss Hoss" title="4 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)"/></a>
-			</li>
-			<li>
-				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" alt="The Boss Hoss" title="5 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
-			</li>
-			<li class="last">
-				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" alt="The Boss Hoss" title="6 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
-			</li>
-		</ul>
+		<a class="singleLightbox" href="pics/DirtyFlowers.jpg"><img src="pics/thumb/DirtyFlowers.jpg" style="height: 7.5em; width: 5em;" alt="Dirty Flowers" title="Dirty Flowers at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
+		<a class="singleLightbox" href="pics/RealKeepers.jpg"><img src="pics/thumb/RealKeepers.jpg" style="height: 7.5em; width: 5em;" alt="Real Keepers" title="Real Keepers at Emergenza Regio-Finale (Batschkapp Frankfurt am Main - 25.06.08)" /></a>
+		<a class="singleLightbox" href="pics/WhiteLilium.jpg"><img src="pics/thumb/WhiteLilium.jpg" style="height: 7.5em; width: 5em;" alt="White Lilium" title="White Lilium at Emergenza Semi-Finale im Knust in Hamburg - 02.05.09)" /></a>
+		<a class="singleLightbox" href="pics/TheJerks.jpg"><img src="pics/thumb/TheJerks.jpg" style="height: 7.5em; width: 5em;" alt="The Jerks" title="The Jerks at Emergenza Semi-Finale im Rind in Rüsselsheim - 16.05.08)" /></a>
+		<a class="singleLightbox last" href="pics/LaRevolta.jpg"><img src="pics/thumb/LaRevolta.jpg" style="height: 7.5em; width: 5em;" alt="La Revolta" title="La Revolta at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
 	</div>
-	<br  /><br />
-	<br  /><br />
-	<br  /><br />
-	<br  /><br />
-	<br  /><br />
-	<br  /><br />
 	<br  /><br />
 </div>
 <div id="copyright"> 
@@ -50,8 +26,6 @@ Copyright (c) 2009-2010 <a href="http://www.felixnagel.com">Felix Nagel</a> for 
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 <br />
 Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a>.
-<br />
-Please notice that jQuery Adress is not part of my widgets.
 </div>		
 	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
@@ -62,7 +36,7 @@ Please notice that jQuery Adress is not part of my widgets.
 	<script type="text/javascript">
 		$(function() {	
 			var lightbox = $("#gallery").ariaLightbox({
-				imageArray: "a.seriesLightbox",
+				imageArray: "a.singleLightbox",
 				altText: function() {
 					// $(this) is the triggered element (in this case the link element)
 					return $(this).find("img").attr("alt");
@@ -73,7 +47,7 @@ Please notice that jQuery Adress is not part of my widgets.
 				useDimmer: true,
 				pos: "auto",
 				titleText: "Gallery",
-				makeHover: false
+				em: false
 			});		
 		});		
 
