@@ -94,7 +94,7 @@ $.widget("ui.ariaLightbox", {
 		em: 0.0568182,
 		// don not alter this var
 		activeImage: 0,
-		// jQuery Adress
+		// jQuery Address
 		jqAdress: {
 			split: ' | '
 		}
@@ -114,7 +114,7 @@ $.widget("ui.ariaLightbox", {
 			if (options.makeHover) self._makeHover(self.element);
 		}		
 		
-		// add jQuery address stuff
+		// add jQuery Address stuff
 		if ($.address) {
 			$.address.externalChange(function(event) {		
 				// Select the proper picture		
@@ -364,7 +364,7 @@ $.widget("ui.ariaLightbox", {
 						// ARIA | manipulations finished
 						contentWrapper.attr("aria-busy", false);
 						
-						// add jQuery adress stuff
+						// add jQuery Address stuff
 						if ($.address) {
 							$.address.title($.address.title().split(options.jqAdress.split)[0] + options.jqAdress.split + options.altText.call(element));
 							$.address.value(element.attr("href"));
@@ -423,7 +423,7 @@ $.widget("ui.ariaLightbox", {
 		if (options.useDimmer) $("#ui-lightbox-screendimmer").fadeOut(options.animationSpeed, function() { $(this).remove(); });
 		// refocus original clicked element
 		$(options.clickedElement).focus();
-		// add jQuery address stuff
+		// add jQuery Address stuff
 		if ($.address) $.address.title($.address.title().split(options.jqAdress.split)[0]);
 		// Callback
 		self._trigger("onClose", 0);
