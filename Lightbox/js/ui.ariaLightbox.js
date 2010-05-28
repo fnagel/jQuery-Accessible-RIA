@@ -151,7 +151,7 @@ $.widget("ui.ariaLightbox", {
 			options.clickedElement = event.currentTarget;
 			
 			// if wrapper element isnt found, create it
-			options.wrapperElement = $("#ui-lightbox-wrapper");
+			options.wrapperElement = $("body>div#ui-lightbox-wrapper");
 			if(!options.wrapperElement.length) self._show(element, event);
 			else self._changePicture(element, event);
 		}
@@ -193,7 +193,7 @@ $.widget("ui.ariaLightbox", {
 		// Callback
 		self._trigger("onShow", 0);
 		// get lightbox element
-		options.wrapperElement = $("#ui-lightbox-wrapper");			
+		options.wrapperElement = $("body>div#ui-lightbox-wrapper");			
 		
 		// enable keyboard navigation 
 		if(options.imageArray) { 
@@ -537,7 +537,7 @@ $.widget("ui.ariaLightbox", {
 	
 	// updates virtual buffer of older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("#virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")
 		} else {
@@ -567,9 +567,9 @@ $.widget("ui.ariaLightbox", {
 			// remove data
 			.removeData('ariaLightbox');
 		
-		$("#virtualBufferForm").parent().remove();	
-		$("#ui-lightbox-screendimmer").remove();	
-		$("#ui-lightbox-wrapper").unbind("keydown").remove();
+		$("body>form #virtualBufferForm").parent().remove();	
+		$("body>div#ui-lightbox-screendimmer").remove();	
+		$("body>div#ui-lightbox-wrapper").unbind("keydown").remove();
 	}	
 });
 })(jQuery);
