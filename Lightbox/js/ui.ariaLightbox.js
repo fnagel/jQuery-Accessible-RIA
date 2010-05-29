@@ -140,16 +140,14 @@ $.widget("ui.ariaLightbox", {
 		self.element.click(function (event) {	
 			// single image?
 			if (!options.imageArray) {
-				self._open($(this), event);
-				return false; // do not follow link
+				return self._open($(this), event);
 			} else {			
 				// get the a tag with our selector within the choosen context
 				target = $(event.target).closest(options.selector, self.element);
 				if (target.length) { 	
 					// set active element if gallery mode is activated
 					options.activeImage = options.imageArray.index(target);
-					self._open(target, event);
-					return false; // do not follow link
+					return self._open(target, event);
 				}
 			}					
 		});	
@@ -165,7 +163,7 @@ $.widget("ui.ariaLightbox", {
 	startGallery: function (event, index){
 		index = (index) ? index : 0;
 		this.options.activeImage = index;
-		this._open($(this.options.imageArray[index]), event);
+		return this._open($(this.options.imageArray[index]), event);
 	},
 	
 	// check if lightbox is already opened
@@ -180,7 +178,9 @@ $.widget("ui.ariaLightbox", {
 			options.wrapperElement = $("#ui-lightbox-wrapper");
 			if(!options.wrapperElement.length) self._show(element, event);
 			else self._changePicture(element, event);
+			return false; // do not follow link
 		}
+		return true;
 	},
 	
 	// called if lightbox wrapper element is not injected yet
