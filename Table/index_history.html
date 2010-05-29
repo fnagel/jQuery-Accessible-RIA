@@ -21,9 +21,6 @@
 			var table1 = $("table").ariaSorTable({
 				rowsToShow: 10,
 				pager: true,
-				onInit: function() {
-					demoControl();
-				},
 				colsToHide: {
 					1: true,
 					7: true
@@ -39,7 +36,8 @@
 </div>
 <div id="wrapper">
 	<div id="table-wrapper">
-		<table summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
+		<!-- Please notice: When youre using jQuery Address support you need to give every table an unique id attribute, as the generated one is time based! -->
+		<table id="unique-id" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
 			<caption class="ui-state-highlight ui-corner-all">Functional demo table</caption>
 			<thead>
 				<tr>
@@ -646,16 +644,6 @@
 				</tr>
 				<tr>
 					<td>60</td>
-					<td>1456</td>
-					<td>0,3321</td>
-					<td>1.91</td>
-					<td>12.12.2003</td>
-					<td>2003-12-12</td>
-					<td>btzhhgghgh</td> 
-					<td>Berum fom</td>
-				</tr>
-				<tr>
-					<td>61</td>
 					<td>1456</td>
 					<td>0,3321</td>
 					<td>1.91</td>
