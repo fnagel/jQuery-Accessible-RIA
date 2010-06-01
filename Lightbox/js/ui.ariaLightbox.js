@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (22.04.10)
+ * jQuery UI AriaLightbox (02.06.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -36,7 +36,13 @@ background: 		color in HTML notation
 opacity: 			decimal betwen 1-0
 makeHover: 			deactivate hover events for images
 em: 				muliplicator for relative width (em) calculation, normally not to be edited
+jqAddress			You need to add the add the jQuery Address file, please see demo file!
+	enable			enable browser history support
+	title
+		enable		enable title change
+		split		set delimiter string
  
+
 * Callbacks
 onShow
 onChangePicture

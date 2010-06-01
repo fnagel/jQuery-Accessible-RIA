@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaTabs (12.04.10)
+ * jQuery UI AriaTabs (02.06.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -14,8 +14,15 @@
 * Simply add the js file uner the regular ui.tabs.js script tag
 * Supports all options, methods and callbacks of the original widget
 * sortable tabs are accessable but the sortable functionality as it is provided by the ui.sortable widget doesnt support ARIA 
+
+ * Options	
+jqAddress			You need to add the add the jQuery Address file, please see demo file!
+	enable			enable browser history support
+	title
+		enable		enable title change
+		split		set delimiter string
  
- */
+*/
 (function($) {
 	$.fn.extend($.ui.tabs.prototype,{
 	
