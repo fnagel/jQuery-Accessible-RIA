@@ -618,7 +618,7 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 				// else -> both are numbers	
 				var start = parseInt(path[1]);
 				var end = parseInt(path[2]);
-				// start shall not be bigger than end
+				// start shall not be bigger than end, do nothing
 				if (start > end) return false;
 				var range = end - (start - 1);
 				// no need to update if already choosen rows should be displayed
