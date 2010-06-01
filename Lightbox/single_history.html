@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=charset=ISO-8859-1" />
+	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
+	<title>ui.ariaLightbox - jQuery UI - Felix Nagel</title>
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="css/style.css" rel="stylesheet" />	
+</head>
+<body>
+<h1>jQuery UI - Gallery Demo with History support via jQuery Adress - ui.ariaLightbox</h1>
+<div id="wrapper">
+	<div class="box ui-widget-content ui-corner-all ui-helper-clearfix">
+		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Single Pictures</h2>
+		<a class="singleLightbox" href="pics/DirtyFlowers.jpg"><img src="pics/thumb/DirtyFlowers.jpg" style="height: 7.5em; width: 5em;" alt="Dirty Flowers" title="Dirty Flowers at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
+		<a class="singleLightbox" href="pics/RealKeepers.jpg"><img src="pics/thumb/RealKeepers.jpg" style="height: 7.5em; width: 5em;" alt="Real Keepers" title="Real Keepers at Emergenza Regio-Finale (Batschkapp Frankfurt am Main - 25.06.08)" /></a>
+		<a class="singleLightbox" href="pics/WhiteLilium.jpg"><img src="pics/thumb/WhiteLilium.jpg" style="height: 7.5em; width: 5em;" alt="White Lilium" title="White Lilium at Emergenza Semi-Finale im Knust in Hamburg - 02.05.09)" /></a>
+		<a class="singleLightbox" href="pics/TheJerks.jpg"><img src="pics/thumb/TheJerks.jpg" style="height: 7.5em; width: 5em;" alt="The Jerks" title="The Jerks at Emergenza Semi-Finale im Rind in Rüsselsheim - 16.05.08)" /></a>
+		<a class="singleLightbox last" href="pics/LaRevolta.jpg"><img src="pics/thumb/LaRevolta.jpg" style="height: 7.5em; width: 5em;" alt="La Revolta" title="La Revolta at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
+	</div>
+	<br  /><br />
+</div>
+<div id="copyright"> 
+Copyright (c) 2009-2010 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+<br />
+Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a>.
+<br />
+Please notice: jQuery Adress is a third party add-on.
+</div>		
+	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="js/jquery.address-1.2.1.js?strict=0"></script>
+	
+	<script type="text/javascript" src="js/ui.ariaLightbox.js"></script>
+	<script type="text/javascript">
+		$(function() {	
+			var lightbox = $("a.singleLightbox").ariaLightbox({
+				useDimmer: false,
+				pos: "offset"
+			});
+		});		
+
+			
+
+	</script>
+</body>
+</html>

@@ -13,45 +13,31 @@
 	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="js/jquery.address-1.2.1.js?strict=0"></script>
 	
 	<script type="text/javascript" src="js/ui.ariaSorTable.js"></script>	
-	<script type="text/javascript" src="js/demo.js"></script>	
-	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>	
 	<script type="text/javascript">	
 		$(function() {			
 			var table1 = $("table").ariaSorTable({
 				rowsToShow: 10,
 				pager: true,
-				onInit: function() {
-					demoControl();
-				},
 				colsToHide: {
 					1: true,
 					7: true
 				}
 			});
-			
-			$("#destroy").click(function (event) { 
-				table1.ariaSorTable('destroy');
-			});		
-			$("#disable").click(function (event) { 
-				table1.ariaSorTable('disable');
-			});			
-			
-			// theme switcher
-			$("#ui-table-control").prepend('<div id="switcher"></div><br />');
-			$('#switcher').themeswitcher();	
 		});		
 	</script>
 </head>
 <body>
 <h1>jQuery UI - ui.ariaSorTable - Functional Demo</h1>
 <div id="controls">
-	<a href="index_history.html">History Demo</a> | <a href="performance.html">Performance Demo</a> | <a href="multiple.html">Multiple Demo</a> | <a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a>
+	<a href="index.html">Functional Demo</a> | <a href="performance.html">Performance Demo</a> | <a href="multiple.html">Multiple Demo</a> | <a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a>
 </div>
 <div id="wrapper">
 	<div id="table-wrapper">
-		<table summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
+		<!-- Please notice: When youre using jQuery Address support you need to give every table an unique id attribute, as the generated one is time based! -->
+		<table id="unique-id" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
 			<caption class="ui-state-highlight ui-corner-all">Functional demo table</caption>
 			<thead>
 				<tr>
@@ -666,23 +652,17 @@
 					<td>btzhhgghgh</td> 
 					<td>Berum fom</td>
 				</tr>
-				<tr>
-					<td>61</td>
-					<td>1456</td>
-					<td>0,3321</td>
-					<td>1.91</td>
-					<td>12.12.2003</td>
-					<td>2003-12-12</td>
-					<td>btzhhgghgh</td> 
-					<td>Berum fom</td>
-				</tr>
 			</tbody>  
 		</table>
+		<br />
+		<br />
+		<div id="copyright"> 
+		Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+		<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+		<br />
+		Please notice: jQuery Adress is a third party add-on.
+		</div>	
 	</div>	
 </div>
-<div id="copyright"> 
-Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
-<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
-</div>	
 </body>
 </html>

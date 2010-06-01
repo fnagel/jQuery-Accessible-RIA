@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (22.04.10)
+ * jQuery UI AriaLightbox (02.06.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -34,8 +34,15 @@ animationSpeed:		in millseconds or jQuery keywors aka "slow", "fast"
 zIndex: 			number: z-index for overlay elements
 background: 		color in HTML notation
 opacity: 			decimal betwen 1-0
+makeHover: 			deactivate hover events for images
 em: 				muliplicator for relative width (em) calculation, normally not to be edited
+jqAddress			You need to add the add the jQuery Address file, please see demo file!
+	enable			enable browser history support
+	title
+		enable		enable title change
+		split		set delimiter string
  
+
 * Callbacks
 onShow
 onChangePicture
@@ -92,7 +99,15 @@ $.widget("ui.ariaLightbox", {
 		makeHover: true,
 		em: 0.0568182,
 		// don not alter this var
-		activeImage: 0
+		activeImage: 0,		
+		// jQuery Address
+		jqAddress: {
+			enable: true,
+			title: {
+				enable: true,
+				split: ' | '		
+			}
+		}
 	},
 	
 	_create: function() {	
@@ -107,22 +122,42 @@ $.widget("ui.ariaLightbox", {
 		} else {
 			// make hover
 			if (options.makeHover) self._makeHover(self.element);
+		}		
+		
+		// add jQuery Address stuff
+		if ($.address && options.jqAddress.enable) {
+			$.address.externalChange(function(event) {		
+				// Select the proper picture		
+				if (event.value == "" && options.wrapperElement) self.close();
+				else if (options.imageArray) {	
+					for (var x = 0; x < options.imageArray.length; x++) {
+						if ($(options.imageArray[x]).attr("href") == event.value) {
+							options.activeImage = x;
+							// no second argument as there is no mouse click event
+							self._open($(options.imageArray[x]));
+							self._setButtonState();
+							return;
+						}
+					}
+				} else {
+					// no second argument as there is no mouse click event
+					if (self.element.attr("href") == event.value) self._open(self.element);
+				}		
+			});
 		}
 		
 		// set trigger event			
 		self.element.click(function (event) {	
 			// single image?
 			if (!options.imageArray) {
-				self._open($(this), event);
-				return false; // do not follow link
+				return self._open($(this), event);
 			} else {			
 				// get the a tag with our selector within the choosen context
 				target = $(event.target).closest(options.selector, self.element);
 				if (target.length) { 	
 					// set active element if gallery mode is activated
 					options.activeImage = options.imageArray.index(target);
-					self._open(target, event);
-					return false; // do not follow link
+					return self._open(target, event);
 				}
 			}					
 		});	
@@ -138,7 +173,7 @@ $.widget("ui.ariaLightbox", {
 	startGallery: function (event, index){
 		index = (index) ? index : 0;
 		this.options.activeImage = index;
-		this._open($(this.options.imageArray[index]), event);
+		return this._open($(this.options.imageArray[index]), event);
 	},
 	
 	// check if lightbox is already opened
@@ -147,13 +182,15 @@ $.widget("ui.ariaLightbox", {
 		// only activate when widget isnt disabled and screen isn't to small
 		if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {
 			// save clicked element (needed if lightbox is controlled by keyboard only)
-			options.clickedElement = event.currentTarget;
+			if (event) options.clickedElement = event.currentTarget;
 			
 			// if wrapper element isnt found, create it
-			options.wrapperElement = $("#ui-lightbox-wrapper");
+			options.wrapperElement = $("body>div#ui-lightbox-wrapper");
 			if(!options.wrapperElement.length) self._show(element, event);
 			else self._changePicture(element, event);
+			return false; // do not follow link
 		}
+		return true;
 	},
 	
 	// called if lightbox wrapper element is not injected yet
@@ -192,7 +229,7 @@ $.widget("ui.ariaLightbox", {
 		// Callback
 		self._trigger("onShow", 0);
 		// get lightbox element
-		options.wrapperElement = $("#ui-lightbox-wrapper");			
+		options.wrapperElement = $("body>div#ui-lightbox-wrapper");			
 		
 		// enable keyboard navigation 
 		if(options.imageArray) { 
@@ -235,6 +272,7 @@ $.widget("ui.ariaLightbox", {
 		self._makeHover(closeElement);
 		
 		// decide which position is set
+		if (!event && options.pos == "offset") options.pos = "auto";
 		switch (options.pos) {
 			case "auto":
 				var viewPos = 	self._pageScroll();
@@ -297,6 +335,7 @@ $.widget("ui.ariaLightbox", {
 					height: calculatedY
 				});
 				// decide which position is set and animate the width of the ligthbox element
+				if (!event && options.pos == "offset") options.pos = "auto";
 				switch (options.pos) {
 					case "offset":
 						options.wrapperElement.animate({
@@ -333,7 +372,14 @@ $.widget("ui.ariaLightbox", {
 						// update screenreader buffer
 						self._updateVirtualBuffer();		
 						// ARIA | manipulations finished
-						contentWrapper.attr("aria-busy", false);						
+						contentWrapper.attr("aria-busy", false);
+						
+						// add jQuery Address stuff
+						if ($.address && options.jqAddress.enable) {
+							if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + options.altText.call(element));
+							$.address.value(element.attr("href"));
+						}
+						
 						// Callback
 						self._trigger("onChangePicture", 0);
 						// END of image changing
@@ -387,6 +433,11 @@ $.widget("ui.ariaLightbox", {
 		if (options.useDimmer) $("#ui-lightbox-screendimmer").fadeOut(options.animationSpeed, function() { $(this).remove(); });
 		// refocus original clicked element
 		$(options.clickedElement).focus();
+		// add jQuery Address stuff
+		if ($.address && options.jqAddress.enable) {
+			if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0]);
+			$.address.value("");
+		}
 		// Callback
 		self._trigger("onClose", 0);
 	},		
@@ -536,7 +587,7 @@ $.widget("ui.ariaLightbox", {
 	
 	// updates virtual buffer of older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("#virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")
 		} else {
@@ -566,9 +617,9 @@ $.widget("ui.ariaLightbox", {
 			// remove data
 			.removeData('ariaLightbox');
 		
-		$("#virtualBufferForm").parent().remove();	
-		$("#ui-lightbox-screendimmer").remove();	
-		$("#ui-lightbox-wrapper").unbind("keydown").remove();
+		$("body>form #virtualBufferForm").parent().remove();	
+		$("body>div#ui-lightbox-screendimmer").remove();	
+		$("body>div#ui-lightbox-wrapper").unbind("keydown").remove();
 	}	
 });
 })(jQuery);

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (12.04.10)
+ * jQuery UI AriaSorTable (02.06.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -34,6 +34,11 @@ textPager			String pager
 textAsc				String for sorting ascending
 textDesc			String for sorting descending
 disabled			deactivate the widget
+jqAddress			You need to add the add the jQuery Address file, please see demo file!
+	enable			enable browser history support
+	title
+		enable		enable title change
+		split		set delimiter string
 			
 * Callbacks
 onInit
@@ -71,7 +76,16 @@ $.widget("ui.ariaSorTable", {
 		pager: false,
 		textPager: "Page:",
 		textAsc: "Sort ascending",
-		textDesc: "Sort descending"
+		textDesc: "Sort descending",		
+		// jQuery Address
+		jqAddress: {
+			enable: true,
+			title: {
+				enable: true,
+				split: ' | '		
+			},
+			changeRow: true
+		}
 	},
 	
 	_create: function() {	
@@ -81,6 +95,7 @@ $.widget("ui.ariaSorTable", {
 		options.originalData = [];
 		options.selectedCol = 0;
 		options.activeCol = 0;		
+		
 		
 		// ARIA | make UID if no ID is set by default
 		var elementID = self.element.attr("id");
@@ -168,15 +183,24 @@ $.widget("ui.ariaSorTable", {
 		if (!options.rowsToShow) options.rowsToShow = rows.length;
 		// update data to delete hided rows and cols
 		self.updateData(); 
-		// set new HTML (with ARIA)
-		self.setHTML();		
 		// pager?
 		if (options.pager) self.buildPager();			
 		// activate Keyboard accessibility
 		if (options.keyboard) self._setKeyboard();
+		
+		// add jQuery Address stuff
+		if ($.address && options.jqAddress.enable && self._jqAddressHelper) {
+			self._jqAddressHelper($.address.pathNames());
+			$.address.externalChange(function(event) {
+				if (self._jqAddressHelper(event.pathNames)) self.setHTML();
+			});
+		}
+		// set new HTML (with ARIA)
+		self.setHTML(); 		
 		// Callback
 		self._trigger("onInit", 0);
-	},
+	},	
+	
 	
 	// make another "cleaned" version of the data array | delete hidden rows and cols
 	updateData: function () {
@@ -198,7 +222,7 @@ $.widget("ui.ariaSorTable", {
 	
 	// set new HTML with selected data
 	setHTML: function() {
-		var options = this.options, self = this;				
+		var options = this.options, self = this;	
 		// var for diffrent row colors
 		var second = true;
 		var html = [];
@@ -247,8 +271,16 @@ $.widget("ui.ariaSorTable", {
 		$(options.headers[0]).parent().parent()
 		.attr("aria-live", "polite")
 		.attr("aria-relevant","text");
+		
 		// update virtual Buffer
 		self._updateVirtualBuffer();
+		
+		// add jQuery Address stuff
+		if ($.address && options.jqAddress.enable) {
+			if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + self.element.find("caption").text() + " (" + options.rowToStart + "-" + (options.rowToStart - 1 + options.rowsToShow) + ")");
+			$.address.value(options.uid + "/" + options.rowToStart + "/" + (options.rowToStart - 1 + options.rowsToShow));
+		}
+		
 		// Callback
 		self._trigger("onSetHTML", 0);
 	},
@@ -499,12 +531,12 @@ $.widget("ui.ariaSorTable", {
 		// pager
 		if (this.options.pager) $("#ui-table-pager").remove();
 		// remove virtual buffer form
-		$("#virtualBufferForm").parent().remove();
+		$("body>form #virtualBufferForm").parent().remove();
 	},	
 	
 	// updates virtual buffer | for older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("#virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")
 		} else {
@@ -515,24 +547,27 @@ $.widget("ui.ariaSorTable", {
 });
 
 $.fn.extend($.ui.ariaSorTable.prototype,{
+	// this code is only needed if you like to use the pager, otherwise: delete it
 	// build a pager
 	buildPager: function () {		
 		var options = this.options, self = this;
 		// build html to inject
 		var site = 0;
 		var y = 0;
-		var html = 	'<div class="ui-table-pager" aria-controls="ui-table-'+options.uid+'">'+"\n";
+		var html = 	'<div class="ui-table-pager" aria-valuemin="1" aria-controls="ui-table-'+options.uid+'">'+"\n";
 			html += 	'<span id="ui-table-'+options.uid+'-pager-title" class="ui-corner-all">'+options.textPager+'</span>'+"\n";						
 		while (y < options.tableData.length){
-			html += '	<button title="'+options.textPager+' '+ (site + 1) +'" type="button" class="ui-state-default ui-corner-all" aria-selected="false" aria-labelledby="ui-table-'+options.uid+'-pager-title">'+ (site + 1) +'</button>'+"\n";
-			site++;
+			site++;			
+			html += '	<button title="'+options.textPager+' '+ site +'" type="button" class="ui-state-default ui-corner-all" aria-selected="false" aria-labelledby="ui-table-'+options.uid+'-pager-title">'+ site +'</button>'+"\n";
 			y = y + options.rowsToShow;
 		}
-			html += '</div>'+"\n";			
-		self.element.after(html);
+			html += '</div>'+"\n";
+
+		options.pager = self.element.next(".ui-table-pager")			
+		if (options.pager.length) options.pager.replaceWith(html);
+		else self.element.after(html);
 		// ARIA
 		options.pager = self.element.next(".ui-table-pager")
-		.attr("aria-valuemin", 1)
 		.attr("aria-valuemax", site);
 		
 		// set events | change css classes and sort table
@@ -565,7 +600,49 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 		$(options.pagerButtons[Math.floor(options.rowToStart/options.rowsToShow)]).removeClass('ui-state-active').attr("aria-selected", false);				
 		$(options.pagerButtons[Math.floor(newRow/options.rowsToShow)]).addClass('ui-state-active').attr("aria-selected", true);
 		options.pager.attr("aria-valuenow", Math.floor(newRow/options.rowsToShow)+1);
-	}		
+	},
+	
+	// this code is only needed if you like to use the jQuery Address support, otherwise: delete it
+	_jqAddressHelper: function (path) {
+		var options = this.options, self = this;
+		// check if anchor has valid values
+		if (path != "" && path[0] == options.uid) {
+			// make this anchor control more fault-tolerant
+			if (isNaN(path[1])) {
+				return true;
+			}
+			if (path[1] <  options.tableData.length-1) {
+				if (isNaN(path[2])) {
+					if (options.pager) self.setPager(parseInt(path[1]));
+					// start row is valid
+					options.rowToStart = parseInt(path[1]);
+					return true;
+				}
+				// else -> both are numbers	
+				var start = parseInt(path[1]);
+				var end = parseInt(path[2]);
+				// start shall not be bigger than end, do nothing
+				if (start > end) return false;
+				var range = end - (start - 1);
+				// no need to update if already choosen rows should be displayed
+				if (options.rowToStart == start && options.rowsToShow == range) return false;
+				var temp_range = start + range - 1;
+				// check if its in rage
+				if (temp_range <=  options.tableData.length) {
+					var temp_rowsToShow = options.rowsToShow;
+					// check if its allowed to change how many rows are shown
+					if (options.jqAddress.changeRow) options.rowsToShow = range;
+					if (options.pager) {
+						// if we changed rows we need to rebuild pager
+						if (temp_rowsToShow != options.rowsToShow) self.buildPager();
+						else self.setPager(start);
+					}
+					options.rowToStart = start;
+					return true;
+				}				
+			} 								
+		}	
+	}
 });
 
 })(jQuery);
