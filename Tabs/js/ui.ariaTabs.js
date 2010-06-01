@@ -21,15 +21,23 @@
 	
 		// when widget is initiated
 		_create: function() {
-			// add jQuery address default options
-			if (!this.options.jqAdress && $.address) {
-				this.options["jqAdress"] = [];
-				this.options["jqAdress"]["split"] = ' | ';
-			}
 			var self = this, options = this.options;	
+			// add jQuery address default options
+			if ($.address) {						
+				var jqAddressDefOpt = { 
+					enable: true,
+					title: {
+						enable: true,
+						split: ' | '		
+					}
+				};			
+				if (!$.isEmptyObject(options.jqAddress)) $.extend(true, jqAddressDefOpt, options.jqAddress );
+				else options.jqAddress = {};
+				$.extend(true, options.jqAddress, jqAddressDefOpt);
+			}
 
 			// add jQuery Address stuff
-			if ($.address) var anchorId = "#" + $.address.value().replace("/", '');
+			if ($.address && options.jqAddress.enable) var anchorId = "#" + $.address.value().replace("/", '');
 
 			// fire original function
 			self._tabify(true);		
@@ -39,7 +47,7 @@
 			self.list.attr("role", "tablist");	
 			for (var x = 0; x < self.anchors.length; x++) {
 				// add jQuery Address stuff | get proper tab by anchor
-				if ($.address && anchorId != "#" && $(self.anchors[x]).attr("href") == anchorId) self.select(x);
+				if ($.address && options.jqAddress.enable && anchorId != "#" && $(self.anchors[x]).attr("href") == anchorId) self.select(x);
 				// init aria atrributes for each panel and anchor
 				self._ariaInit(x);
 			}	
@@ -75,7 +83,7 @@
 			});		
 			
 			// add jQuery address stuff
-			if ($.address) {
+			if ($.address && this.options.jqAddress.enable) {
 				$.address.externalChange(function(event) {
 					// Select the proper tab
 					var anchorId = "#" + event.value.replace("/", '');
@@ -115,8 +123,8 @@
 			this._original_load(index);
 			
 			// add jQuery Address stuff
-			if ($.address) {
-				$.address.title($.address.title().split(this.options.jqAdress.split)[0] + this.options.jqAdress.split + $(this.anchors[index]).text());
+			if ($.address && this.options.jqAddress.enable) {
+				if (this.options.jqAddress.title.enable) $.address.title($.address.title().split(this.options.jqAddress.title.split)[0] + this.options.jqAddress.title.split + $(this.anchors[index]).text());
 				$.address.value($(this.anchors[index]).attr("href").replace(/^#/, ''));
 			}
 			
