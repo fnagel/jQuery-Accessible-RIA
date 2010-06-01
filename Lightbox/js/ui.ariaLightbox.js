@@ -93,10 +93,14 @@ $.widget("ui.ariaLightbox", {
 		makeHover: true,
 		em: 0.0568182,
 		// don not alter this var
-		activeImage: 0,
+		activeImage: 0,		
 		// jQuery Address
-		jqAdress: {
-			split: ' | '
+		jqAddress: {
+			enable: true,
+			title: {
+				enable: true,
+				split: ' | '		
+			}
 		}
 	},
 	
@@ -115,7 +119,7 @@ $.widget("ui.ariaLightbox", {
 		}		
 		
 		// add jQuery Address stuff
-		if ($.address) {
+		if ($.address && options.jqAddress.enable) {
 			$.address.externalChange(function(event) {		
 				// Select the proper picture		
 				if (event.value == "" && options.wrapperElement) self.close();
@@ -365,8 +369,8 @@ $.widget("ui.ariaLightbox", {
 						contentWrapper.attr("aria-busy", false);
 						
 						// add jQuery Address stuff
-						if ($.address) {
-							$.address.title($.address.title().split(options.jqAdress.split)[0] + options.jqAdress.split + options.altText.call(element));
+						if ($.address && options.jqAddress.enable) {
+							if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + options.altText.call(element));
 							$.address.value(element.attr("href"));
 						}
 						
@@ -424,7 +428,10 @@ $.widget("ui.ariaLightbox", {
 		// refocus original clicked element
 		$(options.clickedElement).focus();
 		// add jQuery Address stuff
-		if ($.address) $.address.title($.address.title().split(options.jqAdress.split)[0]);
+		if ($.address && options.jqAddress.enable) {
+			if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0]);
+			$.address.value("");
+		}
 		// Callback
 		self._trigger("onClose", 0);
 	},		
