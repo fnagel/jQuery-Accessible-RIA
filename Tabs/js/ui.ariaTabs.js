@@ -92,6 +92,8 @@
 			}			
 			// set state for the activated tab
 			this._ariaSet(index, true);
+			// update virtual Buffer
+			this._updateVirtualBuffer();
 		},
 		
 		// sets aria states for single tab and its panel
@@ -195,8 +197,21 @@
 					.removeAttr("aria-relevant")
 					.removeAttr("role");
 			}
+			// remove virtual buffer form
+			$("body>form #virtualBufferForm").parent().remove();
 			// fire original function
 			this._original_destroy();	
-		}		
+		},
+	
+		// updates virtual buffer | for older screenreader
+		_updateVirtualBuffer: function() {
+			var form = $("body>form #virtualBufferForm");		
+			if(form.length) {
+				(form.val() == "1") ? form.val("0") : form.val("1")
+			} else {
+				var html = '<form><input id="virtualBufferForm" type="hidden" value="1" /></form>';
+				$("body").append(html);
+			}
+		}
 	});
 })(jQuery); 

@@ -499,12 +499,12 @@ $.widget("ui.ariaSorTable", {
 		// pager
 		if (this.options.pager) $("#ui-table-pager").remove();
 		// remove virtual buffer form
-		$("#virtualBufferForm").parent().remove();
+		$("body>form #virtualBufferForm").parent().remove();
 	},	
 	
 	// updates virtual buffer | for older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("#virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1")
 		} else {

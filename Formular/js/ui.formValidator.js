@@ -677,12 +677,12 @@ $.widget("ui.formValidator", {
 		if (options.originalUrl != "") this.element.attr("action", options.originalUrl);
 		// remove injected elements
 		this.element.find(".ui-formular-live, .ui-formular-error, .ui-formular-success").remove();	
-		$("#virtualBufferForm").parent().remove();	
+		$("body>form #virtualBufferForm").parent().remove();	
 	},	
 	
 	// updates virtual buffer | for older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("#virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1");
 		} else {
