@@ -182,7 +182,8 @@ $.widget("ui.ariaLightbox", {
 		// only activate when widget isnt disabled and screen isn't to small
 		if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {
 			// save clicked element (needed if lightbox is controlled by keyboard only)
-			if (event) options.clickedElement = event.currentTarget;
+			if (!options.imageArray) options.clickedElement = event.currentTarget;
+			else options.clickedElement = element;
 			
 			// if wrapper element isnt found, create it
 			options.wrapperElement = $("body>div#ui-lightbox-wrapper");
@@ -424,8 +425,6 @@ $.widget("ui.ariaLightbox", {
 	// close wrappper element
 	close: function (){
 		var options = this.options, self = this;
-		// focus back to first clicked element
-		$(options.clickedElement).parent().focus();
 		options.wrapperElement.fadeOut(options.animationSpeed, function () { 
 			$(this).remove(); 
 		});
