@@ -273,7 +273,7 @@ $.widget("ui.ariaLightbox", {
 		self._makeHover(closeElement);
 		
 		// decide which position is set
-		if (!event && options.pos == "offset") options.pos = "auto";
+		if (!event.pageX && !event.pageY && options.pos == "offset") options.pos = "auto";
 		switch (options.pos) {
 			case "auto":
 				var viewPos = 	self._pageScroll();
