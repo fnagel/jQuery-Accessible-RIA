@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (02.06.10)
+ * jQuery UI AriaSorTable (12.07.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -191,15 +191,16 @@ $.widget("ui.ariaSorTable", {
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable && self._jqAddressHelper) {
 			// set inital state
-			self._jqAddressHelper($.address.pathNames());
+			var startRow = self._jqAddressHelper($.address.pathNames());
 			// check is address bar in browser is manually changed but fires setHTML only when necassary
 			$.address.externalChange(function(event) {
-				if (self._jqAddressHelper(event.pathNames)) self.setHTML();
+				var changeRow = self._jqAddressHelper(event.pathNames);
+				if (changeRow) self.setHTML(changeRow, false, true);
 			});
 		}
-
+		startRow = (startRow) ? startRow : options.rowToStart;
 		// set new HTML (with ARIA)
-		self.setHTML(true);	 // true = initial	
+		self.setHTML(startRow, true);	 // true = initial	
 		// Callback
 		self._trigger("onInit", 0);
 	},	
@@ -224,13 +225,19 @@ $.widget("ui.ariaSorTable", {
 	},	
 	
 	// set new HTML with selected data
-	setHTML: function(init) {
+	// init and forceFirst only necassary when using jqAddress
+	setHTML: function(newRowToStart, init, forceFirst) {
 		var options = this.options, self = this;
 		// var for diffrent row colors
 		var second = true;
-		var html = [];
+		var html = [];		
+		// backfall
+		if (!newRowToStart) newRowToStart = option.rowToStart;		
+		// set pager
+		if (options.pager) self.setPager(newRowToStart);
+		// make html
 		html.push(					"<tbody class=\"ui-table-tbody-active\" aria-live=\"polite\" aria-relevant=\"text\">\n");
-		for (var x = options.rowToStart - 1; x < options.rowToStart - 1 + options.rowsToShow; x++) {
+		for (var x = newRowToStart - 1; x < newRowToStart - 1 + options.rowsToShow; x++) {
 			// check if row data exists
 			if (options.tableData[x]) {
 				// diffrent row css class
@@ -275,18 +282,25 @@ $.widget("ui.ariaSorTable", {
 		.attr("aria-live", "polite")
 		.attr("aria-relevant","text");
 		
+		// add jQuery Address stuff
+		if ($.address && options.jqAddress.enable) {
+			if (!init) {
+				if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + self.element.find("caption").text() + " (" + options.rowToStart + "-" + (options.rowToStart - 1 + options.rowsToShow) + ")");
+				// save first page in browser history when user (!) starts to interact with the table
+				if (options.rowToStart == 1 && newRowToStart != 1 && !forceFirst) {
+					// if there is no anchor to keep, prevent double entry
+					if ($.address.value() == "") $.address.history(false);
+					$.address.value(options.uid + "/" + 1 + "/" + options.rowsToShow);
+				}
+				$.address.history(true);
+				$.address.value(options.uid + "/" + newRowToStart + "/" + (newRowToStart - 1 + options.rowsToShow));
+			}
+		}		
 		// update virtual Buffer
 		self._updateVirtualBuffer();
 		
-		// add jQuery Address stuff
-		if ($.address && options.jqAddress.enable) {
-			if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + self.element.find("caption").text() + " (" + options.rowToStart + "-" + (options.rowToStart - 1 + options.rowsToShow) + ")");
-			if (!init) {
-				$.address.history(true);
-				$.address.value(options.uid + "/" + options.rowToStart + "/" + (options.rowToStart - 1 + options.rowsToShow));
-			}
-		}
-		
+		// set new start point
+		options.rowToStart = newRowToStart;		
 		// Callback
 		self._trigger("onSetHTML", 0);
 	},
@@ -357,7 +371,7 @@ $.widget("ui.ariaSorTable", {
 		// Callback
 		self._trigger("onRowSort", 0);				
 		// update HTML 
-		self.setHTML();	
+		self.setHTML(options.rowToStart);	
 	},
 	// sorting clauses function
 	_sortNumber: function (a, b) {
@@ -416,37 +430,23 @@ $.widget("ui.ariaSorTable", {
 					case $.ui.keyCode.DOWN:
 					case $.ui.keyCode.PAGE_DOWN:
 						// check if new value is in range and if there are any pages to show
-						if (options.rowToStart < options.tableData.length-1 && options.rowsToShow != options.tableData.length) { 
-							if (options.pager) self.setPager(options.rowToStart + options.rowsToShow);
-							options.rowToStart += options.rowsToShow;
-							self.setHTML(); 
-						}
+						if (options.rowToStart < options.tableData.length-1 && options.rowsToShow != options.tableData.length)  self.setHTML(options.rowToStart + options.rowsToShow);
 						break;
 					// go to previous page
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.PAGE_UP:
 						// check if new value is in range and if there are any pages to show
-						if (options.rowToStart > 0 + options.rowsToShow && options.rowsToShow != options.tableData.length) {
-							if (options.pager) self.setPager(options.rowToStart - options.rowsToShow);
-							options.rowToStart -= options.rowsToShow;	
-							self.setHTML(); 
-						}
+						if (options.rowToStart > 0 + options.rowsToShow && options.rowsToShow != options.tableData.length) self.setHTML(options.rowToStart - options.rowsToShow); 
 						break;
 					// go to first page
 					case $.ui.keyCode.HOME:
 						// check if there are any pages to show
-						if (options.rowsToShow != options.tableData.length) {
-							options.rowToStart = 1;
-							self.setHTML();
-						}
+						if (options.rowsToShow != options.tableData.length)	self.setHTML(1);
 						break;
 					// go to last page
 					case $.ui.keyCode.END:
 						// check if there are any pages to show
-						if (options.rowsToShow != options.tableData.length) {
-							options.rowToStart = ((Math.ceil(options.tableData.length / options.rowsToShow)) * options.rowsToShow) - options.rowsToShow + 1;
-							self.setHTML();
-						}
+						if (options.rowsToShow != options.tableData.length) self.setHTML(((Math.ceil(options.tableData.length / options.rowsToShow)) * options.rowsToShow) - options.rowsToShow + 1);
 						break;
 					// go to next or previous page
 					case $.ui.keyCode.TAB:
@@ -582,21 +582,9 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 			$(this)
 			.bind("click", function(){ 
 				// calculate new start position
-				var newRowToStart = (options.rowsToShow * index == 0) ? 1 : (options.rowsToShow * index)+1;
-				
-				// add jQuery Address stuff | save first page in browser history when user starts to interact with the table
-				if (options.rowToStart == 1 && $.address && options.jqAddress.enable) {
-					// if there is no anchor to keep, prevent double entry
-					if ($.address.value() == "") $.address.history(false);
-					$.address.value(options.uid + "/" + 1 + "/" + options.rowsToShow);
-				}
-				
-				// set pager
-				self.setPager(newRowToStart);
-				// set new start point
-				options.rowToStart = newRowToStart;
+				var newRowToStart = (options.rowsToShow * index == 0) ? 1 : (options.rowsToShow * index)+1;				
 				// set new html
-				self.setHTML();
+				self.setHTML(newRowToStart);
 			})
 			.bind("mouseenter", function(){ $(this).addClass('ui-state-hover'); })
 			.bind("mouseleave", function(){ $(this).removeClass('ui-state-hover'); })
@@ -621,41 +609,33 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 		var options = this.options, self = this;
 		// check if anchor has valid values
 		if (path != "" && path[0] == options.uid) {
+			var start = parseInt(path[1]);
+			var end = parseInt(path[2]);				
 			// make this anchor control more fault-tolerant
-			if (isNaN(path[1])) {
-				return true;
-			}
-			if (path[1] <  options.tableData.length-1) {
-				if (isNaN(path[2])) {
-					if (options.pager) self.setPager(parseInt(path[1]));
-					// start row is valid
-					options.rowToStart = parseInt(path[1]);
-					return true;
-				}
-				// else -> both are numbers	
-				var start = parseInt(path[1]);
-				var end = parseInt(path[2]);
-				// start shall not be bigger than end, do nothing
-				if (start > end) return false;
-				var range = end - (start - 1);
+			if (isNaN(start)) {
+				return false;
+			} // -> start is a number			
+			if (start <=  options.tableData.length) {	
+				// is end a number?
+				// start shall not be bigger than end
+				if (isNaN(end) || start > end) {
+					return start;
+				} // else -> both are valid numbers				
+				
+				var range = end - (start - 1);				
 				// no need to update if already choosen rows should be displayed
 				if (options.rowToStart == start && options.rowsToShow == range) return false;
-				var temp_range = start + range - 1;
-				// check if its in rage
-				if (temp_range <=  options.tableData.length) {
+										
+				if (options.jqAddress.changeRow) {
 					var temp_rowsToShow = options.rowsToShow;
-					// check if its allowed to change how many rows are shown
-					if (options.jqAddress.changeRow) options.rowsToShow = range;
-					if (options.pager) {
-						// if we changed rows we need to rebuild pager
-						if (temp_rowsToShow != options.rowsToShow) self.buildPager();
-						else self.setPager(start);
-					}
-					options.rowToStart = start;
-					return true;
-				}				
+					options.rowsToShow = range;
+					// if we changed rows we need to rebuild pager
+					if (options.pager && temp_rowsToShow != options.rowsToShow) self.buildPager();
+				}
+				return start;			
 			} 								
-		}	
+		}
+		return false;		
 	}
 });
 

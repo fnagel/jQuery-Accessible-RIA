@@ -109,6 +109,25 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 		_original_load: $.ui.tabs.prototype.load,
 		// called whenever tab is called but if option collapsible is set | fired once at init for the chosen tab
 		load: function(index) {	
+			
+			// add jQuery Address stuff
+			// workaround: only set values when user interacts aka not on init
+			if ($.address && this.options.jqAddress.enable) {
+				if ($(this.anchors[0]).attr("aria-selected") !== undefined) {
+					if (this.options.forceFirst === 0 && index !== 0) {
+						// if there is no anchor to keep, prevent double entry
+						if ($.address.value() == "") $.address.history(false);
+						$.address.value($(this.anchors[0]).attr("href").replace(/^#/, ''));
+						$.address.history(true);
+						this.options.forceFirst = false;
+					}
+					if (this.options.jqAddress.title.enable) $.address.title($.address.title().split(this.options.jqAddress.title.split)[0] + this.options.jqAddress.title.split + $(this.anchors[index]).text());
+					$.address.value($(this.anchors[index]).attr("href").replace(/^#/, ''));
+				} else {
+					this.options.forceFirst = index;
+				}
+			}
+			
 			// hide all unselected
 			for (var x = 0; x < this.anchors.length; x++) {			
 				// anchors
@@ -128,13 +147,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			}		
 			// fire original function
 			this._original_load(index);
-			
-			// add jQuery Address stuff
-			if ($.address && this.options.jqAddress.enable) {
-				if (this.options.jqAddress.title.enable) $.address.title($.address.title().split(this.options.jqAddress.title.split)[0] + this.options.jqAddress.title.split + $(this.anchors[index]).text());
-				$.address.value($(this.anchors[index]).attr("href").replace(/^#/, ''));
-			}
-			
+						
 			// is remote? end ARIA busy
 			if($.data(this.anchors[index], 'href.tabs')) {
 				$(this.panels[index])
