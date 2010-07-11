@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaTabs (02.06.10)
+ * jQuery UI AriaTabs (12.07.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
