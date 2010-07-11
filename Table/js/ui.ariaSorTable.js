@@ -291,8 +291,8 @@ $.widget("ui.ariaSorTable", {
 					// if there is no anchor to keep, prevent double entry
 					if ($.address.value() == "") $.address.history(false);
 					$.address.value(options.uid + "/" + 1 + "/" + options.rowsToShow);
+					$.address.history(true);
 				}
-				$.address.history(true);
 				$.address.value(options.uid + "/" + newRowToStart + "/" + (newRowToStart - 1 + options.rowsToShow));
 			}
 		}		
