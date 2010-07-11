@@ -182,7 +182,7 @@ $.widget("ui.ariaSorTable", {
 		// set var to table length if no custom value
 		if (!options.rowsToShow) options.rowsToShow = rows.length;
 		// update data to delete hided rows and cols
-		self.updateData(); 
+		self.updateData();
 		// pager?
 		if (options.pager) self.buildPager();			
 		// activate Keyboard accessibility
@@ -190,13 +190,16 @@ $.widget("ui.ariaSorTable", {
 		
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable && self._jqAddressHelper) {
+			// set inital state
 			self._jqAddressHelper($.address.pathNames());
+			// check is address bar in browser is manually changed but fires setHTML only when necassary
 			$.address.externalChange(function(event) {
 				if (self._jqAddressHelper(event.pathNames)) self.setHTML();
 			});
 		}
+
 		// set new HTML (with ARIA)
-		self.setHTML(); 		
+		self.setHTML(true);	 // true = initial	
 		// Callback
 		self._trigger("onInit", 0);
 	},	
@@ -221,8 +224,8 @@ $.widget("ui.ariaSorTable", {
 	},	
 	
 	// set new HTML with selected data
-	setHTML: function() {
-		var options = this.options, self = this;	
+	setHTML: function(init) {
+		var options = this.options, self = this;
 		// var for diffrent row colors
 		var second = true;
 		var html = [];
@@ -278,7 +281,10 @@ $.widget("ui.ariaSorTable", {
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable) {
 			if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + self.element.find("caption").text() + " (" + options.rowToStart + "-" + (options.rowToStart - 1 + options.rowsToShow) + ")");
-			$.address.value(options.uid + "/" + options.rowToStart + "/" + (options.rowToStart - 1 + options.rowsToShow));
+			if (!init) {
+				$.address.history(true);
+				$.address.value(options.uid + "/" + options.rowToStart + "/" + (options.rowToStart - 1 + options.rowsToShow));
+			}
 		}
 		
 		// Callback
@@ -577,6 +583,14 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 			.bind("click", function(){ 
 				// calculate new start position
 				var newRowToStart = (options.rowsToShow * index == 0) ? 1 : (options.rowsToShow * index)+1;
+				
+				// add jQuery Address stuff | save first page in browser history when user starts to interact with the table
+				if (options.rowToStart == 1 && $.address && options.jqAddress.enable) {
+					// if there is no anchor to keep, prevent double entry
+					if ($.address.value() == "") $.address.history(false);
+					$.address.value(options.uid + "/" + 1 + "/" + options.rowsToShow);
+				}
+				
 				// set pager
 				self.setPager(newRowToStart);
 				// set new start point

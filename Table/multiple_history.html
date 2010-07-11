@@ -15,40 +15,47 @@
 	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="js/jquery.address-1.2.1.js?strict=0"></script>
 	
-	<script type="text/javascript" src="js/ui.ariaSorTable.js"></script>	
+	<script type="text/javascript" src="js/ui.ariaSorTable.js"></script>
 	<script type="text/javascript">	
 		$(function() {			
-			var table1 = $("table").ariaSorTable({
+			$("#table1").ariaSorTable({
 				rowsToShow: 10,
 				pager: true,
 				colsToHide: {
-					1: true,
+					5: true,
+					6: true,
 					7: true
+				}
+			});			
+			$("#table2").ariaSorTable({
+				rowsToShow: 5,
+				pager: true,
+				colsToHide: {
+					1: true
 				}
 			});
 		});		
 	</script>
 </head>
 <body>
-<h1>jQuery UI - ui.ariaSorTable - Browser History Support Demo</h1>
+<h1>jQuery UI - ui.ariaSorTable - Multiple Demo</h1>
 <div id="controls">
-	<a href="index.html">Functional Demo</a> | <a href="performance.html">Performance Demo</a> | <a href="multiple.html">Multiple Demo</a> | <a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a>
+	<a href="index_history.html">History Demo</a> | <a href="performance.html">Performance Demo</a> | <a href="index.html">Functional Demo</a>
 </div>
 <div id="wrapper">
 	<div id="table-wrapper">
-		<!-- Please notice: When youre using jQuery Address support you need to give every table an unique id attribute, as the generated one is time based! -->
-		<table id="unique-id" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
-			<caption class="ui-state-highlight ui-corner-all">Browser history support demo table</caption>
+		<table id="table1" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
+			<caption class="ui-state-highlight ui-corner-all">Table 1</caption>
 			<thead>
 				<tr>
-					<th class="ui-table-asc ui-state-active ui-table-number ui-state-default" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
-					<th class="ui-table-number ui-state-default" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
-					<th class="ui-table-number-de ui-state-default" style="min-width: 10em;">Decimal DE</th>
-					<th class="ui-table-number ui-state-default" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
-					<th class="ui-table-date-de ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
-					<th class="ui-table-date-iso ui-table-deactivate ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
-					<th class="ui-table-text ui-state-default" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
-					<th class="ui-table-deactivate ui-state-default" style="min-width: 12em;"><a href="#server_site_order_only">false</a></th>
+					<th class="ui-table-asc ui-state-active ui-table-number" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
+					<th class="ui-table-number" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
+					<th class="ui-table-number-de" style="min-width: 10em;">Decimal DE</th>
+					<th class="ui-table-number" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
+					<th class="ui-table-date-de" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
+					<th class="ui-table-date-iso ui-table-deactivate" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
+					<th class="ui-table-text" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
+					<th class="ui-table-deactivate" style="min-width: 12em;"><a href="#server_site_order_only">false</a></th>
 				</tr>
 			</thead>
 			<tbody>  
@@ -652,17 +659,208 @@
 					<td>btzhhgghgh</td> 
 					<td>Berum fom</td>
 				</tr>
+				<tr>
+					<td>61</td>
+					<td>1456</td>
+					<td>0,3321</td>
+					<td>1.91</td>
+					<td>12.12.2003</td>
+					<td>2003-12-12</td>
+					<td>btzhhgghgh</td> 
+					<td>Berum fom</td>
+				</tr>
 			</tbody>  
 		</table>
 		<br />
 		<br />
-		<div id="copyright"> 
-		Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
-		<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 		<br />
-		Please notice: jQuery Adress is a third party add-on.
-		</div>	
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<table id="table2" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
+			<caption class="ui-state-highlight ui-corner-all">Table 2</caption>
+			<thead>
+				<tr>
+					<th class="ui-table-asc ui-state-active ui-table-number" style="min-width: 4.2em;"><a href="#server_site_order">#</a></th>
+					<th class="ui-table-number" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
+					<th class="ui-table-number" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
+					<th class="ui-table-date-de" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
+					<th class="ui-table-text" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
+				</tr>
+			</thead>
+			<tbody>  
+				<tr>
+					<td>19</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>29</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>39</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>49</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>59</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>69</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>79</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>89</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>99</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>119</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>229</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>339</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>449</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>559</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>669</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>779</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>889</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+				<tr>
+					<td>999</td>
+					<td>999999999</td>
+					<td>999.999</td>
+					<td>09.09.2009</td>
+					<td>Lorum ipsum</td>
+				</tr>
+			</tbody>  
+		</table>
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
 	</div>	
 </div>
+<div id="copyright"> 
+Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+</div>	
 </body>
 </html>
