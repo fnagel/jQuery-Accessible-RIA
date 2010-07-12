@@ -11,7 +11,6 @@
 	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
-	<script type="text/javascript" src="js/jquery.address-1.2.1.js?strict=0"></script>
 	
 	<script type="text/javascript" src="js/jquery.ui.tabs.js"></script>
 	<script type="text/javascript" src="js/ui.ariaTabs.js"></script>
@@ -19,13 +18,7 @@
 	<script type="text/javascript">
 		$(function() {
 			var tabs1 = $("#tabs")			
-			.tabs({				
-				jqAddress: {
-					title: {
-						split: ' ~ '		
-					}
-				}
-			}); 			
+			.tabs(); 			
 			
 			$("#destroylink").click(function (event) { 
 				tabs1.tabs('destroy');
@@ -51,6 +44,12 @@
 
 <h1>jQuery UI - ui.ariaTabs - Default with history support via jQuery Adress</h1>
 <div id="wrapper">	
+	<div class="ui-formular-info info ui-state-highlight ui-corner-all" style="padding: 0.3em 0.5em; margin: 0 0 1em 0;">
+		<p>
+			<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+			Please <em>arrow</em> keys to move inside the tabpanel. Jump to the first tab by pressing <em>Pos1</em> key and <em>end</em> key for last tab.
+		</p>
+	</div>
 	<div id="tabs">
 		<ul>
 			<li><a href="#tabs-1">Nunc tincidunt</a></li>
@@ -78,7 +77,9 @@
 Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 <br />
-Please notice: jQuery UI Tabs and jQuery Adress are both third party add-ons.
+Please notice that jQuery UI Tabs is not part of my widgets.
+<br />
+Please notice that jQuery Adress is not part of my widgets.
 </div>	
 </body>
 </html>

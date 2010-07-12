@@ -56,7 +56,7 @@ function demoControl() {
 			colsToHide[x] = test;
 		}			
 		widget.ariaSorTable('updateData');
-		widget.ariaSorTable('setHTML');
+		widget.ariaSorTable('setHTML', widget.ariaSorTable("option", "rowToStart"));
 	});	
 	
 	// Row Search
@@ -91,8 +91,7 @@ function demoControl() {
 		}
 		widget.ariaSorTable("option", "tableData", tableData);	
 		widget.ariaSorTable("option", "rowsToShow", tableData.length);	
-		widget.ariaSorTable("option", "rowToStart", 1);	
-		widget.ariaSorTable('setHTML');
+		widget.ariaSorTable('setHTML', 1);
 		$(".ui-table-pager").fadeOut();
 		$("#ui-table-control #colSelect").parent().fadeOut();
 		
