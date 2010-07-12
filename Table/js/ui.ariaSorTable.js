@@ -285,7 +285,7 @@ $.widget("ui.ariaSorTable", {
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable) {
 			if (!init) {
-				if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + self.element.find("caption").text() + " (" + options.rowToStart + "-" + (options.rowToStart - 1 + options.rowsToShow) + ")");
+				if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + self.element.find("caption").text() + " (" + newRowToStart + "-" + (newRowToStart - 1 + options.rowsToShow) + ")");
 				// save first page in browser history when user (!) starts to interact with the table
 				if (options.rowToStart == 1 && newRowToStart != 1 && !forceFirst) {
 					// if there is no anchor to keep, prevent double entry
