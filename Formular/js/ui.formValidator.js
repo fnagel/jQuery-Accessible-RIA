@@ -81,11 +81,10 @@ $.widget("ui.formValidator", {
 		validateOn: "Please clkick here to activate live form validating.",
 		errorSummery: true,
 		errorsTitle: "Please check the following errors:",		
-		submitHowTo: "ajax",
+		submitHowTo: "post",
 		submitUrl: "",
 		submitError: "Something wen't wrong while sending your data. Please retry.",
 		submitSuccess: "Your data was succefully submitted, thank you!",
-		originalUrl: "",
 		selectDefault: "default"
 	},
 
