@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (12.04.10)
+ * jQuery UI FormValidator (16.07.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -63,6 +63,7 @@ checkCaptcha 		must deliver a boolean value)
 disable
 destroy
 enable
+initField			parameter is string (name of added field); adds events and internal vars for validation
 formSubmitted		submits the form	
 validate 			parameter is string (id attribut); validates a single form element
  
@@ -85,7 +86,8 @@ $.widget("ui.formValidator", {
 		submitUrl: "",
 		submitError: "Something wen't wrong while sending your data. Please retry.",
 		submitSuccess: "Your data was succefully submitted, thank you!",
-		selectDefault: "default"
+		selectDefault: "default",
+		noHover: false
 	},
 
 	_create: function() {	
@@ -137,32 +139,39 @@ $.widget("ui.formValidator", {
 					.html(options.validateOff);
 					self._updateVirtualBuffer();
 				}
-			);
-		
+			);		
 		}
 		
 		// set hover and focus for reset and submit buttons 
-		self._makeHover(self.element.find("input:submit, input:reset"));
+		if (!options.noHover) self._makeHover(self.element.find("input:submit, input:reset"));
 				
 		// go trough every given form element
 		$.each(options.forms, function(id){
-			// instance the associative arry with index = id of the form element
-			options.forms[id]["errors"] = [];
-			// options.errorsArray[id] = [];
-			
-			// save element and which form type | add event handler | ARIA
-			//  search for "single" elements (which sould be defined by their ID)
-			var element = self.element.find("#"+id);
-			//check if radio group or checkbox group or single checkbox (which sould be defined by their class)
+			self.initField(id);
+		});	
+		
+		// Callback
+		self._trigger("onInit", 0);
+		console.log(options);
+	},
+	
+	// init a form field (events, hover effects, internal vars)
+	initField: function(id) {
+		var options = this.options, self = this;
+		// save element and which form type | add event handler | ARIA
+		//  search for "single" elements (which sould be defined by their ID)
+		var element = self.element.find("#"+id);
+		//check if radio group or checkbox group or single checkbox (which sould be defined by their class)
+		if (!element.length) {
+			// get all group elements
+			element = self.element.find("input."+id);	
+			// no element found? Only developers should see this
 			if (!element.length) {
-				// get all group elements
-				element = self.element.find("input."+id);	
-				// no element found? Only developers should see this
-				if (!element.length) {
-					alert("Error: Configuration corrupted!\n\nCan't find element with id or class = "+id);
-				} else {
-					value = "group";
-					// change label class when hover the label
+				alert("Error: Configuration corrupted!\n\nCan't find element with id or class = "+id);
+			} else {
+				value = "group";
+				// change label class when hover the label
+				if (!options.noHover) {
 					self._makeHover(element.next()); 
 					// change label class when hover the form element
 					element.bind("mouseenter", function(){ $(this).next().addClass('ui-state-hover'); })
@@ -170,147 +179,140 @@ $.widget("ui.formValidator", {
 						.bind("focus", function(){ $(this).next().addClass('ui-state-focus'); })
 						.bind("blur", function(){ $(this).next().removeClass('ui-state-focus'); });
 				}
+			}
+		} else {
+			// form element hover
+			if (!options.noHover) self._makeHover(element);
+			// ARIA
+			if (options.forms[id].rules.required) {
+				element.attr("aria-required", true);
+			}
+			if (element[0].nodeName.toLowerCase() == "select") {
+				// element is a selectfield
+				value = "select";
 			} else {
-				// form element hover
-				self._makeHover(element);
-				// ARIA
-				if (options.forms[id].rules.required) {
-					element.attr("aria-required", true);
-				}
-				if (element[0].nodeName.toLowerCase() == "select") {
-					// element is a selectfield
-					value = "select";
-				} else {
-					// normal textinput or textarea or file upload
-					value = "single";
+				// normal textinput or textarea or file upload
+				value = "single";
+			}
+		}
+		// save info
+		options.forms[id].element = element;
+		options.forms[id].type = value;			
+		
+		// we use blur as default, as we like to get a validation when a user leave a field empty when tabbing trough
+		var eventBinder = "blur ";
+		// which events should be set? only blur event?
+		if (options.validateTimeout != "blur") {
+			// necessary for not getting too much events
+			if (options.forms[id].type != "group") {
+				// selectboxes need all these events cause of IE (click with UI 1.8.x) and Chrome (change)
+				// please note that single slectboxes (size=1) handled different than multiple, thats why we need keyup
+				// this could be more effecient one day... (i will wait till UI 1.7.1 is not longer used)
+				// text input and textarea get only keyup
+				eventBinder +=  (options.forms[id].type == "select") ? "click change keyup" : "keyup"; 
+			} else {
+				// radio buttons and checkboxes get this event
+				eventBinder += "click";
+			}
+		}
+		// add event listener
+		// we always add the blur event, so a required field left empty triggers an error
+		options.forms[id].element.bind(eventBinder, function (e) {
+			// dont fire events if live validation or widget or form field is disabled	
+			if (options.validateLive && !options.disabled) {
+				// if tab is pushed do not validate immediatly || if the event is blur do not use timeout
+				if (options.validateTimeout == "blur" || e.type == "blur") {
+					self.validate(id);			
+				} else if (e.keyCode != $.ui.keyCode.TAB) {
+					// delete old timeout
+					if(options.forms[id].timeout) window.clearTimeout(options.forms[id].timeout);	
+					// extend timeout to prevent server overload
+					var time = (options.forms[id].rules["regEx"] == "captcha") ? options.validateTimeout*options.validateTimeoutCaptcha : options.validateTimeout;
+					// wait before fire event
+					options.forms[id].timeout = window.setTimeout(function() {
+						self.validate(id);		
+					}, time);
 				}
 			}
-			// save info
-			options.forms[id].element = element;
-			options.forms[id].type = value;			
-			
-			// dont bind events if live validation is disabled	
-			if (options.validateLive) {
-				// we use blur as default, as we like to get a validation when a user leave a field empty when tabbing trough
-				var eventBinder = "blur ";
-				// only blur event?
-				if (options.validateTimeout != "blur") {
-					// necessary for not getting too much events
-					if (options.forms[id].type != "group") {
-						// selectboxes need all these events cause of IE (click with UI 1.8.x) and Chrome (change)
-						// please note that single slectboxes (size=1) handled different than multiple, thats why we need keyup
-						// this could be more effecient one day... (i will wait till UI 1.7.1 is not longer used)
-						// text input and textarea get only keyup
-						eventBinder +=  (options.forms[id].type == "select") ? "click change keyup" : "keyup"; 
-					} else {
-						// radio buttons and checkboxes get this event
-						eventBinder += "click";
-					}
-				}
-				// add event listener
-				// we always add the blur event, so a required field left empty triggers an error
-				options.forms[id].element.bind(eventBinder, function (e) {
-					// look up if live validation is turned off or widget is disabled
-					// if tab is pushed do not validate immediatly || if the event is blur do not use timeout
-					if (options.validateTimeout == "blur" || e.type == "blur") {
-						self._validator(id);	
-						self._setErrors(false);			
-					} else if (options.validateLive && !options.disabled && e.keyCode != $.ui.keyCode.TAB) {
-						// delete old timeout
-						if(options.forms[id].timeout) window.clearTimeout(options.forms[id].timeout);	
-						// extend timeout to prevent server overload
-						var time = (options.forms[id].rules["regEx"] == "captcha") ? options.validateTimeout*options.validateTimeoutCaptcha : options.validateTimeout;
-						// wait before fire event
-						options.forms[id].timeout = window.setTimeout(function() {
-							self._validator(id);	
-							self._setErrors(false);	
-						}, time);
-					}
-				});
-			}
-		});	
-		// Callback
-		self._trigger("onInit", 0);
+		});
 	},
 	
 	// called when interact with the form | validates the forms | manages which rule applies to which element
 	_validator: function(id) {
 		var options = this.options, self = this;
-		
-		// get error array
-		// var errors = options.errorsArray;
-		var errors = options.forms[id].errors;
-		
-		// get value of the form element(s)
-		var elementValue = self._getValue(id);	
-		// got trough every rule and its ruleValue of every given form element 
-		$.each(options.forms[id].rules, function(rule, ruleValue){
-			if (elementValue == "") {
-				// unset required error if no form value given and form is not required
-				if (rule != "required") errors[rule] = self._whichError(true, errors[rule]);
-				// if form is required set error
-				if (rule == "required" && ruleValue) errors[rule] = self._whichError(false, errors[rule]);
-			} else {
-				// unset required error if form has some value
-				if (rule == "required" && ruleValue) errors[rule] = self._whichError(true, errors[rule]);
-				switch (rule) {
-					case "regEx":
-						switch (ruleValue) {
-							case "number":
-								errors[rule] = self._whichError(self._number(elementValue), errors[rule]);
-								break;
-							case "numberDE":
-								errors[rule] = self._whichError(self._numberDE(elementValue), errors[rule]);
-								break;
-							case "numberISO":
-								errors[rule] = self._whichError(self._numberISO(elementValue), errors[rule]);
-								break;
-							case "email":
-								errors[rule] = self._whichError(self._email(elementValue), errors[rule]);
-								break;
-							case "url":
-								errors[rule] = self._whichError(self._url(elementValue), errors[rule]);
-								break;
-							case "plz":
-								errors[rule] = self._whichError(self._plz(elementValue), errors[rule]);
-								break;
-							case "dateDE":
-								errors[rule] = self._whichError(self._dateDE(elementValue), errors[rule]);
-								break;
-							case "dateISO":
-								errors[rule] = self._whichError(self._dateISO(elementValue), errors[rule]);
-								break;
-							case "captcha":
-								errors[rule] = self._whichError(self._captcha(elementValue), errors[rule]);
-								break;
-							// regular expression
-							default:
-								errors[rule] = self._whichError(self._regEx(elementValue, ruleValue), errors[rule]);
-								break;
-						}
-						break;
-					case "lengthMin":
-						errors[rule] = self._whichError(self._lengthMin(elementValue, ruleValue), errors[rule]);
-						break;
-					case "lengthMax":
-						errors[rule] = self._whichError(self._lengthMax(elementValue, ruleValue), errors[rule]);
-						break;
-					case "equalTo":
-						errors[rule] = self._whichError(self._equalTo(elementValue, ruleValue), errors[rule]);
-						break; 
-					case "custom":
-                        errors[rule] = self._whichError(ruleValue(elementValue), errors[rule]);
-					   break;
-		}		
-			}
-		});
-		
+		// do nothing if field is disabled
+		if (!options.forms[id].disabled) {		
+			// get or make error array
+			var errors = (options.forms[id].errors) ? options.forms[id].errors : [];			
+			// get value of the form element(s)
+			var elementValue = self._getValue(id);	
+			// got trough every rule and its ruleValue of every given form element 
+			$.each(options.forms[id].rules, function(rule, ruleValue){
+				if (elementValue == "") {
+					// unset required error if no form value given and form is not required
+					if (rule != "required") errors[rule] = self._whichError(true, errors[rule]);
+					// if form is required set error
+					if (rule == "required" && ruleValue) errors[rule] = self._whichError(false, errors[rule]);
+				} else {
+					// unset required error if form has some value
+					if (rule == "required" && ruleValue) errors[rule] = self._whichError(true, errors[rule]);
+					switch (rule) {
+						case "regEx":
+							switch (ruleValue) {
+								case "number":
+									errors[rule] = self._whichError(self._number(elementValue), errors[rule]);
+									break;
+								case "numberDE":
+									errors[rule] = self._whichError(self._numberDE(elementValue), errors[rule]);
+									break;
+								case "numberISO":
+									errors[rule] = self._whichError(self._numberISO(elementValue), errors[rule]);
+									break;
+								case "email":
+									errors[rule] = self._whichError(self._email(elementValue), errors[rule]);
+									break;
+								case "url":
+									errors[rule] = self._whichError(self._url(elementValue), errors[rule]);
+									break;
+								case "plz":
+									errors[rule] = self._whichError(self._plz(elementValue), errors[rule]);
+									break;
+								case "dateDE":
+									errors[rule] = self._whichError(self._dateDE(elementValue), errors[rule]);
+									break;
+								case "dateISO":
+									errors[rule] = self._whichError(self._dateISO(elementValue), errors[rule]);
+									break;
+								case "captcha":
+									errors[rule] = self._whichError(self._captcha(elementValue), errors[rule]);
+									break;
+								// regular expression
+								default:
+									errors[rule] = self._whichError(self._regEx(elementValue, ruleValue), errors[rule]);
+									break;
+							}
+							break;
+						case "lengthMin":
+							errors[rule] = self._whichError(self._lengthMin(elementValue, ruleValue), errors[rule]);
+							break;
+						case "lengthMax":
+							errors[rule] = self._whichError(self._lengthMax(elementValue, ruleValue), errors[rule]);
+							break;
+						case "equalTo":
+							errors[rule] = self._whichError(self._equalTo(elementValue, ruleValue), errors[rule]);
+							break; 
+						case "custom":
+							errors[rule] = self._whichError(ruleValue(elementValue), errors[rule]);
+						   break;
+					}		
+				}
+			});			
+			// save errors
+			options.forms[id].errors = errors;		
+		}			
 		// callback for customized error messages
 		options.forms[id]["id"] = id;
-		self._trigger("customError", 0, options.forms[id]);
-		
-		// save errors
-		options.forms[id].errors = errors;
+		self._trigger("customError", 0, options.forms[id]);	
 	},
 	
 	// called when form is submitted
@@ -359,9 +361,9 @@ $.widget("ui.formValidator", {
 		for (var id in options.forms){
 			// needed to ensure error Class isn't removed if required error still exists
 			var failure = false;
-			for (var rule in options.forms[id]["errors"]){	
+			for (var rule in options.forms[id]["errors"]){
 				// set error as corrected
-				if (options.forms[id]["errors"][rule] == "corrected") {
+				if (options.forms[id]["errors"][rule] == "corrected" || options.forms[id].disabled) {
 					var target = options.forms[id].element;
 					// ARIA
 					target.attr("aria-invalid", false);					
@@ -371,20 +373,21 @@ $.widget("ui.formValidator", {
 					target.removeClass("ui-state-error");
 					// ARIA: old error deleted
 					removeError = true;
-					// execute callback for every corrected element; returns the id of the element
-					self._trigger("onValid", null, id);
-				}	
-				if(options.forms[id]["errors"][rule] == "new" || options.forms[id]["errors"][rule] == "old") {					
-					if (options.errorSummery) msgs += '					<li><a href="#'+id+'">'+options.forms[id].msg[rule]+"</a></li>\n";
-					// there are errors to show
-					isError = failure = true;
-					// execute callback for every element with wrong input; returns the ids of the elements
-					self._trigger("onError", null, id);
+					// execute callback for every (really) corrected element ; returns the id of the element
+					if (!options.forms[id].disabled) self._trigger("onValid", null, id);
+				} else {
+					if (options.forms[id]["errors"][rule] == "new" || options.forms[id]["errors"][rule] == "old") {					
+						if (options.errorSummery) msgs += '					<li><a href="#'+id+'">'+options.forms[id].msg[rule]+"</a></li>\n";
+						// there are errors to show
+						isError = failure = true;
+						// execute callback for every element with wrong input; returns the ids of the elements
+						self._trigger("onError", null, id);
+					}
+					if (options.forms[id]["errors"][rule] == "new") {
+						// ARIA: new error added
+						addError = true;				
+					}	
 				}
-				if(options.forms[id]["errors"][rule] == "new") {
-					// ARIA: new error added
-					addError = true;				
-				}				
 			}
 			// check at last if there is an error so error class wont be removed
 			if (failure) {
@@ -443,13 +446,13 @@ $.widget("ui.formValidator", {
 		if (data["isError"]) {
 			// set link anchor to form
 			errorElement.find("a").click(function(event){
-				event.preventDefault();
 				// get id out of the href anchor				
 				var id = $(this).attr("href").split("#");
 				id = id[1];
 				// focus element or first element of a group
 				var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
 				target.focus();
+				return false;
 			});
 			// focus error box when form is submitted
 			if (data["submitted"]) errorElement.attr("tabindex",-1).focus();
@@ -565,8 +568,7 @@ $.widget("ui.formValidator", {
 			value = "corrected";
 		}
 		return value;
-	},
-	
+	},	
 	
 	// how many checked / selected options | which value
 	_getValue: function(id) {

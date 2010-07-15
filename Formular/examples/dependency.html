@@ -5,10 +5,10 @@
 	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
 	<title>ui.formValidator - dependency demo - jQuery UI - Felix Nagel</title>
-	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
-	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	<link type="text/css" href="../css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="../css/style.css" rel="stylesheet" />
 	<!--[if gte IE 6]>	
-		<style type="text/css">@import url(css/style_ie.css);</style>
+		<style type="text/css">@import url(../css/style_ie.css);</style>
 	<![endif]-->	
 </head>
 <body>
@@ -40,52 +40,57 @@
 Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 </div>		
-	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../js/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../js/jquery.ui.widget.js"></script>
 	
-	<script type="text/javascript" src="js/ui.formValidator.js"></script>
+	<script type="text/javascript" src="../js/ui.formValidator.js"></script>
 	<script type="text/javascript">	
 		$(function() {			
 			var formular = $("#form").formValidator({
 				// forms array
 				forms: {
+					inputtext1: {
+						rules: {		
+							required: true
+						},
+						msg: {	
+							required: "Please enter something in Input Text 1."	
+						}
+					},
 					// we enable this required rule if inputtext1 has a value
 					inputtext2: {
 						rules: {		
-							required: false
+							required: true
 						},
 						msg: {	
 							required: "Please enter something in Input Text 2."	
-						}
+						},
+						disabled: true
 					}
 				},
-				submitHowTo: "ajax"
+				submitHowTo: "ajax",	
+				// get our options array, array content could be viewed with firebug or here:
+				// http://wiki.github.com/fnagel/jQuery-Accessible-RIA/formular	
+				customError: function(event, field){ 
+				var formArray = formular.formValidator("option", "forms");
+					// console.log(field);
+					if (field["id"] == "inputtext1") {
+						if (field.errors.required == "old" || field.errors.required == "new") {						
+							formArray.inputtext2.element.hide().prev('label').hide();
+							formArray.inputtext2.disabled = true;
+						} else { 							
+							formArray.inputtext2.element.show().prev('label').show();
+							formArray.inputtext2.disabled = false;
+						}
+					}
+				}		
 			});	
-			// get our widget options as an array, array content could be viewed with firebug or here:
-			//  http://wiki.github.com/fnagel/jQuery-Accessible-RIA/formular
-			var formArray = formular.formValidator("option", "forms");
 			
-			// play: hide second form
+			// play: init hide second form field
+			var formArray = formular.formValidator("option", "forms");
 			formArray.inputtext2.element.hide().prev('label').hide();
 			
-			// as we do not include inputtext-name1 in our forms array above, we need to set a event manually
-			$('input#inputtext1').bind('blur keypress', function(){			
-				// if our field is empty
-				if ($(this).val() == "") {
-					// we hide and set required to false
-					formArray.inputtext2.element.hide().prev('label').hide();
-					formArray.inputtext2.rules.required = false;
-					// and delete possible errors
-					for (var rule in formArray.inputtext2.errors) {
-						formArray.inputtext2.errors[rule] = "corrected";
-					}
-				} else {	
-					// if our field is empty  we show the form and set rule required to true
-					formArray.inputtext2.element.show().prev('label').show();
-					formArray.inputtext2.rules.required = true;
-				}
-			});			
 		});		
 	</script>
 </body>
