@@ -57,7 +57,7 @@ onErrors
 customError			returns a array with all information about the currectly validated element
 onShowErrors
 onShowSuccess 		returns true or a string)
-checkCaptcha 		must deliver a boolean value) 
+checkCaptcha 		must deliver a boolean value)
 
 * public Methods
 disable
@@ -152,6 +152,7 @@ $.widget("ui.formValidator", {
 		
 		// Callback
 		self._trigger("onInit", 0);
+		console.log(options);
 	},
 	
 	// init a form field (events, hover effects, internal vars)
