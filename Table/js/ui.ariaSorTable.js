@@ -121,9 +121,9 @@ $.widget("ui.ariaSorTable", {
 					th = th.parents("th");
 				}			
 				if (!th.hasClass("ui-table-deactivate")) {	
-					e.preventDefault();	
 					// start sorting | parameter: index of the clicked th element
 					self.rowSort(th.prevAll("th:visible").length);	
+					return false;
 				}
 			}
 		})
@@ -326,20 +326,23 @@ $.widget("ui.ariaSorTable", {
 			options.tableData.sort(self._sortDateDE);
 		} else if (th.hasClass("ui-table-date-iso")) {
 			options.tableData.sort(self._sortDateISO);
-		} else {
+		} else if (th.hasClass("ui-table-text-html")) {
+			options.tableData.sort(self._sortTextHTML);
+		} else { 
+			// default is text
 			options.tableData.sort(self._sortText);
 		}
 		
 		// set new sorted by
 		var asc = th.hasClass("ui-table-asc");
 		if (asc || th.hasClass("ui-table-desc")) {		
-			var newSortBy = (asc) ? "desc" : "asc";	
+			var newSortBy = (asc) ? "desc" : "asc";
 		// no class found? set it by default
 		} else {
 			var newSortBy = options.defaultSortBy;
 		}		
 		
-		// rerse array if necassary
+		// reverse array if necassary
 		if (newSortBy == "desc") options.tableData.reverse();
 			
 		// get active col
@@ -398,9 +401,13 @@ $.widget("ui.ariaSorTable", {
 		var bDate = b[sortIndex].substr(5,2) + "/" + b[sortIndex].substr(8,2) + "/" + b[sortIndex].substr(0,4);	
 		return (Date.parse(aDate) < Date.parse(bDate));
 	},
+	_sortTextHTML: function (a, b) {
+		// Text with html
+		return ($(a[sortIndex]).text() > $(b[sortIndex]).text());
+	},
 	_sortText: function (a, b) {
 		// 20:00:13
-		// Text, no html
+		// Text with html
 		return (a[sortIndex] > b[sortIndex]);
 	},
 	
