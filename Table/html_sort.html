@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
+	<title>ui.ariaSorTable - jQuery UI - Felix Nagel</title>
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	<!--[if gte IE 6]>	
+		<style type="text/css">@import url(css/style_ie.css);</style>
+	<![endif]-->		
+	<style type="text/css">
+		.test {
+			color: red;
+		}
+		span {
+			font-family: serif;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+	
+	<script type="text/javascript" src="js/ui.ariaSorTable.js"></script>	
+	<script type="text/javascript">	
+		$(function() {			
+			var table1 = $("table").ariaSorTable({
+				rowsToShow: 10,
+				pager: true,
+				colsToHide: {
+					2: true,
+					3: true,
+					4: true,
+					5: true
+				}
+			});
+		});		
+	</script>
+</head>
+<body>
+<h1>jQuery UI - ui.ariaSorTable - HTML Sorting Demo</h1>
+<div id="wrapper">
+	<div id="table-wrapper">
+		<table summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
+			<caption class="ui-state-highlight ui-corner-all">Functional demo table</caption>
+			<thead>
+				<tr>
+					<th class="ui-table-asc ui-state-active ui-table-number ui-state-default" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
+					<th class="ui-table-number ui-state-default" style="min-width: 10em;"><a href="#server_site_order">Correct sorting</a></th>
+					<th class="ui-table-number-de ui-state-default" style="min-width: 10em;">Decimal DE</th>
+					<th class="ui-table-number ui-state-default" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
+					<th class="ui-table-date-de ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
+					<th class="ui-table-date-iso ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
+					<th class="ui-table-text ui-state-default" style="min-width: 10em;"><a href="#server_site_order">String without HTML</a></th>
+					<th class="ui-table-text-html ui-state-default" style="min-width: 12em;"><a href="#server_site_order">Same string with HTML</a></th>
+				</tr>
+			</thead>
+			<tbody>  
+				<tr>
+					<td>1</td>
+					<td>4</td>
+					<td>119,111</td>
+					<td>111.231</td>
+					<td>01.01.2009</td>
+					<td>2009-01-01</td>
+					<td>Lorum ipsum</td>
+					<td><strong>Lorum ipsum</strong></td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>10</td>
+					<td>119,131</td>
+					<td>311.231</td>
+					<td>01.03.2009</td>
+					<td>2009-03-01</td>
+					<td>test link</td> 
+					<td><a href="#test">test link</a></td> 
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>5</td>
+					<td>11459,131</td>
+					<td>31.231</td>
+					<td>02.03.09</td>
+					<td>2009-03-02</td>
+					<td>Sdrum ipsum</td>
+					<td><em>Sdrum ipsum</em></td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>1</td>
+					<td>11459,131</td>
+					<td>31.551</td>
+					<td>23.03.09</td>
+					<td>2009-03-23</td>
+					<td>Adrum ipsum</td>
+					<td><div class="test">Adrum ipsum</div></td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>9</td>
+					<td>2259,131</td>
+					<td>11.551</td>
+					<td>28.03.2009</td>
+					<td>2009-03-28</td>
+					<td>ioom ipsum</td>
+					<td><span>ioom ipsum</span></td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>8</td>
+					<td>231239,1321</td>
+					<td>61.661</td>
+					<td>28.07.2009</td>
+					<td>2009-07-28</td>
+					<td>ioio fgpsum</td>
+					<td><div>ioio fgpsum</div></td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>3</td>
+					<td>39,1321</td>
+					<td>6.661</td>
+					<td>28.12.2009</td>
+					<td>2009-12-28</td>
+					<td>Ipsum Lorem fgpsum</td>
+					<td><div>Ipsum Lorem fgpsum</div></td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>7</td>
+					<td>13,1321</td>
+					<td>3.661</td>
+					<td>01.12.2009</td>
+					<td>2009-12-01</td>
+					<td>Tipsum Lorem fgpsum</td>
+					<td><div>Tipsum Lorem fgpsum</div></td>
+				</tr>
+				<tr>
+					<td>9</td>
+					<td>6</td>
+					<td>12,3321</td>
+					<td>31.021</td>
+					<td>05.12.2003</td>
+					<td>2003-12-05</td>
+					<td>Tertrem fgpsum</td>
+					<td><div>Tertrem fgpsum</div></td>
+				</tr>
+				<tr>
+					<td>10</td>
+					<td>2</td>
+					<td>0,3321</td>
+					<td>1.91</td>
+					<td>12.12.2003</td>
+					<td>2003-12-12</td>
+					<td>Berum test fom</td>
+					<td><div>Berum test fom</div></td>
+				</tr>
+			</tbody>  
+		</table>
+	</div>	
+</div>
+<div id="copyright"> 
+Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+</div>	
+</body>
+</html>

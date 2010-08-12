@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
+	<title>ui.formValidator - dependency demo - jQuery UI - Felix Nagel</title>
+	<link type="text/css" href="../css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="../css/style.css" rel="stylesheet" />
+	<!--[if gte IE 6]>	
+		<style type="text/css">@import url(../css/style_ie.css);</style>
+	<![endif]-->	
+</head>
+<body>
+<h1>jQuery UI - add a field manually demo - ui.formValidator</h1>
+<div id="wrapper">
+	<button class="ui-state-default ui-corner-all">Push The Button!</button>
+	
+	<br />
+	<br />
+	<form id="form" action="ui.formValidator.html" method="post" enctype="multipart/form-data">
+		<div class="ui-formular-info info ui-state-highlight ui-corner-all">
+			<p>
+				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+				Fields with an asterix (<em>*</em>) are needed.
+			</p>
+		</div>
+		<div class="ui-formular-error"></div>
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Input 1 is added manually</legend>
+			
+			
+			<label for="inputtext1">Text Input 1<em title="Needed">*</em></label>
+			<input type="text" id="inputtext1" name="inputtext-name1" class="text ui-widget-content ui-corner-all" />
+						
+			<label for="inputtext2">Text Input 2<em title="Needed">*</em></label>
+			<input type="text" id="inputtext2" name="inputtext-name2" class="text ui-widget-content ui-corner-all" />
+				
+			<input type="submit" id="submit" value="Send" class="submit ui-state-default ui-corner-all" />
+			<input type="reset" value="Reset" class="submit ui-state-default ui-corner-all" />
+		</fieldset>		
+	</form>
+</div>
+<div id="copyright"> 
+Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+</div>		
+	<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+	<script type="text/javascript" src="../js/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="../js/jquery.ui.widget.js"></script>
+	
+	<script type="text/javascript" src="../js/ui.formValidator.js"></script>
+	<script type="text/javascript">	
+		$(function() {			
+			var formular = $("#form").formValidator({
+				// forms array
+				forms: {
+					inputtext1: {
+						rules: {		
+							required: true
+						},
+						msg: {	
+							required: "Please enter something in Input Text 1."	
+						}
+					},
+				},
+				submitHowTo: "ajax"
+			});	
+			
+			$("button").click(function(){
+				// get our forms array from above
+				var formArray = formular.formValidator("option", "forms");
+				// init new field and set rules
+				formArray["inputtext2"] = {
+											rules: {		
+												required: true
+											},
+											msg: {	
+												required: "Please enter something in Input Text 1."	
+											}
+										};	
+				// init field in widget
+				formular.formValidator("initField", "inputtext2");
+			});			
+		});		
+	</script>
+</body>
+</html>

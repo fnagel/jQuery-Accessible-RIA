@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (12.07.10)
+ * jQuery UI AriaLightbox (12.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -127,8 +127,9 @@ $.widget("ui.ariaLightbox", {
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable) {
 			$.address.externalChange(function(event) {		
-				// Select the proper picture		
+				// Select the proper picture	
 				if (event.value == "" && options.wrapperElement) self.close();
+				// gallery mode
 				else if (options.imageArray) {	
 					for (var x = 0; x < options.imageArray.length; x++) {
 						if ($(options.imageArray[x]).attr("href") == event.value) {
@@ -139,9 +140,10 @@ $.widget("ui.ariaLightbox", {
 							return;
 						}
 					}
+				// single mode
 				} else {
 					// no second argument as there is no mouse click event
-					if (self.element.attr("href") == event.value) self._open(self.element);
+					if (self.element.attr("href") == event.value) self._open(self.element);	
 				}		
 			});
 		}
@@ -182,7 +184,7 @@ $.widget("ui.ariaLightbox", {
 		// only activate when widget isnt disabled and screen isn't to small
 		if (!options.disabled && $(window).width()-options.disableWidth > 0 && $(window).height()-options.disableHeight > 0) {
 			// save clicked element (needed if lightbox is controlled by keyboard only)
-			if (!options.imageArray) options.clickedElement = event.currentTarget;
+			if (!options.imageArray && event) options.clickedElement = event.currentTarget;
 			else options.clickedElement = element;
 			
 			// if wrapper element isnt found, create it
@@ -273,7 +275,7 @@ $.widget("ui.ariaLightbox", {
 		self._makeHover(closeElement);
 		
 		// decide which position is set
-		if (!event.pageX && !event.pageY && options.pos == "offset") options.pos = "auto";
+		if ((!event || !event.pageX || !event.pageY) && options.pos == "offset") options.pos = "auto";
 		switch (options.pos) {
 			case "auto":
 				var viewPos = 	self._pageScroll();
