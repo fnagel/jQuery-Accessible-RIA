@@ -25,8 +25,8 @@
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Checks if username is available</legend>
 			
-			<label for="inputtext1">Username<em title="Needed">*</em></label>
-			<input type="text" id="inputtext" name="inputtext-name1" class="text ui-widget-content ui-corner-all" />
+			<label for="username">Username<em title="Needed">*</em></label>
+			<input type="text" id="username" name="username" class="text ui-widget-content ui-corner-all" />
 						
 			<input type="submit" id="submit" value="Send" class="submit ui-state-default ui-corner-all" />
 			<input type="reset" value="Reset" class="submit ui-state-default ui-corner-all" />
@@ -47,15 +47,18 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 			var formular = $("#form").formValidator({
 				// forms array
 				forms: {
-					inputtext: {
+					username: {
 						rules: {
-							custom:	function (elementValue) {									  
+							required: true,
+							custom:	function (elementValue) {		
 								var value = true; // backfall
 								$.ajax({
-									data: elementValue,
-									type: "post",
-									url: "server_check.php",
-										// you need a serversite script which checks the username
+									data: "username=" + elementValue,
+									// we need to wait for the response
+									async: false,
+									type: "POST",
+									// you need a serversite script which checks the username
+									url: "http://localhost/Formular/examples/server_check.php",
 									error: function(msg) {},
 									success: function(msg) { 
 										value = msg; // server should return true or false
@@ -65,11 +68,14 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 							}
 						},
 						msg: {
+						   required: "Username is empty.",
 						   custom: "This username is in use already, please choose another one."
 						}
 					}
 				},
-				submitHowTo: "ajax"
+				submitHowTo: "ajax",
+				validateLive: false,
+				validateLiveMsg: false
 			});	
 		});		
 	</script>

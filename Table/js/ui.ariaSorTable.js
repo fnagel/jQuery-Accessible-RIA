@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (12.07.10)
+ * jQuery UI AriaSorTable (18.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -103,7 +103,7 @@ $.widget("ui.ariaSorTable", {
 			options.uid = elementID;
 		} else {
 			options.uid = new Date().getTime();
-			self.element.attr("id", "ui-table-"+options.uid)
+			self.element.attr("id", "ui-table-"+options.uid);
 		}		
 		self.element.find("caption").attr("id", "ui-table-"+options.uid+"-caption");
 		self.element
@@ -111,29 +111,27 @@ $.widget("ui.ariaSorTable", {
 		.attr("aria-readonly","true")
 		.attr("aria-labelledby", "ui-table-"+options.uid+"-caption");
 			
+		// save header elements
+		var theadTr = self.element.find("thead tr");
 		// bubbling event for th link elements
-		var theadTr = self.element.find("thead tr")
-		.bind("click", function(e){
+		options.headers = theadTr.find("th");
+		theadTr.bind("click", function(e){
 			if (!options.disabled) {
-				var el = th = $(e.target);
 				// get the th element
-				while (!th.is("th")) {
-					th = th.parents("th");
-				}			
+				th = $(e.target).closest("th", theadTr);
 				if (!th.hasClass("ui-table-deactivate")) {	
-					// start sorting | parameter: index of the clicked th element
-					self.rowSort(th.prevAll("th:visible").length);	
+					// does not work in certain browsers
+					// self.rowSort(th.prevAll("th:visible").length); 
+					self.rowSort(self._getVisible(th.prevAll("th")).length);	
 					return false;
 				}
 			}
 		})
 		.attr("role", "row");
 		
-		// save header elements (th)
-		options.headers = theadTr.find("th");
 		options.headers.each( function(index) {
 			// get single th element
-			var th = $(options.headers[index]);
+			var th = $(this);
 			
 			// ARIA 
 			th.attr("id","ui-table-" + options.uid + "-header-" + index)
@@ -309,7 +307,8 @@ $.widget("ui.ariaSorTable", {
 	rowSort: function (index) {
 		var options = this.options, self = this;
 		// get all visible th elements
-		var thArray = options.headers.filter(":visible");
+		// var thArray = options.headers.filter(":visible");
+		var thArray = self._getVisible(options.headers);
 		// get new (clicked) th element
 		th = $(thArray[index]);	
 			
@@ -376,6 +375,7 @@ $.widget("ui.ariaSorTable", {
 		// update HTML 
 		self.setHTML(options.rowToStart);	
 	},
+	
 	// sorting clauses function
 	_sortNumber: function (a, b) {
 		// 123.456
@@ -403,12 +403,30 @@ $.widget("ui.ariaSorTable", {
 	},
 	_sortTextHTML: function (a, b) {
 		// Text with html
-		return ($(a[sortIndex]).text() > $(b[sortIndex]).text());
+		var x = $(a[sortIndex]).text().toLowerCase();
+		var y = $(b[sortIndex]).text().toLowerCase();
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	_sortText: function (a, b) {
 		// 20:00:13
-		// Text with html
-		return (a[sortIndex] > b[sortIndex]);
+		// Text without (!) html
+		var x = a[sortIndex].toLowerCase();
+		var y = b[sortIndex].toLowerCase();
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+	},
+	
+	// jQuery :visible filter does not work with tables in certain browser (IE8, ?) so wee built our own function
+	// http://www.code-styling.de/deutsch/jquery-132-verursacht-probleme-im-ie-8
+	_getVisible: function (elements) {
+		var elReturn = [];
+		var i = 0;
+		elements.each(function(index){
+			if ($(this).css('display') != 'none') {
+				elReturn[i] = $(this);
+				i++;
+			}
+		});
+		return elReturn;
 	},
 	
 	// set keyboard control
@@ -458,9 +476,9 @@ $.widget("ui.ariaSorTable", {
 					// go to next or previous page
 					case $.ui.keyCode.TAB:
 						if (options.shift) { 
-							if (options.selectedCol > 0) { self.colSwitch(-1) } else { return true; }
+							if (options.selectedCol > 0) { self.colSwitch(-1); } else { return true; }
 						} else { 
-							if (options.selectedCol < options.headers.filter(":visible").length-1) { self.colSwitch(1); } else { return true; }
+							if (options.selectedCol < self._getVisible(options.headers).length-1) { self.colSwitch(1); } else { return true; }
 						}			
 						break;
 					// switch to left col
@@ -469,11 +487,11 @@ $.widget("ui.ariaSorTable", {
 						break;	
 					// switch to right col
 					case $.ui.keyCode.RIGHT:
-						if (options.selectedCol < options.headers.filter(":visible").length-1) self.colSwitch(1);
+						if (options.selectedCol < self._getVisible(options.headers).length-1) self.colSwitch(1);
 						break;	
 					// start sorting
 					case $.ui.keyCode.SPACE:
-						var th = options.headers.filter(":visible");
+						var th = self._getVisible(options.headers);
 						$(th[options.selectedCol]).find("a").click();
 						break;
 					default:
@@ -482,13 +500,13 @@ $.widget("ui.ariaSorTable", {
 				}
 				return false;	
 			}
-		})
+		});
 	},
 	// switchh selected col
 	colSwitch: function (dir) {
 		var options = this.options, self = this;
 		// get visible headers
-		var thArray = options.headers.filter(":visible");
+		var thArray = self._getVisible(options.headers);
 		// remove old selected col css class
 		$(thArray[options.selectedCol]).removeClass("ui-state-focus");
 		// set new selected col
@@ -551,7 +569,7 @@ $.widget("ui.ariaSorTable", {
 	_updateVirtualBuffer: function() {
 		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
-			(form.val() == "1") ? form.val("0") : form.val("1")
+			(form.val() == "1") ? form.val("0") : form.val("1");
 		} else {
 			var html = '<form><input id="virtualBufferForm" type="hidden" value="1" /></form>';
 			$("body").append(html);
@@ -576,7 +594,7 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 		}
 			html += '</div>'+"\n";
 
-		options.pager = self.element.next(".ui-table-pager")			
+		options.pager = self.element.next(".ui-table-pager");	
 		if (options.pager.length) options.pager.replaceWith(html);
 		else self.element.after(html);
 		// ARIA
