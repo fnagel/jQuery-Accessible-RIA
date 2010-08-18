@@ -13,6 +13,8 @@
 * To set sorting method add css classes, default is text, alphabetically 
 
 * Sorting CSS classes (apply to th elements)
+ui-table-text			default: sorts text
+ui-table-text-html		sorts text with html tags
 ui-table-number 		123 or 123.456
 ui-table-number-de 		123,456
 ui-table-date 			07/28/2009
