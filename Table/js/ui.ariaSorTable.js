@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (18.08.10)
+ * jQuery UI AriaSorTable (26.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -13,6 +13,8 @@
 * To set sorting method add css classes, default is text, alphabetically 
 
 * Sorting CSS classes (apply to th elements)
+ui-table-text			default: sorts text
+ui-table-text-html		sorts text with html tags
 ui-table-number 		123 or 123.456
 ui-table-number-de 		123,456
 ui-table-date 			07/28/2009
@@ -387,19 +389,21 @@ $.widget("ui.ariaSorTable", {
 	},
 	_sortDateDE: function (a, b) {	
 		// 28.07.2009
-		var aDate = a[sortIndex].substr(3,2) + "/" + a[sortIndex].substr(0,2) + "/" + a[sortIndex].substr(6,4);
-		var bDate = b[sortIndex].substr(3,2) + "/" + b[sortIndex].substr(0,2) + "/" + b[sortIndex].substr(6,4);	
-		return (Date.parse(aDate) < Date.parse(bDate));
+		var x = Date.parse(a[sortIndex].substr(3,2) + "/" + a[sortIndex].substr(0,2) + "/" + a[sortIndex].substr(6,4));
+		var y = Date.parse(b[sortIndex].substr(3,2) + "/" + b[sortIndex].substr(0,2) + "/" + b[sortIndex].substr(6,4));	
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	_sortDate: function (a, b) {	
 		// 07/28/2009
-		return (Date.parse(a[sortIndex]) < Date.parse(b[sortIndex]));
+		var x = Date.parse(a[sortIndex]);
+		var y = Date.parse(b[sortIndex]);
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	_sortDateISO: function (a, b) {
 		// 2009-07-28
-		var aDate = a[sortIndex].substr(5,2) + "/" + a[sortIndex].substr(8,2) + "/" + a[sortIndex].substr(0,4);
-		var bDate = b[sortIndex].substr(5,2) + "/" + b[sortIndex].substr(8,2) + "/" + b[sortIndex].substr(0,4);	
-		return (Date.parse(aDate) < Date.parse(bDate));
+		var x = Date.parse(a[sortIndex].substr(5,2) + "/" + a[sortIndex].substr(8,2) + "/" + a[sortIndex].substr(0,4));
+		var y = Date.parse(b[sortIndex].substr(5,2) + "/" + b[sortIndex].substr(8,2) + "/" + b[sortIndex].substr(0,4));	
+		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	_sortTextHTML: function (a, b) {
 		// Text with html
