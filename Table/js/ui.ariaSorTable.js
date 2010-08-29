@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (26.08.10)
+ * jQuery UI AriaSorTable (29.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -567,6 +567,8 @@ $.widget("ui.ariaSorTable", {
 		if (this.options.pager) $("#ui-table-pager").remove();
 		// remove virtual buffer form
 		$("body>form #virtualBufferForm").parent().remove();
+		// call widget destroy function
+		$.Widget.prototype.destroy.apply(this, arguments);
 	},	
 	
 	// updates virtual buffer | for older screenreader

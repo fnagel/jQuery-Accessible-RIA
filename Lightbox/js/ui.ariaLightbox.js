@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (12.08.10)
+ * jQuery UI AriaLightbox (29.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -621,6 +621,8 @@ $.widget("ui.ariaLightbox", {
 		$("body>form #virtualBufferForm").parent().remove();	
 		$("body>div#ui-lightbox-screendimmer").remove();	
 		$("body>div#ui-lightbox-wrapper").unbind("keydown").remove();
+		// call widget destroy function
+		$.Widget.prototype.destroy.apply(this, arguments);
 	}	
 });
 })(jQuery);

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (16.07.10)
+ * jQuery UI FormValidator (29.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -678,6 +678,8 @@ $.widget("ui.formValidator", {
 		// remove injected elements
 		this.element.find(".ui-formular-live, .ui-formular-error, .ui-formular-success").remove();	
 		$("body>form #virtualBufferForm").parent().remove();	
+		// call widget destroy function
+		$.Widget.prototype.destroy.apply(this, arguments);
 	},	
 	
 	// updates virtual buffer | for older screenreader
