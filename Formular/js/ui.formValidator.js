@@ -96,12 +96,7 @@ $.widget("ui.formValidator", {
 		self._updateVirtualBuffer();
 		
 		// set UID for later usage
-		var elementID = self.element.attr("id");
-		if (elementID != "") {
-			options.uid = elementID;
-		} else {
-			options.uid = new Date().getTime();
-		}		
+		options.uid = self.element.attr("id") || Math.random().toString(16).slice(2, 10);
 		
 		// set sumitUrl to form action if no one is defined
 		if (options.submitUrl == "") options.submitUrl = self.element.attr("action");

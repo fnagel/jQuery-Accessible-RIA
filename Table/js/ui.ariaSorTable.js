@@ -90,21 +90,20 @@ $.widget("ui.ariaSorTable", {
 		}
 	},
 	
-	_create: function() {	
-		var options = this.options, self = this;	
-		// init vars		
+	_create: function() {
+		var options = this.options, self = this;
+		// init vars
 		options.tableData = [];
 		options.originalData = [];
 		options.selectedCol = 0;
-		options.activeCol = 0;		
-		
+		options.activeCol = 0;
 		
 		// ARIA | make UID if no ID is set by default
 		var elementID = self.element.attr("id");
 		if (elementID != "") {
 			options.uid = elementID;
 		} else {
-			options.uid = new Date().getTime();
+			options.uid = Math.random().toString(16).slice(2, 10);
 			self.element.attr("id", "ui-table-"+options.uid);
 		}		
 		self.element.find("caption").attr("id", "ui-table-"+options.uid+"-caption");
