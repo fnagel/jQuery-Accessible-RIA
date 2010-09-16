@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (26.08.10)
+ * jQuery UI AriaSorTable (29.08.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -90,21 +90,20 @@ $.widget("ui.ariaSorTable", {
 		}
 	},
 	
-	_create: function() {	
-		var options = this.options, self = this;	
-		// init vars		
+	_create: function() {
+		var options = this.options, self = this;
+		// init vars
 		options.tableData = [];
 		options.originalData = [];
 		options.selectedCol = 0;
-		options.activeCol = 0;		
-		
+		options.activeCol = 0;
 		
 		// ARIA | make UID if no ID is set by default
 		var elementID = self.element.attr("id");
 		if (elementID != "") {
 			options.uid = elementID;
 		} else {
-			options.uid = new Date().getTime();
+			options.uid = Math.random().toString(16).slice(2, 10);
 			self.element.attr("id", "ui-table-"+options.uid);
 		}		
 		self.element.find("caption").attr("id", "ui-table-"+options.uid+"-caption");
@@ -567,6 +566,8 @@ $.widget("ui.ariaSorTable", {
 		if (this.options.pager) $("#ui-table-pager").remove();
 		// remove virtual buffer form
 		$("body>form #virtualBufferForm").parent().remove();
+		// call widget destroy function
+		$.Widget.prototype.destroy.apply(this, arguments);
 	},	
 	
 	// updates virtual buffer | for older screenreader
