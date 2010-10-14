@@ -329,6 +329,8 @@ $.widget("ui.tabs", {
 				$li.hasClass('ui-state-disabled') ||
 				$li.hasClass('ui-state-processing') ||
 				self._trigger('select', null, self._ui(this, $show[0])) === false) {
+				// FIXME this blur is a accessibility nightmare!
+				// accessibility: needed to prevent blur() when enter key is pushed to enable forms mode in screenreader
 				this.blur();
 				return false;
 			}
@@ -394,6 +396,9 @@ $.widget("ui.tabs", {
 			// and remove dotted border from clicked link. This is controlled via CSS
 			// in modern browsers; blur() removes focus from address bar in Firefox
 			// which can become a usability and annoying problem with tabs('rotate').
+			
+			// FIXME this blur is a accessibility nightmare!
+			// accessibility: needed to prevent blur() because IE loses focus when using keyboard control
 			if ($.browser.msie) {
 				this.blur();
 			}
