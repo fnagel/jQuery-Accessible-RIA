@@ -48,7 +48,9 @@ Please notice: jQuery Adress is a third party add-on.
 				},
 				useDimmer: true,
 				pos: "auto",
-				titleText: "Gallery",
+				titleText: function() {
+					return "Gallery";
+				},
 				em: false
 			});		
 		});		

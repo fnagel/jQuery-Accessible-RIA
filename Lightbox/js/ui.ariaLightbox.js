@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (29.08.10)
+ * jQuery UI AriaLightbox (09.11.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -74,10 +74,12 @@ $.widget("ui.ariaLightbox", {
 		},
 		descText: function() {
 			return $(this).find("img").attr("title");
+		},		
+		titleText: function() {
+			return "Lightbox";
 		},
 		prevText: "previous picture",
-		nextText: "next picture",		
-		titleText: "Lightbox",
+		nextText: "next picture",
 		pictureText: "Picture",
 		ofText: "of",
 		closeText: "Close [ESC]",
@@ -198,13 +200,12 @@ $.widget("ui.ariaLightbox", {
 	
 	// called if lightbox wrapper element is not injected yet
 	_show: function (element, event){
-		var options = this.options, self = this;		
-		
+		var options = this.options, self = this;
 		// build html 
 		var html = "\n";
 		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
 		html += '	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+"\n";
-		html += '		<span class="ui-dialog-title" id="ui-dialog-title-dialog">'+ options.titleText +'</span>'+"\n";
+		html += '		<span class="ui-dialog-title" id="ui-dialog-title-dialog">'+ options.titleText.call(element) +'</span>'+"\n";
 		html += '		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="'+ options.closeText +'" role="button">'+"\n";
 		html += '			<span class="ui-icon ui-icon-closethick">'+ options.closeText +'</span>'+"\n";
 		html += '		</a>'+"\n";
@@ -216,8 +217,8 @@ $.widget("ui.ariaLightbox", {
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
-		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
-		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
+		html += '			<button id="ui-lightbox-next" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">'+ options.nextText +'</span></button>'+"\n";
+		html += '			<button id="ui-lightbox-prev" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">'+ options.prevText +'</span></button>'+"\n";
 		html += '		</div>'+"\n";
 		}
 		html += '	</div>	'+"\n";
@@ -370,6 +371,8 @@ $.widget("ui.ariaLightbox", {
 						if (options.imageArray)
 						options.wrapperElement.find("#ui-lightbox-pager")
 							.text(options.pictureText +' '+ (options.activeImage+1) +' '+ options.ofText +' '+ options.imageArray.length);
+						// change title
+						options.wrapperElement.find("span#ui-dialog-title-dialog").text(options.titleText.call(element));
 						// check if lightbox popup changed body dimension
 						if (options.useDimmer)	self._dimmerResize();
 						// update screenreader buffer

@@ -107,7 +107,9 @@ Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a
 				},
 				useDimmer: true,
 				pos: "auto",
-				titleText: "Gallery",
+				titleText: function() {
+					return "Gallery";
+				},
 				em: false
 			});		
 			$("#destroylink2").click(function (event) { 
