@@ -132,7 +132,6 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
 	
 	<script type="text/javascript" src="js/ui.formValidator.js"></script>
-	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">	
 		$(function() {			
 			var formular = $("#form").formValidator({
@@ -293,9 +292,18 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 				formular.formValidator('validate', "inputtext");
 			});			
 			
-			// theme switcher
-			$.fn.themeswitcher && $('#switcher').themeswitcher();
 			
+			// add themeswitcher
+			$(function(){ 
+				var ts = $('<div class="ui-button ui-widget ui-state-default ui-corner-all" style="font-size: 0.6em; padding: 2px 5px; position: absolute; top: 20px; right: 10px;">Click here to add Themeswitcher!</div>')
+				.appendTo('body')
+				.bind("click", function() {
+					ts.text("Loading Themeswitcher...");
+					$.getScript('http://ui.jquery.com/applications/themeroller/themeswitchertool/', function() {
+						ts.removeClass("ui-button ui-widget ui-state-default ui-corner-all").text("").unbind("click").themeswitcher(); 
+					});
+				}); 
+			});			
 		});		
 	</script>
 </body>

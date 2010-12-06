@@ -209,8 +209,7 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 					for (var error in data["errors"]){
 						if (data.errors[error] == "new") {	
 							// we need to check for a context which is not a checkbox so we use to the parent element (which is div.pair)
-							var selector = (data.type == "group") ? data.element.first().parent() : data.element; // jquery 1.4.x
-							// var selector = (data.type == "group") ? data.element.parents() : data.element; // jquery 1.3.x
+							var selector = (data.type == "group") ? data.element.first().parent() : data.element;
 							// did we set a tooltip?
 							if (!data.tooltip) {	
 								data.tooltip = selector.tooltip({
@@ -225,20 +224,21 @@ Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a hr
 										offset: "35 0",
 										of: selector
 									},
-									tooltipClass: "ui-widget-content",
-									noHover: true
-								});								
-								data.tooltip.tooltip("open", selector); // para is target (of)
+									tooltipClass: "ui-widget-content"
+								// no hover effects as we do this on our own
+								}).unbind(".tooltip");								
+							} else {	
+								// as the tooltip is already existent we only need to change the message
+								data.tooltip.tooltip("option", "content", function(){ return data.msg[error] });
 							}
+							// open our tooltip
+							data.tooltip.tooltip("open", selector); // para is target (of)
 						} else if (data.errors[error] == "corrected") {
-							data.tooltip.tooltip("close");							
-							data.tooltip.tooltip("destroy");		
-							data.tooltip	= false;						
+							data.tooltip.tooltip("close");			
 						}
 					}					
 				}		
-			});	
-			
+			});				
 		});		
 	</script>
 </body>
