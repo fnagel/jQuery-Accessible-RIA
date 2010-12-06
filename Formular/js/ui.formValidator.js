@@ -565,29 +565,31 @@ $.widget("ui.formValidator", {
 	},	
 	
 	// how many checked / selected options | which value
-	_getValue: function(id) {
-		var options = this.options;
-		var type = options.forms[id].type;
-		var value = "";
-		switch(type) {
-			case "single":
-					value = options.forms[id].element.val();
-				break;
-			case "group":
-					var result = options.forms[id].element.filter(':checked');
-					if (result.length) value = result;	
-				break;
-			case "select":
-					var result = options.forms[id].element.find("option").filter(':selected');
-					// check if its an array (how much items)
-					if (result.length) {
-						// if not multiple items selected, there could be a default option 
-						value =  (result.val() == options.selectDefault) ? 0 : result;
-					}
-				break;
-		}
-		return value;
-	},	
+    _getValue: function(id) {
+        var options = this.options,
+            value = "";
+           
+        switch(options.forms[id].type) {
+            case "single":
+                    value = options.forms[id].element.val();
+                break;
+            case "group":
+                    var result = options.forms[id].element.filter(':checked');
+                    if (result.length) value = result;   
+                break;
+            case "select":
+                    var result = options.forms[id].element.children("option").filter(':selected');
+                    // check if we could select multiple elements
+                    if (options.forms[id].element.attr("multiple")) {
+                        value = result;
+                    } else {                   
+                        // if not multiple items selected, there could be a default option
+                        value =  (result.val() == options.selectDefault) ? 0 : result.val();
+                    }
+                break;
+        }
+        return value;
+    },    
 	
 	// make hover and focus effects
 	_makeHover: function(element) {
