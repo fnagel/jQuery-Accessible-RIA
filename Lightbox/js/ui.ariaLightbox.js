@@ -225,7 +225,7 @@ $.widget("ui.ariaLightbox", {
 		html += '</div>'+"\n";	
 		
 		// create dimmer
-		if (options.useDimmer) self._lightboxCreate();
+		if (options.useDimmer) self._createDimmer();
 		
 		// inject HTML
 		$("body").append(html);
@@ -470,11 +470,11 @@ $.widget("ui.ariaLightbox", {
 		}
 	},
 	
-	// create lightbox
-	_lightboxCreate: function() {	
+	// create dimmer
+	_createDimmer: function() {	
 		var options = this.options, self = this;
 		// inject html
-		var html = '<div id="ui-lightbox-screendimmer" style="display: none;"></div>';		
+		var html = '<div id="ui-lightbox-screendimmer" class="ui-widget-overlay" style="display: none;"></div>';		
 		$("body").append(html);
 		// set attributes
 		$("#ui-lightbox-screendimmer")
@@ -483,9 +483,6 @@ $.widget("ui.ariaLightbox", {
 				height: 	self._dimmerHeight() + 'px',
 				zIndex: 	options.zIndex,
 				background: options.background,
-				position: 	"absolute",
-				top: 		"0px",
-				left:		"0px",
 				opacity:	options.opacity
 			})
 			.fadeIn(options.animationSpeed)
