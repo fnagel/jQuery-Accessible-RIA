@@ -140,7 +140,9 @@ Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a
 					return $(this).attr("title");
 				},
 				useDimmer: false,
-				titleText: "All pictures in Text",
+				titleText: function() {
+					return "All pictures in Text";
+				},
 				em: false,
 				makeHover: false
 			});		
@@ -157,9 +159,6 @@ Pictures (c) 2009 <a href="http://www.felixnagel.com/fotografie/">Felix Nagel</a
 				}); 
 			});			
 		});		
-
-			
-
 	</script>
 </body>
 </html>
