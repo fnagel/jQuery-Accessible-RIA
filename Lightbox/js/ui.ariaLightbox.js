@@ -78,7 +78,7 @@ $.widget("ui.ariaLightbox", {
 			return $(this).find("img").attr("title");
 		},		
 		titleText: function() {
-			return "Lightbox";
+			return "Fullscreen";
 		},
 		prevText: "previous picture",
 		nextText: "next picture",

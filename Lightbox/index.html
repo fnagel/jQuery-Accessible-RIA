@@ -21,6 +21,12 @@
 	<script type="text/javascript">
 		$(function() {	
 			var lightbox1 = $(".singleLightbox").ariaLightbox({
+				altText: function() {
+					return $(this).find("img").attr("alt");
+				},
+				descText: function() {
+					return $(this).find("img").attr("alt");
+				},		
 				useDimmer: false,
 				pos: "offset"
 			});
@@ -36,17 +42,16 @@
 			
 			var lightbox2 = $("#gallery").ariaLightbox({
 				imageArray: "a.seriesLightbox",
+				useDimmer: true,
+				pos: "auto",
 				altText: function() {
-					// $(this) is the triggered element (in this case the link element)
 					return $(this).find("img").attr("alt");
 				},
 				descText: function() {
-					return $(this).find("img").attr("title");
-				},
-				useDimmer: true,
-				pos: "auto",
+					return $(this).find("img").attr("alt");
+				},		
 				titleText: function() {
-					return "Gallery";
+					return "Picture Gallery";
 				},
 				em: false
 			});		
@@ -73,7 +78,7 @@
 				imageArray: "a.textLightbox",
 				altText: function() {
 					// $(this) is the triggered element (in this case the link)
-					return $(this).attr("title");
+					return "Picture opened by link: " + $(this).text();
 				},
 				descText: function() {
 					return $(this).attr("title");
@@ -112,11 +117,11 @@
 			<a href="#nogo" id="disablelink1">disable()</a>
 		</div>
 		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Single Pictures</h2>
-		<a class="singleLightbox" href="pics/DirtyFlowers.jpg"><img src="pics/thumb/DirtyFlowers.jpg" style="height: 7.5em; width: 5em;" alt="Dirty Flowers" title="Dirty Flowers at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
-		<a class="singleLightbox" href="pics/RealKeepers.jpg"><img src="pics/thumb/RealKeepers.jpg" style="height: 7.5em; width: 5em;" alt="Real Keepers" title="Real Keepers at Emergenza Regio-Finale (Batschkapp Frankfurt am Main - 25.06.08)" /></a>
-		<a class="singleLightbox" href="pics/WhiteLilium.jpg"><img src="pics/thumb/WhiteLilium.jpg" style="height: 7.5em; width: 5em;" alt="White Lilium" title="White Lilium at Emergenza Semi-Finale im Knust in Hamburg - 02.05.09)" /></a>
-		<a class="singleLightbox" href="pics/TheJerks.jpg"><img src="pics/thumb/TheJerks.jpg" style="height: 7.5em; width: 5em;" alt="The Jerks" title="The Jerks at Emergenza Semi-Finale im Rind in Rüsselsheim - 16.05.08)" /></a>
-		<a class="singleLightbox last" href="pics/LaRevolta.jpg"><img src="pics/thumb/LaRevolta.jpg" style="height: 7.5em; width: 5em;" alt="La Revolta" title="La Revolta at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
+		<a class="singleLightbox" href="pics/DirtyFlowers.jpg"><img src="pics/thumb/DirtyFlowers.jpg" style="height: 7.5em; width: 5em;" title="Open this picture of 'Dirty Flowers' in a larger version" alt="Dirty Flowers at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
+		<a class="singleLightbox" href="pics/RealKeepers.jpg"><img src="pics/thumb/RealKeepers.jpg" style="height: 7.5em; width: 5em;" title="Open this picture of 'Real Keepers' in a larger version" alt="Real Keepers at Emergenza Regio-Finale (Batschkapp Frankfurt am Main - 25.06.08)" /></a>
+		<a class="singleLightbox" href="pics/WhiteLilium.jpg"><img src="pics/thumb/WhiteLilium.jpg" style="height: 7.5em; width: 5em;" title="Open this picture of 'White Lilium' in a larger version" alt="White Lilium at Emergenza Semi-Finale im Knust in Hamburg - 02.05.09)" /></a>
+		<a class="singleLightbox" href="pics/TheJerks.jpg"><img src="pics/thumb/TheJerks.jpg" style="height: 7.5em; width: 5em;" title="Open this picture of 'The Jerks' in a larger version" alt="The Jerks at Emergenza Semi-Finale im Rind in Rüsselsheim - 16.05.08)" /></a>
+		<a class="singleLightbox last" href="pics/LaRevolta.jpg"><img src="pics/thumb/LaRevolta.jpg" style="height: 7.5em; width: 5em;" title="Open this picture of 'La Revolta' in a larger version" alt="La Revolta at Emergenza Semi-Finale (Batschkapp Frankfurt am Main - 24.04.08)" /></a>
 	</div>
 	<div id="gallery" class="box ui-widget-content ui-corner-all ui-helper-clearfix">
 		<div class="sub">
@@ -131,24 +136,24 @@
 		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">Gallery</h2>
 		<ul class="ui-helper-clearfix">
 			<li>
-				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  alt="The Boss Hoss" title="The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)"/></a>
+				<a class="seriesLightbox" href="pics/TheBossHoss_1.jpg"><img src="pics/thumb/TheBossHoss_1.jpg"  title="Open this picture of 'The Boss Hoss' in a larger version" alt="The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)"/></a>
 			</li>
 			<li>
-				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" alt="The Boss Hoss" title="The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
+				<a class="seriesLightbox" href="pics/TheBossHoss_2.jpg"><img src="pics/thumb/TheBossHoss_2.jpg" title="Open this picture of 'The Boss Hoss' in a larger version" alt="The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
 			</li>
 			<li class="last">
-				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" alt="The Boss Hoss" title="The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
+				<a class="seriesLightbox" href="pics/TheBossHoss_3.jpg"><img src="pics/thumb/TheBossHoss_3.jpg" title="Open this picture of 'The Boss Hoss' in a larger version" alt="The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)" /></a>
 			</li>
 		</ul>
 	</div>
 	<div class="box ui-widget-content ui-corner-all ui-helper-clearfix">
 		<h2 class="ui-dialog-titlebar ui-widget-header ui-corner-all">In Text Gallery</h2>
 		<p>
-			Lorem ipsum dolor sit amet, <a class="textLightbox" href="pics/TheBossHoss_1.jpg" title="1 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 1</a>
+			Lorem ipsum dolor sit amet, <a class="textLightbox" href="pics/TheBossHoss_1.jpg" title="Picture of the Band 'The Boss Hoss' at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 1</a>
 			consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
-			<a class="textLightbox" href="pics/TheBossHoss_2.jpg" title="2 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 2</a>					
+			<a class="textLightbox" href="pics/TheBossHoss_2.jpg" title="Picture of the Band 'The Boss Hoss' at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 2</a>					
 			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
-			<a class="textLightbox" href="pics/TheBossHoss_3.jpg" title="3 - The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 3</a>					
+			<a class="textLightbox" href="pics/TheBossHoss_3.jpg" title="Picture of the Band 'The Boss Hoss' at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)">In text link 3</a>					
 			At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 		</p>		
 	</div>
