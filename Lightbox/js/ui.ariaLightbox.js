@@ -218,8 +218,8 @@ $.widget("ui.ariaLightbox", {
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
 		html += '			<div class="ui-dialog-buttonset">'+"\n";
-		html += '				<button id="ui-lightbox-next" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.nextText +'</span></button>'+"\n";
 		html += '				<button id="ui-lightbox-prev" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.prevText +'</span></button>'+"\n";
+		html += '				<button id="ui-lightbox-next" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.nextText +'</span></button>'+"\n";
 		html += '			</div>'+"\n";
 		html += '		</div>'+"\n";
 		}
