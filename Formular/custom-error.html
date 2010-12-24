@@ -5,12 +5,144 @@
 	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
 	<title>ui.formValidator - custom error demo - jQuery UI - Felix Nagel</title>
-	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
-	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" href="../jquery/themes/base/jquery.ui.all.css">
+	<script src="../jquery/jquery-1.4.4.js"></script>
+	<script src="../jquery/ui/jquery.ui.core.js"></script>
+	<script src="../jquery/ui/jquery.ui.widget.js"></script>
+	<script src="../jquery/ui/jquery.ui.tabs.js"></script>
+		
 	<link type="text/css" href="css/tooltip.css" rel="stylesheet" />
+	<link href="css/style.css" rel="stylesheet" />
 	<!--[if gte IE 6]>	
 		<style type="text/css">@import url(css/style_ie.css);</style>
-	<![endif]-->	
+	<![endif]-->		
+		
+	<script type="text/javascript" src="js/ui.formValidator.js"></script>
+	<script type="text/javascript" src="../jquery/ui/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.tooltip.js"></script>
+	<script type="text/javascript">	
+		$(function() {			
+			var formular = $("#form").formValidator({
+				forms: {			
+					inputtext: {
+						rules: {
+							regEx: "email",
+							required: true
+						},
+						msg: {	
+							regEx: "Please enter a valid email adress.",
+							required: "Please enter your email adress."	
+						}
+					},
+					txtarea: {
+						rules: {		
+							lengthMin: 5,
+							lengthMax: 15
+						},
+						msg: {	
+							lengthMin: "Please enter 5 chars minimum in the textarea.",
+							lengthMax: "Please enter 15 chars maximum in the textarea."
+						}
+					},
+					password1: {
+						rules: {
+							lengthMin: 6,
+							lengthMax: 15,
+							required: true
+						},
+						msg: {
+							required: "Please enter a password.",
+							lengthMin: "Your Password must have between 6 and 15 chars.",
+							lengthMax: "Your Password must have between 6 and 15 chars."
+						}
+					},
+					password2: {
+						rules: {
+							equalTo: "password1"
+						},
+						msg: {
+							equalTo: "Your passowrds need to be equal."
+						}
+					},
+					checkboxset: {
+						rules: {
+							lengthMin: 2,
+							lengthMax: 3
+						},
+						msg: {
+							lengthMin: "Please select 2 options minimum within the chexboxes.",
+							lengthMax: "Please select 3 options maximum within the chexboxes."
+						}
+					},
+					vote: {
+						rules: {
+							required: true
+						},
+						msg: {
+							required: "You have to check a radio button."
+						}
+					},
+					selectset: {
+						rules: {
+							lengthMin: 2,
+							lengthMax: 3
+						},
+						msg: {
+							lengthMin: "Please select 2 (or none) options minimum within the select element. You have to press [shift].",
+							lengthMax: "Please select 3 options maximum within the select element. You have to press [shift]."
+						}
+					},
+					salutation: {
+						rules: {
+							required: true
+						},
+						msg: {
+							required: "Please select a salutation."
+						}
+					}
+				},
+				validateLive: true,
+				errorSummery: "onSubmit",
+				disabled: false,
+				submitHowTo: "iframe",
+				submitUrl: "server.php",					
+				customError: function(event, data){ 
+					for (var error in data["errors"]){
+						if (data.errors[error] == "new") {	
+							// we need to check for a context which is not a checkbox so we use to the parent element (which is div.pair)
+							var selector = (data.type == "group") ? data.element.first().parent() : data.element;
+							// did we set a tooltip?
+							if (!data.tooltip) {	
+								data.tooltip = selector.tooltip({
+									content: function() {
+										// use the error message
+										return data.msg[error];
+									},
+									// ui.position settings
+									position: {
+										my: "left top",
+										at: "right top",
+										offset: "35 0",
+										of: selector
+									},
+									tooltipClass: "ui-widget-content"
+								// no hover effects as we do this on our own
+								}).unbind(".tooltip");								
+							} else {	
+								// as the tooltip is already existent we only need to change the message
+								data.tooltip.tooltip("option", "content", function(){ return data.msg[error] });
+							}
+							// open our tooltip
+							data.tooltip.tooltip("open", selector); // para is target (of)
+						} else if (data.errors[error] == "corrected") {
+							data.tooltip.tooltip("close");			
+						}
+					}					
+				}		
+			});				
+		});		
+	</script>
 </head>
 <body>
 <h1>jQuery UI - custom error demo - ui.formValidator</h1>
@@ -109,137 +241,8 @@
 	</form>
 </div>
 <div id="copyright"> 
-Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
-</div>	
-	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
-	
-	<script type="text/javascript" src="js/ui.formValidator.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.position.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.tooltip.js"></script>
-	<script type="text/javascript">	
-		$(function() {			
-			var formular = $("#form").formValidator({
-				forms: {			
-					inputtext: {
-						rules: {
-							regEx: "email",
-							required: true
-						},
-						msg: {	
-							regEx: "Please enter a valid email adress.",
-							required: "Please enter your email adress."	
-						}
-					},
-					txtarea: {
-						rules: {		
-							lengthMin: 5,
-							lengthMax: 15
-						},
-						msg: {	
-							lengthMin: "Please enter 5 chars minimum in the textarea.",
-							lengthMax: "Please enter 15 chars maximum in the textarea."
-						}
-					},
-					password1: {
-						rules: {
-							lengthMin: 6,
-							lengthMax: 15,
-							required: true
-						},
-						msg: {
-							required: "Please enter a password.",
-							lengthMin: "Your Password must have between 6 and 15 chars.",
-							lengthMax: "Your Password must have between 6 and 15 chars."
-						}
-					},
-					password2: {
-						rules: {
-							equalTo: "password1"
-						},
-						msg: {
-							equalTo: "Your passowrds need to be equal."
-						}
-					},
-					checkboxset: {
-						rules: {
-							lengthMin: 2,
-							lengthMax: 3
-						},
-						msg: {
-							lengthMin: "Please select 2 options minimum within the chexboxes.",
-							lengthMax: "Please select 3 options maximum within the chexboxes."
-						}
-					},
-					vote: {
-						rules: {
-							required: true
-						},
-						msg: {
-							required: "You have to check a radio button."
-						}
-					},
-					selectset: {
-						rules: {
-							lengthMin: 2,
-							lengthMax: 3
-						},
-						msg: {
-							lengthMin: "Please select 2 (or none) options minimum within the select element. You have to press [shift].",
-							lengthMax: "Please select 3 options maximum within the select element. You have to press [shift]."
-						}
-					},
-					salutation: {
-						rules: {
-							required: true
-						},
-						msg: {
-							required: "Please select a salutation."
-						}
-					}
-				},
-				validateLive: true,
-				errorSummery: "onSubmit",
-				disabled: false,
-				submitHowTo: "iframe",
-				submitUrl: "server.php",					
-				customError: function(event, data){ 
-					for (var error in data["errors"]){
-						if (data.errors[error] == "new") {	
-							// we need to check for a context which is not a checkbox so we use to the parent element (which is div.pair)
-							var selector = (data.type == "group") ? data.element.first().parent() : data.element; // jquery 1.4.x
-							// var selector = (data.type == "group") ? data.element.parents() : data.element; // jquery 1.3.x
-							// did we set a tooltip?
-							if (!data.tooltip) {	
-								data.tooltip = selector.tooltip({
-									content: function() {
-										// use the error message
-										return data.msg[error];
-									},
-									// ui.position settings
-									position: {
-										my: "left top",
-										at: "right top",
-										offset: "35 0",
-										of: selector
-									},
-									tooltipClass: "ui-widget-content",
-									noHover: true
-								});								
-								data.tooltip.tooltip("open", selector); // para is target (of)
-							}
-						} else if (data.errors[error] == "corrected") {
-							data.tooltip.tooltip("close");							
-							data.tooltip.tooltip("destroy");		
-							data.tooltip	= false;						
-						}
-					}					
-				}		
-			});	
-			
-		});		
-	</script>
+</div>
 </body>
 </html>

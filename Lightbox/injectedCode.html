@@ -1,20 +1,21 @@
-<div id="ui-lightbox-wrapper" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">
+<div aria-labelledby="ui-dialog-title-dialog" role="dialog" tabindex="-1" class="ui-dialog ui-widget ui-widget-content ui-corner-all" style="z-index: 10001; left: 607px; top: 202px; display: block; width: 450px;" id="ui-lightbox-wrapper">
 	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-		<span class="ui-dialog-title" id="ui-dialog-title-dialog">Bildergallerie</span>
-		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="Schließen [ESC]" role="button">
-			<span class="ui-icon ui-icon-closethick">Schließen [ESC]</span>
+		<span class="ui-dialog-title" id="ui-dialog-title-dialog">Gallery</span>
+		<a role="button" title="Close [ESC]" class="ui-dialog-titlebar-close ui-corner-all" id="ui-lightbox-close" href="#nogo">
+			<span class="ui-icon ui-icon-closethick">Close [ESC]</span>
 		</a>
 	</div>
-	<div id="ui-lightbox-content" aria-busy="false" aria-relevant="additions removals text" aria-live="assertive">
-		<div id="ui-lightbox-image"><img alt="Alt Texts" src="dir/image.jpg" aria-describedby="ui-lightbox-description"></div>
-		<p id="ui-lightbox-description">Bildbeschreibung</p>
-		<p id="ui-lightbox-pager">Bild 2 von 3</p>
-
-		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">nächtes Bild</button>
-			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">vorheriges Bild</button>
+	<div id="ui-lightbox-content" aria-live="assertive" aria-relevant="additions removals text" aria-busy="false">
+		<div id="ui-lightbox-image" style="height: 301px;"><img aria-describedby="ui-lightbox-description" src="pics/TheBossHoss_2.jpg" alt="The Boss Hoss" style="width: 450px; height: 301px; display: inline;"></div>
+		<p id="ui-lightbox-description">The Boss Hoss at Magik Bike Festival (Rüdesheim am Rhein - 22.05.09)</p>
+		<p id="ui-lightbox-pager">Picture 2 of 3</p>
+		<div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" id="ui-dialog-buttonpane">
+			<div class="ui-dialog-buttonset">
+				<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" type="button" id="ui-lightbox-next"><span class="ui-button-text">next picture</span></button>
+				<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" type="button" id="ui-lightbox-prev"><span class="ui-button-text">previous picture</span></button>
+			</div>
 		</div>
 	</div>	
 </div>
-<div id="ui-lightbox-screendimmer" ></div>
-<form><input id="virtualBufferForm" value="1" type="hidden"></form>
+
+<form><input type="hidden" value="1" id="virtualBufferForm"></form>

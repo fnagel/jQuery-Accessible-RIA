@@ -1,11 +1,13 @@
 /*!
- * jQuery UI AriaLightbox (29.08.10)
+ * jQuery UI AriaLightbox (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
+ * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js 1.8
+ * Depends: jQuery UI
+ * Optional: jQuery Address Plugin
  */
 /*
  USAGE:::::::::::::
@@ -74,10 +76,12 @@ $.widget("ui.ariaLightbox", {
 		},
 		descText: function() {
 			return $(this).find("img").attr("title");
+		},		
+		titleText: function() {
+			return "Fullscreen";
 		},
 		prevText: "previous picture",
-		nextText: "next picture",		
-		titleText: "Lightbox",
+		nextText: "next picture",
 		pictureText: "Picture",
 		ofText: "of",
 		closeText: "Close [ESC]",
@@ -93,8 +97,6 @@ $.widget("ui.ariaLightbox", {
 		useDimmer: true,
 		animationSpeed: "slow",		
 		zIndex: 1000,
-		background: "black",
-		opacity: 0.8,
 		// misc
 		makeHover: true,
 		em: 0.0568182,
@@ -198,13 +200,12 @@ $.widget("ui.ariaLightbox", {
 	
 	// called if lightbox wrapper element is not injected yet
 	_show: function (element, event){
-		var options = this.options, self = this;		
-		
+		var options = this.options, self = this;
 		// build html 
 		var html = "\n";
 		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
 		html += '	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+"\n";
-		html += '		<span class="ui-dialog-title" id="ui-dialog-title-dialog">'+ options.titleText +'</span>'+"\n";
+		html += '		<span id="ui-dialog-title-dialog" class="ui-dialog-title">'+ options.titleText.call(element) +'</span>'+"\n";
 		html += '		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="'+ options.closeText +'" role="button">'+"\n";
 		html += '			<span class="ui-icon ui-icon-closethick">'+ options.closeText +'</span>'+"\n";
 		html += '		</a>'+"\n";
@@ -216,15 +217,17 @@ $.widget("ui.ariaLightbox", {
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
-		html += '			<button id="ui-lightbox-next" type="button" class="ui-state-default ui-corner-all">'+ options.nextText +'</button>'+"\n";
-		html += '			<button id="ui-lightbox-prev" type="button" class="ui-state-default ui-corner-all">'+ options.prevText +'</button>'+"\n";
+		html += '			<div class="ui-dialog-buttonset">'+"\n";
+		html += '				<button id="ui-lightbox-next" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.nextText +'</span></button>'+"\n";
+		html += '				<button id="ui-lightbox-prev" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.prevText +'</span></button>'+"\n";
+		html += '			</div>'+"\n";
 		html += '		</div>'+"\n";
 		}
 		html += '	</div>	'+"\n";
 		html += '</div>'+"\n";	
 		
 		// create dimmer
-		if (options.useDimmer) self._lightboxCreate();
+		if (options.useDimmer) self._createDimmer();
 		
 		// inject HTML
 		$("body").append(html);
@@ -370,6 +373,8 @@ $.widget("ui.ariaLightbox", {
 						if (options.imageArray)
 						options.wrapperElement.find("#ui-lightbox-pager")
 							.text(options.pictureText +' '+ (options.activeImage+1) +' '+ options.ofText +' '+ options.imageArray.length);
+						// change title
+						options.wrapperElement.find("span#ui-dialog-title-dialog").text(options.titleText.call(element));
 						// check if lightbox popup changed body dimension
 						if (options.useDimmer)	self._dimmerResize();
 						// update screenreader buffer
@@ -467,23 +472,18 @@ $.widget("ui.ariaLightbox", {
 		}
 	},
 	
-	// create lightbox
-	_lightboxCreate: function() {	
+	// create dimmer
+	_createDimmer: function() {	
 		var options = this.options, self = this;
 		// inject html
-		var html = '<div id="ui-lightbox-screendimmer" style="display: none;"></div>';		
+		var html = '<div id="ui-lightbox-screendimmer" class="ui-widget-overlay" style="display: none;"></div>';		
 		$("body").append(html);
 		// set attributes
 		$("#ui-lightbox-screendimmer")
 			.css({
 				width: 		self._dimmerWidth() + 'px',
 				height: 	self._dimmerHeight() + 'px',
-				zIndex: 	options.zIndex,
-				background: options.background,
-				position: 	"absolute",
-				top: 		"0px",
-				left:		"0px",
-				opacity:	options.opacity
+				zIndex: 	options.zIndex
 			})
 			.fadeIn(options.animationSpeed)
 			// if dimmer is clicked, close lightbox

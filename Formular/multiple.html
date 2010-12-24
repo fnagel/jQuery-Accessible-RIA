@@ -5,11 +5,61 @@
 	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
 	<title>ui.formValidator - multiple demo - jQuery UI - Felix Nagel</title>
-	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
-	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" href="../jquery/themes/base/jquery.ui.all.css">
+	<script src="../jquery/jquery-1.4.4.js"></script>
+	<script src="../jquery/ui/jquery.ui.core.js"></script>
+	<script src="../jquery/ui/jquery.ui.widget.js"></script>
+	<script src="../jquery/ui/jquery.ui.tabs.js"></script>
+		
+	<link href="css/style.css" rel="stylesheet" />
 	<!--[if gte IE 6]>	
 		<style type="text/css">@import url(css/style_ie.css);</style>
-	<![endif]-->	
+	<![endif]-->		
+	
+	<script src="js/ui.formValidator.js"></script>
+	<script type="text/javascript">	
+		$(function() {			
+			var formular1 = $("#form1").formValidator({
+				forms: {			
+					inputtext: {
+						rules: {
+							regEx: "email",
+							required: true
+						},
+						msg: {	
+							regEx: "Please enter a valid email adress.",
+							required: "Please enter your email adress."	
+						}
+					},
+					txtarea: {
+						rules: {		
+							lengthMin: 5,
+							lengthMax: 15
+						},
+						msg: {	
+							lengthMin: "Please enter 5 chars minimum in the textarea.",
+							lengthMax: "Please enter 15 chars maximum in the textarea."
+						}
+					}
+				}		
+			});					
+			var formular2 = $("#form2").formValidator({
+				forms: {							
+					checkboxset: {
+						rules: {
+							lengthMin: 2,
+							lengthMax: 3
+						},
+						msg: {
+							lengthMin: "Please select 2 options minimum within the chexboxes.",
+							lengthMax: "Please select 3 options maximum within the chexboxes."
+						}
+					}
+				}		
+			});				
+		});		
+	</script>
 </head>
 <body>
 <style type="text/css">
@@ -79,55 +129,8 @@
 	</form>
 </div>
 <div id="copyright"> 
-Copyright (c) 2009 <a href="http://www.felixnagel.com">Felix Nagel</a> for <a href="http://namics.com">Namics (Deustchland) GmbH</a>.
+Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
-</div>		
-	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
-	
-	<script type="text/javascript" src="js/ui.formValidator.js"></script>
-	<script type="text/javascript">	
-		$(function() {			
-			var formular1 = $("#form1").formValidator({
-				forms: {			
-					inputtext: {
-						rules: {
-							regEx: "email",
-							required: true
-						},
-						msg: {	
-							regEx: "Please enter a valid email adress.",
-							required: "Please enter your email adress."	
-						}
-					},
-					txtarea: {
-						rules: {		
-							lengthMin: 5,
-							lengthMax: 15
-						},
-						msg: {	
-							lengthMin: "Please enter 5 chars minimum in the textarea.",
-							lengthMax: "Please enter 15 chars maximum in the textarea."
-						}
-					}
-				}		
-			});					
-			var formular2 = $("#form2").formValidator({
-				forms: {							
-					checkboxset: {
-						rules: {
-							lengthMin: 2,
-							lengthMax: 3
-						},
-						msg: {
-							lengthMin: "Please select 2 options minimum within the chexboxes.",
-							lengthMax: "Please select 3 options maximum within the chexboxes."
-						}
-					}
-				}		
-			});				
-		});		
-	</script>
+</div>
 </body>
 </html>

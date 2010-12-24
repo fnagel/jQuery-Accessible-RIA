@@ -1,12 +1,14 @@
 /*!
- * jQuery UI AriaTabs (12.07.10)
+ * jQuery UI AriaTabs (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
+ * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js 1.8
- *   		ui.tabs.js
+ * Depends: jQuery UI
+ *   		jQuery UI Tabs
+ * Optional: jQuery Address Plugin
  */ 
 /* 
  USAGE:::::::::::::
@@ -49,8 +51,13 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			// fire original function
 			self._tabify(true);		
 			
+			// accessibility: needed to prevent blur() when enter key is pushed to enable forms mode in screenreader
+			// needs to be fixed in tabs widget in line 333
+			this.anchors.bind(options.event + '.tabs-accessibility', function() { this.focus(); });
+			
+			
 			// ARIA
-			self.element.attr("role", "application");
+			// self.element.attr("role", "application");
 			self.list.attr("role", "tablist");	
 			for (var x = 0; x < self.anchors.length; x++) {
 				// add jQuery Address stuff | get proper tab by anchor
@@ -60,31 +67,32 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			}	
 			
 			// keyboard
-			self.element.keydown( function(event){
+			self.list.keydown( function(event){
 				switch (event.keyCode) {
-					case $.ui.keyCode.RIGHT: 
-						event.preventDefault();
+					case $.ui.keyCode.RIGHT:
 						self.select(options.selected+1);
+						return false;
 						break;
-					case $.ui.keyCode.DOWN: 
-						event.preventDefault();
+					case $.ui.keyCode.DOWN:
 						self.select(options.selected+1);
+						// FIXME issues with NVDA: down key is needed for reading content
+						// return false;
 						break;
-					case $.ui.keyCode.UP: 
-						event.preventDefault();
+					case $.ui.keyCode.UP:
 						self.select(options.selected-1);
+						return false;
 						break;
-					case $.ui.keyCode.LEFT: 
-						event.preventDefault();
+					case $.ui.keyCode.LEFT:
 						self.select(options.selected-1);
+						return false;
 						break;
-					case $.ui.keyCode.END: 
-						event.preventDefault();
+					case $.ui.keyCode.END:
 						self.select(self.anchors.length-1);
+						return false;
 						break;
 					case $.ui.keyCode.HOME: 
-						event.preventDefault();
 						self.select(0);
+						return false;
 						break;				
 				}
 			});		
@@ -107,7 +115,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 		},
 		
 		_original_load: $.ui.tabs.prototype.load,
-		// called whenever tab is called but if option collapsible is set | fired once at init for the chosen tab
+		// called whenever a tab is selected but if option collapsible is set | fired once at init for the chosen tab
 		load: function(index) {	
 			
 			// add jQuery Address stuff
@@ -156,21 +164,31 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			}			
 			// set state for the activated tab
 			this._ariaSet(index, true);
-			// update virtual Buffer
-			this._updateVirtualBuffer();
 		},
 		
 		// sets aria states for single tab and its panel
 		_ariaSet: function(index, state) {		
 			var tabindex = (state) ? 0 : -1;
-			// set ARIA state for loaded tab
-			$(this.anchors[index])
-				.attr("tabindex", tabindex)
-				.attr("aria-selected", state)						
+			var anchor = $(this.anchors[index]);
+			// set ARIA state for loaded tab			
+			anchor.attr("tabindex", tabindex)
+				.attr("aria-selected", state);
+			// set focus and remove focus CSS class
+			if (state) {
+				if (!$.browser.msie) anchor.focus(); 
+			} else {
+				// needed to remove CSS class set by original widget
+				anchor.closest("li").removeClass("ui-state-focus");			
+			}
 			// set ARIA state for loaded tab
 			$(this.panels[index])
 				.attr("aria-hidden", !state)
 				.attr("aria-expanded", state);
+			// accessibility: needed to prevent blur() because IE loses focus when using keyboard control
+			// this needs rto be fixed in jQuery UI Tabs in line 402
+			if ($.browser.msie) this.options.timeout = window.setTimeout(function() { anchor.focus(); }, 100);
+			// update virtual Buffer
+			if (state) this._updateVirtualBuffer();
 		},
 		
 		// sets all attributes when plugin is called or if tab is added
@@ -180,14 +198,15 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			var panelId = $(this.panels[index]).attr("id");		
 			// ARIA anchors and li's
 			$(this.anchors[index])
-				.attr("role", "tab")
 				.attr("aria-controls", panelId)
-				.attr("id", panelId+"-tab")				
-			// set li to presentation role
-			.parent().attr("role", "presentation");				
+				.attr("id", panelId+"-tab")
+			// set role to the li not the a because of NVDA tabindex issue
+			.parent().attr("role", "tab");				
 			// ARIA panels aka content wrapper
 			$(this.panels[index])
 				.attr("role", "tabpanel")
+				// add tabpanel to the tabindex
+				.attr("tabindex", 0)
 				.attr("aria-labelledby", panelId+"-tab");				
 			// if collapsible, set event to toggle ARIA state
 			if (this.options.collapsible) {
@@ -271,10 +290,11 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 		_updateVirtualBuffer: function() {
 			var form = $("body>form #virtualBufferForm");		
 			if(form.length) {
-				(form.val() == "1") ? form.val("0") : form.val("1")
+				if (form.val() == "1") form.val("0"); else  form.val("1");
+				if (form.hasClass("ui-accessibility-odd")) form.addClass("ui-accessibility-even").removeClass("ui-accessibility-odd");
+				else form.addClass("ui-accessibility-odd").removeClass("ui-accessibility-even");
 			} else {
-				var html = '<form><input id="virtualBufferForm" type="hidden" value="1" /></form>';
-				$("body").append(html);
+				$("body").append('<form><input id="virtualBufferForm" type="hidden" value="1" /></form>');
 			}
 		}
 	});

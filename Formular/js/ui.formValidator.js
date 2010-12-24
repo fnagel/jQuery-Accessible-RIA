@@ -1,11 +1,12 @@
 /*!
- * jQuery UI FormValidator (29.08.10)
+ * jQuery UI FormValidator (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
+ * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js 1.8
+ * Depends: jQuery UI
  */
 /*
 USAGE:::::::::::::::::::::::::::
@@ -252,39 +253,41 @@ $.widget("ui.formValidator", {
 					if (rule == "required" && ruleValue) errors[rule] = self._whichError(true, errors[rule]);
 					switch (rule) {
 						case "regEx":
+							var number = "";
 							switch (ruleValue) {
 								case "number":
-									errors[rule] = self._whichError(self._number(elementValue), errors[rule]);
+									number = self._number(elementValue);
 									break;
 								case "numberDE":
-									errors[rule] = self._whichError(self._numberDE(elementValue), errors[rule]);
+									number = self._numberDE(elementValue);
 									break;
 								case "numberISO":
-									errors[rule] = self._whichError(self._numberISO(elementValue), errors[rule]);
+									number = self._numberISO(elementValue);
 									break;
 								case "email":
-									errors[rule] = self._whichError(self._email(elementValue), errors[rule]);
+									number = self._email(elementValue);
 									break;
 								case "url":
-									errors[rule] = self._whichError(self._url(elementValue), errors[rule]);
+									number = self._url(elementValue);
 									break;
 								case "plz":
-									errors[rule] = self._whichError(self._plz(elementValue), errors[rule]);
+									number = self._plz(elementValue);
 									break;
 								case "dateDE":
-									errors[rule] = self._whichError(self._dateDE(elementValue), errors[rule]);
+									number = self._dateDE(elementValue);
 									break;
 								case "dateISO":
-									errors[rule] = self._whichError(self._dateISO(elementValue), errors[rule]);
+									number = self._dateISO(elementValue);
 									break;
 								case "captcha":
-									errors[rule] = self._whichError(self._captcha(elementValue), errors[rule]);
+									number = self._captcha(elementValue);
 									break;
 								// regular expression
 								default:
-									errors[rule] = self._whichError(self._regEx(elementValue, ruleValue), errors[rule]);
+									number = self._regEx(elementValue, ruleValue);
 									break;
 							}
+							errors[rule] = self._whichError(number, errors[rule]);
 							break;
 						case "lengthMin":
 							errors[rule] = self._whichError(self._lengthMin(elementValue, ruleValue), errors[rule]);
@@ -565,29 +568,31 @@ $.widget("ui.formValidator", {
 	},	
 	
 	// how many checked / selected options | which value
-	_getValue: function(id) {
-		var options = this.options;
-		var type = options.forms[id].type;
-		var value = "";
-		switch(type) {
-			case "single":
-					value = options.forms[id].element.val();
-				break;
-			case "group":
-					var result = options.forms[id].element.filter(':checked');
-					if (result.length) value = result;	
-				break;
-			case "select":
-					var result = options.forms[id].element.find("option").filter(':selected');
-					// check if its an array (how much items)
-					if (result.length) {
-						// if not multiple items selected, there could be a default option 
-						value =  (result.val() == options.selectDefault) ? 0 : result;
-					}
-				break;
-		}
-		return value;
-	},	
+    _getValue: function(id) {
+        var options = this.options,
+            value = "";
+           
+        switch(options.forms[id].type) {
+            case "single":
+                    value = options.forms[id].element.val();
+                break;
+            case "group":
+                    var result = options.forms[id].element.filter(':checked');
+                    if (result.length) value = result;   
+                break;
+            case "select":
+                    var result = options.forms[id].element.children("option").filter(':selected');
+                    // check if we could select multiple elements
+                    if (options.forms[id].element.attr("multiple")) {
+                        value = result;
+                    } else {                   
+                        // if not multiple items selected, there could be a default option
+                        value =  (result.val() == options.selectDefault) ? 0 : result.val();
+                    }
+                break;
+        }
+        return value;
+    },    
 	
 	// make hover and focus effects
 	_makeHover: function(element) {

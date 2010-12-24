@@ -1,11 +1,13 @@
 /*!
- * jQuery UI AriaSorTable (29.08.10)
+ * jQuery UI AriaSorTable (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
+ * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js
+ * Depends: jQuery UI
+ * Optional: jQuery Address Plugin
  */ 
 /*
  USAGE:::::::::::::
@@ -435,21 +437,6 @@ $.widget("ui.ariaSorTable", {
 	// set keyboard control
 	_setKeyboard: function () {	
 		var options = this.options, self = this;	
-		// listen and save the shift key event
-		options.shift = false;			
-		$(document)
-		.keyup( function(e){ 
-			if (e.keyCode == $.ui.keyCode.SHIFT && !options.disabled) {
-				options.shift = false;
-				return true;
-			}
-		})
-		.keydown( function(e){ 
-			if (e.keyCode == $.ui.keyCode.SHIFT && !options.disabled) {
-				options.shift = true;
-				return true;
-			}
-		});						
 		self.element
 		.keydown( function(e){ 
 			if (!options.disabled) {
@@ -478,7 +465,7 @@ $.widget("ui.ariaSorTable", {
 						break;
 					// go to next or previous page
 					case $.ui.keyCode.TAB:
-						if (options.shift) { 
+						if (e.shiftKey) { 
 							if (options.selectedCol > 0) { self.colSwitch(-1); } else { return true; }
 						} else { 
 							if (options.selectedCol < self._getVisible(options.headers).length-1) { self.colSwitch(1); } else { return true; }
