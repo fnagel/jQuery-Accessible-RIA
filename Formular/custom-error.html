@@ -5,119 +5,21 @@
 	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
 	<title>ui.formValidator - custom error demo - jQuery UI - Felix Nagel</title>
-	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.custom.css" rel="stylesheet" />	
-	<link type="text/css" href="css/style.css" rel="stylesheet" />
+	
+	<link rel="stylesheet" href="../jquery/themes/base/jquery.ui.all.css">
+	<script src="../jquery/jquery-1.4.4.js"></script>
+	<script src="../jquery/ui/jquery.ui.core.js"></script>
+	<script src="../jquery/ui/jquery.ui.widget.js"></script>
+	<script src="../jquery/ui/jquery.ui.tabs.js"></script>
+		
 	<link type="text/css" href="css/tooltip.css" rel="stylesheet" />
+	<link href="css/style.css" rel="stylesheet" />
 	<!--[if gte IE 6]>	
 		<style type="text/css">@import url(css/style_ie.css);</style>
-	<![endif]-->	
-</head>
-<body>
-<h1>jQuery UI - custom error demo - ui.formValidator</h1>
-<div id="controls">
-	<a href="index.html">Standard demo</a> | <a href="multiple.html">multiple demo</a>
-</div>
-<div id="wrapper">
-	<div id="switcher"></div>
-	<br />
-	<form id="form" action="ui.formValidator.html" method="post" enctype="multipart/form-data">
-		<div id="ui-formular-info" class="info ui-state-highlight ui-corner-all">
-			<p>
-				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
-				Fields with an asterix (<em>*</em>) are needed.
-			</p>
-		</div>
-		<div id="ui-formular-error"></div>
-		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Input's</legend>
-			
-			<label for="inputtext">Text Input (email) <em title="Needed">*</em></label>
-			<input type="text" id="inputtext" name="inputtext-name" class="text ui-widget-content ui-corner-all" />
-						
-			<label for="txtarea">Textarea</label>
-			<textarea id="txtarea" name="txtarea" rows="" cols="" class="text ui-widget-content ui-corner-all"></textarea>
-						
-			<label for="password1">Password <em title="Needed">*</em></label>
-			<input name="password1-name" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
-			
-			<label for="password2">Password repeat</label>
-			<input name="password2-name" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
-		</fieldset>	
-		<fieldset class="ui-widget-content ui-corner-all fieldset-checkboxset">
-			<legend class="ui-widget-header ui-corner-all">Checkboxes</legend>
-			<div class="pair">
-				<input type="checkbox" id="checkbox_1" name="checkbox-1" class="radio checkboxset" />
-				<label class="ui-widget-content ui-corner-all" for="checkbox_1">Option 1</label>			
-			</div>	
-			<div class="pair">
-				<input type="checkbox" id="checkbox_2" name="checkbox-2" class="radio checkboxset" />
-				<label class="ui-widget-content ui-corner-all" for="checkbox_2">Option 2</label>				
-			</div>
-			<div class="pair">
-				<input type="checkbox" id="checkbox_3" name="checkbox-3" class="radio checkboxset" />
-				<label class="ui-widget-content ui-corner-all" for="checkbox_3">Option 3</label>			
-			</div>
-			<div class="pair">
-				<input type="checkbox" id="checkbox_4" name="checkbox-4" class="radio checkboxset" />
-				<label class="ui-widget-content ui-corner-all" for="checkbox_4">Option 4</label>			
-			</div>
-		</fieldset>	
+	<![endif]-->		
 		
-		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Radioboxes <em title="Needed">*</em></legend>
-			<div class="pair">
-				<input type="radio" id="vote_1" value="Option 1" name="vote" class="radio vote"/>
-                <label class="ui-widget-content ui-corner-all" for="vote_1">Option 1</label>
-			</div>	
-			<div class="pair">
-				<input type="radio" id="vote_2" name="vote" class="radio vote"/>
-                <label class="ui-widget-content ui-corner-all" for="vote_2">Option 2</label>
-			</div>	
-			<div class="pair">
-				<input type="radio" id="vote_3" name="vote" class="radio vote"/>
-                <label class="ui-widget-content ui-corner-all" for="vote_3">Option 3</label>	
-			</div>			
-		</fieldset>	
-				
-		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Others</legend>
-
-			<label for="selectset">Multiple Selectbox</label>
-			<select name="selectset-name" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
-				<option>Option 1</option>
-				<option>Option 2</option>
-				<option>Option 3</option>
-				<option>Option 4</option>
-				<option>Option 5</option>
-			</select>		
-					
-			<label for="salutation">Selectbox<em title="Needed">*</em></label>
-			<select name="salutation-name" id="salutation" size="1" class="text ui-widget-content ui-corner-all">
-				<option value="default">Please choose...</option>
-				<option value="Mr.">Mr.</option>
-				<option value="Ms.">Ms.</option>
-				<option value="Mrs.">Mrs.</option>
-			</select>
-		</fieldset>		
-		
-		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
-			
-			<input type="submit" id="submit" value="Send" class="submit ui-state-default ui-corner-all" />
-			<input type="reset" value="Reset" class="submit ui-state-default ui-corner-all" />
-		</fieldset>		
-	</form>
-</div>
-<div id="copyright"> 
-Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
-<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
-</div>	
-	<script type="text/javascript" src="js/jquery-1.4.2.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
-	
 	<script type="text/javascript" src="js/ui.formValidator.js"></script>
-	<script type="text/javascript" src="js/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="../jquery/ui/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="js/jquery.ui.tooltip.js"></script>
 	<script type="text/javascript">	
 		$(function() {			
@@ -241,5 +143,106 @@ Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.
 			});				
 		});		
 	</script>
+</head>
+<body>
+<h1>jQuery UI - custom error demo - ui.formValidator</h1>
+<div id="controls">
+	<a href="index.html">Standard demo</a> | <a href="multiple.html">multiple demo</a>
+</div>
+<div id="wrapper">
+	<div id="switcher"></div>
+	<br />
+	<form id="form" action="ui.formValidator.html" method="post" enctype="multipart/form-data">
+		<div id="ui-formular-info" class="info ui-state-highlight ui-corner-all">
+			<p>
+				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
+				Fields with an asterix (<em>*</em>) are needed.
+			</p>
+		</div>
+		<div id="ui-formular-error"></div>
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Input's</legend>
+			
+			<label for="inputtext">Text Input (email) <em title="Needed">*</em></label>
+			<input type="text" id="inputtext" name="inputtext-name" class="text ui-widget-content ui-corner-all" />
+						
+			<label for="txtarea">Textarea</label>
+			<textarea id="txtarea" name="txtarea" rows="" cols="" class="text ui-widget-content ui-corner-all"></textarea>
+						
+			<label for="password1">Password <em title="Needed">*</em></label>
+			<input name="password1-name" id="password1" type="password" class="text ui-widget-content ui-corner-all" />
+			
+			<label for="password2">Password repeat</label>
+			<input name="password2-name" id="password2" type="password" class="text ui-widget-content ui-corner-all" />	
+		</fieldset>	
+		<fieldset class="ui-widget-content ui-corner-all fieldset-checkboxset">
+			<legend class="ui-widget-header ui-corner-all">Checkboxes</legend>
+			<div class="pair">
+				<input type="checkbox" id="checkbox_1" name="checkbox-1" class="radio checkboxset" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_1">Option 1</label>			
+			</div>	
+			<div class="pair">
+				<input type="checkbox" id="checkbox_2" name="checkbox-2" class="radio checkboxset" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_2">Option 2</label>				
+			</div>
+			<div class="pair">
+				<input type="checkbox" id="checkbox_3" name="checkbox-3" class="radio checkboxset" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_3">Option 3</label>			
+			</div>
+			<div class="pair">
+				<input type="checkbox" id="checkbox_4" name="checkbox-4" class="radio checkboxset" />
+				<label class="ui-widget-content ui-corner-all" for="checkbox_4">Option 4</label>			
+			</div>
+		</fieldset>	
+		
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Radioboxes <em title="Needed">*</em></legend>
+			<div class="pair">
+				<input type="radio" id="vote_1" value="Option 1" name="vote" class="radio vote"/>
+                <label class="ui-widget-content ui-corner-all" for="vote_1">Option 1</label>
+			</div>	
+			<div class="pair">
+				<input type="radio" id="vote_2" name="vote" class="radio vote"/>
+                <label class="ui-widget-content ui-corner-all" for="vote_2">Option 2</label>
+			</div>	
+			<div class="pair">
+				<input type="radio" id="vote_3" name="vote" class="radio vote"/>
+                <label class="ui-widget-content ui-corner-all" for="vote_3">Option 3</label>	
+			</div>			
+		</fieldset>	
+				
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Others</legend>
+
+			<label for="selectset">Multiple Selectbox</label>
+			<select name="selectset-name" id="selectset" multiple="multiple" size="5" class="text ui-widget-content ui-corner-all">
+				<option>Option 1</option>
+				<option>Option 2</option>
+				<option>Option 3</option>
+				<option>Option 4</option>
+				<option>Option 5</option>
+			</select>		
+					
+			<label for="salutation">Selectbox<em title="Needed">*</em></label>
+			<select name="salutation-name" id="salutation" size="1" class="text ui-widget-content ui-corner-all">
+				<option value="default">Please choose...</option>
+				<option value="Mr.">Mr.</option>
+				<option value="Ms.">Ms.</option>
+				<option value="Mrs.">Mrs.</option>
+			</select>
+		</fieldset>		
+		
+		<fieldset class="ui-widget-content ui-corner-all">
+			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
+			
+			<input type="submit" id="submit" value="Send" class="submit ui-state-default ui-corner-all" />
+			<input type="reset" value="Reset" class="submit ui-state-default ui-corner-all" />
+		</fieldset>		
+	</form>
+</div>
+<div id="copyright"> 
+Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
+<a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
+</div>
 </body>
 </html>

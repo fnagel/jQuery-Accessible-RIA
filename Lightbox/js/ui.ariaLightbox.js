@@ -1,12 +1,13 @@
 /*!
- * jQuery UI AriaLightbox (23.12.10)
+ * jQuery UI AriaLightbox (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js 1.8
+ * Depends: jQuery UI
+ * Optional: jQuery Address Plugin
  */
 /*
  USAGE:::::::::::::
@@ -206,7 +207,7 @@ $.widget("ui.ariaLightbox", {
 		var html = "\n";
 		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
 		html += '	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+"\n";
-		html += '		<span class="ui-dialog-title" id="ui-dialog-title-dialog">'+ options.titleText.call(element) +'</span>'+"\n";
+		html += '		<span id="ui-dialog-title-dialog" class="ui-dialog-title">'+ options.titleText.call(element) +'</span>'+"\n";
 		html += '		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="'+ options.closeText +'" role="button">'+"\n";
 		html += '			<span class="ui-icon ui-icon-closethick">'+ options.closeText +'</span>'+"\n";
 		html += '		</a>'+"\n";
@@ -218,8 +219,10 @@ $.widget("ui.ariaLightbox", {
 		if (options.imageArray) { 
 		html += '		<p id="ui-lightbox-pager"></p>'+"\n";
 		html += '		<div id="ui-dialog-buttonpane" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">'+"\n";
-		html += '			<button id="ui-lightbox-next" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">'+ options.nextText +'</span></button>'+"\n";
-		html += '			<button id="ui-lightbox-prev" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all"><span class="ui-button-text">'+ options.prevText +'</span></button>'+"\n";
+		html += '			<div class="ui-dialog-buttonset">'+"\n";
+		html += '				<button id="ui-lightbox-next" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.nextText +'</span></button>'+"\n";
+		html += '				<button id="ui-lightbox-prev" type="button" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+ options.prevText +'</span></button>'+"\n";
+		html += '			</div>'+"\n";
 		html += '		</div>'+"\n";
 		}
 		html += '	</div>	'+"\n";

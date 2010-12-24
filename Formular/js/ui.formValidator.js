@@ -1,12 +1,12 @@
 /*!
- * jQuery UI FormValidator (23.12.10)
+ * jQuery UI FormValidator (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js 1.8
+ * Depends: jQuery UI
  */
 /*
 USAGE:::::::::::::::::::::::::::
@@ -284,11 +284,10 @@ $.widget("ui.formValidator", {
 									break;
 								// regular expression
 								default:
-									number = self._regEx(elementValue);
-									break;									
-								
-								errors[rule] = self._whichError(number, errors[rule]);
+									number = self._regEx(elementValue, ruleValue);
+									break;
 							}
+							errors[rule] = self._whichError(number, errors[rule]);
 							break;
 						case "lengthMin":
 							errors[rule] = self._whichError(self._lengthMin(elementValue, ruleValue), errors[rule]);

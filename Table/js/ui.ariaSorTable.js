@@ -1,12 +1,13 @@
 /*!
- * jQuery UI AriaSorTable (29.08.10)
+ * jQuery UI AriaSorTable (24.12.10)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
  * Copyright (c) 2010-2011 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: ui.core.js
+ * Depends: jQuery UI
+ * Optional: jQuery Address Plugin
  */ 
 /*
  USAGE:::::::::::::
@@ -439,7 +440,6 @@ $.widget("ui.ariaSorTable", {
 		self.element
 		.keydown( function(e){ 
 			if (!options.disabled) {
-				console.log(e);
 				switch (e.keyCode) {
 					// go to next page
 					case $.ui.keyCode.DOWN:
