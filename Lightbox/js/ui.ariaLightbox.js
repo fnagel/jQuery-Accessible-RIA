@@ -97,8 +97,6 @@ $.widget("ui.ariaLightbox", {
 		useDimmer: true,
 		animationSpeed: "slow",		
 		zIndex: 1000,
-		background: "black",
-		opacity: 0.8,
 		// misc
 		makeHover: true,
 		em: 0.0568182,
@@ -485,9 +483,7 @@ $.widget("ui.ariaLightbox", {
 			.css({
 				width: 		self._dimmerWidth() + 'px',
 				height: 	self._dimmerHeight() + 'px',
-				zIndex: 	options.zIndex,
-				background: options.background,
-				opacity:	options.opacity
+				zIndex: 	options.zIndex
 			})
 			.fadeIn(options.animationSpeed)
 			// if dimmer is clicked, close lightbox

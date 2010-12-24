@@ -101,3 +101,6 @@ ul li.last,
 a.last{
 	margin: 0;
 }
+
+/* Overwrite Overlay */
+.ui-widget-overlay { opacity: .8; filter:Alpha(Opacity=80); }
