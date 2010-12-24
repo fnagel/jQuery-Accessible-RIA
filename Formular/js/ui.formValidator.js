@@ -271,7 +271,7 @@ $.widget("ui.formValidator", {
 									number = self._url(elementValue);
 									break;
 								case "plz":
-									number = self._plz(elementValue)
+									number = self._plz(elementValue);
 									break;
 								case "dateDE":
 									number = self._dateDE(elementValue);
