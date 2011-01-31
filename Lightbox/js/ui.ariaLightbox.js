@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (24.12.10)
+ * jQuery UI AriaLightbox (31.01.11)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -445,7 +445,7 @@ $.widget("ui.ariaLightbox", {
 			$.address.value("");
 		}
 		// Callback
-		self._trigger("onClose", 0);
+		self._trigger("onClose", 0, options.activeImage);
 	},		
 	
 	// change picture to previous image
@@ -456,7 +456,7 @@ $.widget("ui.ariaLightbox", {
 			self._changePicture($(options.imageArray[options.activeImage]));
 			self._setButtonState();
 			// Callback
-			self._trigger("onPrev", 0);
+			self._trigger("onPrev", 0, options.activeImage);
 		}
 	},	
 	
@@ -468,7 +468,7 @@ $.widget("ui.ariaLightbox", {
 			self._changePicture($(options.imageArray[options.activeImage]));
 			self._setButtonState();
 			// Callback
-			self._trigger("onNext", 0);
+			self._trigger("onNext", 0, options.activeImage);
 		}
 	},
 	
