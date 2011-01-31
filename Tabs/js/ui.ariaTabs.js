@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaTabs (24.12.10)
+ * jQuery UI AriaTabs (31.01.11)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -59,7 +59,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			// ARIA
 			// self.element.attr("role", "application");
 			self.list.attr("role", "tablist");	
-			for (var x = 0; x < self.anchors.length; x++) {
+			for (x = 0; x < self.anchors.length; x++) {
 				// add jQuery Address stuff | get proper tab by anchor
 				if ($.address && options.jqAddress.enable && anchorId != "#" && $(self.anchors[x]).attr("href") == anchorId) self.select(x);
 				// init aria atrributes for each panel and anchor
@@ -68,33 +68,31 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			
 			// keyboard
 			self.list.keydown( function(event){
+				var ret = false;
 				switch (event.keyCode) {
 					case $.ui.keyCode.RIGHT:
 						self.select(options.selected+1);
-						return false;
 						break;
 					case $.ui.keyCode.DOWN:
 						self.select(options.selected+1);
 						// FIXME issues with NVDA: down key is needed for reading content
 						// return false;
+						ret = true;
 						break;
 					case $.ui.keyCode.UP:
 						self.select(options.selected-1);
-						return false;
 						break;
 					case $.ui.keyCode.LEFT:
 						self.select(options.selected-1);
-						return false;
 						break;
 					case $.ui.keyCode.END:
 						self.select(self.anchors.length-1);
-						return false;
 						break;
 					case $.ui.keyCode.HOME: 
 						self.select(0);
-						return false;
 						break;				
 				}
+				return ret;
 			});		
 			
 			// add jQuery address stuff
@@ -112,6 +110,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 					}	
 				});
 			}
+			self.initiated = true;
 		},
 		
 		_original_load: $.ui.tabs.prototype.load,
@@ -120,6 +119,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			
 			// add jQuery Address stuff
 			// workaround: only set values when user interacts aka not on init
+			// ToDO use this.initiated to check for init
 			if ($.address && this.options.jqAddress.enable) {
 				if ($(this.anchors[0]).attr("aria-selected") !== undefined) {
 					if (this.options.forceFirst === 0 && index !== 0) {
@@ -137,18 +137,18 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			}
 			
 			// hide all unselected
-			for (var x = 0; x < this.anchors.length; x++) {			
+			for (x = 0; x < this.anchors.length; x++) {			
 				// anchors
 				this._ariaSet(x, false);
 				// remove ARIA live settings
-				if($.data(this.anchors[x], 'href.tabs')) {
+				if ($.data(this.anchors[x], 'href.tabs')) {
 					$(this.panels[x])
 						.removeAttr("aria-live")
 						.removeAttr("aria-busy");
 				}
-			};	
+			}
 			// is remote? set ARIA states 
-			if($.data(this.anchors[index], 'href.tabs')) {
+			if ($.data(this.anchors[index], 'href.tabs')) {
 				$(this.panels[index])
 					.attr("aria-live", "polite")
 					.attr("aria-busy", "true");
@@ -157,17 +157,17 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			this._original_load(index);
 						
 			// is remote? end ARIA busy
-			if($.data(this.anchors[index], 'href.tabs')) {
+			if ($.data(this.anchors[index], 'href.tabs')) {
 				$(this.panels[index])
 					.attr("aria-busy", "false");				
-					// TO DO jQuery Address: title is wrong when using Ajax Tab
+					// TODO jQuery Address: title is wrong when using Ajax Tab
 			}			
 			// set state for the activated tab
 			this._ariaSet(index, true);
 		},
 		
 		// sets aria states for single tab and its panel
-		_ariaSet: function(index, state) {		
+		_ariaSet: function(index, state) {
 			var tabindex = (state) ? 0 : -1;
 			var anchor = $(this.anchors[index]);
 			// set ARIA state for loaded tab			
@@ -175,7 +175,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 				.attr("aria-selected", state);
 			// set focus and remove focus CSS class
 			if (state) {
-				if (!$.browser.msie) anchor.focus(); 
+				if (!$.browser.msie && this.initiated) anchor.focus(); 
 			} else {
 				// needed to remove CSS class set by original widget
 				anchor.closest("li").removeClass("ui-state-focus");			
@@ -186,7 +186,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 				.attr("aria-expanded", state);
 			// accessibility: needed to prevent blur() because IE loses focus when using keyboard control
 			// this needs rto be fixed in jQuery UI Tabs in line 402
-			if ($.browser.msie) this.options.timeout = window.setTimeout(function() { anchor.focus(); }, 100);
+			if ($.browser.msie && this.initiated) this.options.timeout = window.setTimeout(function() { anchor.focus(); }, 100);
 			// update virtual Buffer
 			if (state) this._updateVirtualBuffer();
 		},
@@ -260,7 +260,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 				.removeAttr("aria-relevant");
 			// ul element
 			self.list.removeAttr("role");		
-			for (var x = 0; x < self.anchors.length; x++) {
+			for (x = 0; x < self.anchors.length; x++) {
 				// tabs
 				$(self.anchors[x])
 					.removeAttr("aria-selected")
@@ -299,3 +299,5 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 		}
 	});
 })(jQuery); 
+
+
