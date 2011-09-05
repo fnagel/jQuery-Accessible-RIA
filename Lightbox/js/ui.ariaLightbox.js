@@ -589,7 +589,7 @@ $.widget("ui.ariaLightbox", {
 	_updateVirtualBuffer: function() {
 		var form = $("body>form #virtualBufferForm");		
 		if(form.length) {
-			(form.val() == "1") ? form.val("0") : form.val("1")
+			(form.val() == "1") ? form.val("0") : form.val("1");
 		} else {
 			var html = '<form><input id="virtualBufferForm" type="hidden" value="1" /></form>';
 			$("body").append(html);
