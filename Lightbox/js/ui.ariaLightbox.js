@@ -102,7 +102,7 @@ $.widget("ui.ariaLightbox", {
 		em: 0.0568182,
 		// don not alter this var
 		activeImage: 0,		
-		// jQuery Address
+		// jQuery Address (please note you need to init jqAddress with ?strict=0 parameter)
 		jqAddress: {
 			enable: true,
 			title: {
@@ -203,7 +203,7 @@ $.widget("ui.ariaLightbox", {
 		var options = this.options, self = this;
 		// build html 
 		var html = "\n";
-		html += '<div id="ui-lightbox-wrapper" style="z-index:'+options.zIndex+1+';" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
+		html += '<div id="ui-lightbox-wrapper" class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">'+"\n";
 		html += '	<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+"\n";
 		html += '		<span id="ui-dialog-title-dialog" class="ui-dialog-title">'+ options.titleText.call(element) +'</span>'+"\n";
 		html += '		<a href="#nogo" id="ui-lightbox-close" class="ui-dialog-titlebar-close ui-corner-all" title="'+ options.closeText +'" role="button">'+"\n";
@@ -282,12 +282,12 @@ $.widget("ui.ariaLightbox", {
 		switch (options.pos) {
 			case "auto":
 				var viewPos = 	self._pageScroll();
-				var posLeft = 	(($(document).width() - options.wrapperElement.width())/2);	
-				var posTop = 	viewPos[1]+options.autoHeight;
+				var posLeft = 	viewPos[0] + (($(window).width() - options.wrapperElement.width())/2);	
+				var posTop = 	viewPos[1] + options.autoHeight;
 				break;
 			case "offset":
-				var posLeft = 	event.pageX+options.offsetX;	
-				var posTop = 	event.pageY-options.offsetY;
+				var posLeft = 	event.pageX + options.offsetX;	
+				var posTop = 	event.pageY - options.offsetY;
 				break;						
 			default:
 				var position =  options.pos.split(",");
@@ -299,11 +299,12 @@ $.widget("ui.ariaLightbox", {
 		options.wrapperElement
 			.css({
 				left: posLeft+"px",
-				top: posTop+"px"
+				top: posTop+"px",
+				zIndex: options.zIndex
 			})
 			.fadeIn(options.animationSpeed)
 			.focus();
-		
+			
 		// set picture and meta data
 		self._changePicture(element, event);
 	},
@@ -339,21 +340,23 @@ $.widget("ui.ariaLightbox", {
 				imageElement.css({
 					width: calculatedX,
 					height: calculatedY
-				});
+				});				
 				// decide which position is set and animate the width of the ligthbox element
-				if (!event && options.pos == "offset") options.pos = "auto";
 				switch (options.pos) {
 					case "offset":
+						topPos = (event) ? event.pageY : element.offset().top;
+						leftPos = (event) ? event.pageX : element.offset().left;
 						options.wrapperElement.animate({
-							left: event.pageX+options.offsetX+"px",
-							top: event.pageY+options.offsetY+"px",
+							left: leftPos + options.offsetX + "px",
+							top: topPos + options.offsetY + "px",
 							width: calculatedX
 						}, options.animationSpeed);
 						break;						
 					case "auto":
 					default:
+						var viewPos = 	self._pageScroll();
 						options.wrapperElement.animate({
-							left: (($(document).width() - image.width)/2)+"px",
+							left: viewPos[0] + (( $( window ).width() - image.width ) / 2 ) + "px",
 							width: calculatedX
 						}, options.animationSpeed);
 						break;						
@@ -368,13 +371,13 @@ $.widget("ui.ariaLightbox", {
 						imageElement.fadeIn(options.animationSpeed);
 						// change description of the picture
 						options.wrapperElement.find("#ui-lightbox-description")
-							.text(options.descText.call(element));
+							.html(options.descText.call(element));
 						// if it is a gallery change the pager text
 						if (options.imageArray)
 						options.wrapperElement.find("#ui-lightbox-pager")
 							.text(options.pictureText +' '+ (options.activeImage+1) +' '+ options.ofText +' '+ options.imageArray.length);
 						// change title
-						options.wrapperElement.find("span#ui-dialog-title-dialog").text(options.titleText.call(element));
+						options.wrapperElement.find("span#ui-dialog-title-dialog").html(options.titleText.call(element));
 						// check if lightbox popup changed body dimension
 						if (options.useDimmer)	self._dimmerResize();
 						// update screenreader buffer
@@ -442,7 +445,7 @@ $.widget("ui.ariaLightbox", {
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable) {
 			if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0]);
-			$.address.value("");
+			$.address.value("nogo");
 		}
 		// Callback
 		self._trigger("onClose", 0, options.activeImage);
@@ -501,13 +504,9 @@ $.widget("ui.ariaLightbox", {
 			dimmer.css({
 				width: 	0,
 				height: 0
-			});		
-			// check real body dimension
-			var dimension = self._pageScroll();
-			// if page is not scrolled without dimmer div use normal width
-			var dimensionX = (dimension[0] == 0) ? self._dimmerWidth() : dimension[0];			
+			});	
 			dimmer.css({
-				width: 	dimensionX + 'px',
+				width: 	self._dimmerWidth() + 'px',
 				height: self._dimmerHeight() + 'px'
 			});
 		}
