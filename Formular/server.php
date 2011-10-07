@@ -1,5 +1,5 @@
 <?php
-	// checking correkt data transfer
+	// checking correct data transfer
 	if ($_POST != "") {
 		echo "true";
 	} else {	
