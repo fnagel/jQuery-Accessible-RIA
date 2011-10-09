@@ -453,9 +453,6 @@ $.widget("ui.formValidator", {
 			});
 			// focus error box when form is submitted
 			if (data["submitted"]) errorElement.attr("tabindex",-1).focus();
-			// Callback fired when error exists and form is shown
-			self._trigger("onErrors", 0);
-		// send data if no errors found
 		}
 
 		// Callback
