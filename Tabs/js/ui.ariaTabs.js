@@ -30,7 +30,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 	
 		// when widget is initiated
 		_create: function() {
-			var self = this, options = this.options;	
+			var self = this, options = this.options, x = 0;	
 			// add jQuery address default options
 			if ($.address) {						
 				var jqAddressDefOpt = { 
