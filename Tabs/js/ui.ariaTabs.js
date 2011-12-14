@@ -30,7 +30,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 	
 		// when widget is initiated
 		_create: function() {
-			var self = this, options = this.options;	
+			var self = this, options = this.options, x, anchorId = '#';	
 			// add jQuery address default options
 			if ($.address) {						
 				var jqAddressDefOpt = { 
@@ -46,7 +46,7 @@ jqAddress			You need to add the add the jQuery Address file, please see demo fil
 			}
 
 			// add jQuery Address stuff
-			if ($.address && options.jqAddress.enable) var anchorId = "#" + $.address.value().replace("/", '');
+			if ($.address && options.jqAddress.enable) anchorId = "#" + $.address.value().replace("/", '');
 
 			// fire original function
 			self._tabify(true);		
