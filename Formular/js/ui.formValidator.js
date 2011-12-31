@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (24.12.10)
+ * jQuery UI FormValidator (10.10.11)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
