@@ -233,7 +233,7 @@ $.widget("ui.ariaLightbox", {
 		$("body").append(html);
 		
 		// Callback
-		self._trigger("onShow", 0);
+		self._trigger("onShow", event, element);
 		// get lightbox element
 		options.wrapperElement = $("body>div#ui-lightbox-wrapper");			
 		
@@ -392,7 +392,7 @@ $.widget("ui.ariaLightbox", {
 						}
 						
 						// Callback
-						self._trigger("onChangePicture", 0);
+						self._trigger("onChangePicture", event, element);
 						// END of image changing
 					}
 				);					
