@@ -407,28 +407,33 @@ $.widget("ui.ariaLightbox", {
 	// set button attributes
 	_setButtonState: function (){
 		var options = this.options;
-		// activate both buttons	
+		var prevDisabled = false, nextDisabled = false;
+		// activate both buttons
 		options.buttonpane.find("#ui-lightbox-next, #ui-lightbox-prev")
 			.removeAttr("disabled")
 			.removeClass("ui-state-disabled")
 			.removeClass("ui-state-focus");
-		switch (options.activeImage) {
+
+		if (options.activeImage == 0) {
 			// disable prev
-			case 0:	
-				options.buttonpane.find("#ui-lightbox-prev")
-					.attr("disabled", "disabled")
-					.removeClass("ui-state-hover")
-					.addClass("ui-state-disabled");
-				options.buttonpane.find("#ui-lightbox-next").focus();
-				break;
+			options.buttonpane.find("#ui-lightbox-prev")
+				.attr("disabled", "disabled")
+				.removeClass("ui-state-hover")
+				.addClass("ui-state-disabled");
+			prevDisabled = true;
+		}
+		if (options.activeImage == options.imageArray.length-1) {
 			// disable next
-			case options.imageArray.length-1:				
-				options.buttonpane.find("#ui-lightbox-next")
-					.attr("disabled", "disabled")
-					.removeClass("ui-state-hover")
-					.addClass("ui-state-disabled");
-				options.buttonpane.find("#ui-lightbox-prev").focus();
-				break;
+			options.buttonpane.find("#ui-lightbox-next")
+				.attr("disabled", "disabled")
+				.removeClass("ui-state-hover")
+				.addClass("ui-state-disabled");
+			nextDisabled = true;
+		}
+		if (prevDisabled && !nextDisabled) {
+			options.buttonpane.find("#ui-lightbox-next").focus();
+		} else if (!prevDisabled && nextDisabled) {
+			options.buttonpane.find("#ui-lightbox-prev").focus();
 		}		
 	},
 	
