@@ -406,35 +406,38 @@ $.widget("ui.ariaLightbox", {
 	
 	// set button attributes
 	_setButtonState: function (){
-		var options = this.options;
-		var prevDisabled = false, nextDisabled = false;
+		var options = this.options,
+		prevDisabled = false, 
+		nextDisabled = false,
+		next = options.buttonpane.find("#ui-lightbox-next"),
+		prev = options.buttonpane.find("#ui-lightbox-prev");
+		
 		// activate both buttons
-		options.buttonpane.find("#ui-lightbox-next, #ui-lightbox-prev")
+		prev.add(next)
 			.removeAttr("disabled")
-			.removeClass("ui-state-disabled")
-			.removeClass("ui-state-focus");
+			.removeClass("ui-state-disabled ui-state-focus");
 
 		if (options.activeImage == 0) {
 			// disable prev
-			options.buttonpane.find("#ui-lightbox-prev")
-				.attr("disabled", "disabled")
-				.removeClass("ui-state-hover")
-				.addClass("ui-state-disabled");
+			this._disableButton(prev);
 			prevDisabled = true;
 		}
 		if (options.activeImage == options.imageArray.length-1) {
 			// disable next
-			options.buttonpane.find("#ui-lightbox-next")
-				.attr("disabled", "disabled")
-				.removeClass("ui-state-hover")
-				.addClass("ui-state-disabled");
+			this._disableButton(next);
 			nextDisabled = true;
 		}
 		if (prevDisabled && !nextDisabled) {
-			options.buttonpane.find("#ui-lightbox-next").focus();
+			next.focus();
 		} else if (!prevDisabled && nextDisabled) {
-			options.buttonpane.find("#ui-lightbox-prev").focus();
+			prev.focus();
 		}		
+	},
+
+	_disableButton: function(element) {
+		element.attr("disabled", "disabled")
+			.removeClass("ui-state-hover")
+			.addClass("ui-state-disabled");
 	},
 	
 	// close wrappper element
