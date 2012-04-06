@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (24.12.10)
+ * jQuery UI AriaSorTable (06.04.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -233,7 +233,7 @@ $.widget("ui.ariaSorTable", {
 		var second = true;
 		var html = [];		
 		// backfall
-		if (!newRowToStart) newRowToStart = option.rowToStart;		
+		if (!newRowToStart) newRowToStart = options.rowToStart;		
 		// set pager
 		if (options.pager) self.setPager(newRowToStart);
 		// make html
