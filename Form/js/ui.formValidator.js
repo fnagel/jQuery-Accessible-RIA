@@ -36,9 +36,9 @@ USAGE:::::::::::::::::::::::::::
 					captcha (this is a callback for server side validation, look example)
 		
 * Other widget options are:
-validateLive 			Boolean / String	turn on or off live validation; set to "blur" if validation should start when leaving form elements
+validateLive 			Boolean / String	turn on or off live validation;
 validateLiveMsg			Boolean				Disable the "click here to disable live validation" message
-validateTimeout			Number / String		time till live validation, use "Blur" to validate on lost focus
+validateTimeout			Number / String		time till live validation, use "blur" to validate on lost focus
 validateTimeoutCaptcha	Number				multiplied with validateTimeout to protect your server from to much load
 validateOff 			String				msg for disabling live validation
 validateOn 				String				msg for disabling live validation
@@ -138,6 +138,23 @@ $.widget("ui.formValidator", {
 			);		
 		}
 		
+		// show error summery if enabled or only when form is submitted
+		this.errorElement = self.element.find(".ui-formular-error");
+		if (options.errorSummery && this.errorElement.length) {		
+			// set link anchor to form
+			this.errorElement.click(function(event){
+				// get id out of the href anchor				
+				var id = $(event.target).closest("a").attr("href").split("#");
+				id = id[1];
+				// focus element or first element of a group
+				var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
+				target.focus();
+				return false;
+			});
+		} else {
+			options.errorSummery = false;
+		}
+		
 		// set hover and focus for reset and submit buttons 
 		if (!options.noHover) self._makeHover(self.element.find("input:submit, input:reset"));
 				
@@ -217,7 +234,10 @@ $.widget("ui.formValidator", {
 			if (options.validateLive && !options.disabled) {
 				// if tab is pushed do not validate immediatly || if the event is blur do not use timeout
 				if (options.validateTimeout == "blur" || e.type == "blur") {
-					self.validate(id);			
+					// needed to make clicking on error anchors work
+					window.setTimeout(function() {
+						self.validate(id);	
+					}, 150);		
 				} else if (e.keyCode != $.ui.keyCode.TAB) {
 					// delete old timeout
 					if(options.forms[id].timeout) window.clearTimeout(options.forms[id].timeout);	
@@ -351,7 +371,7 @@ $.widget("ui.formValidator", {
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
 	_setErrors: function(submitted){	
 		var options = this.options, self = this;
-		var isError, addError, removeError = false;
+		var hasError, addError, removeError = false;
 		var msgs = "", msg = "";	
 		
 		// got trough every error form element 
@@ -376,7 +396,7 @@ $.widget("ui.formValidator", {
 					if (options.forms[id]["errors"][rule] == "new" || options.forms[id]["errors"][rule] == "old") {					
 						if (options.errorSummery) msgs += '					<li><a href="#'+id+'">'+options.forms[id].msg[rule]+"</a></li>\n";
 						// there are errors to show
-						isError = failure = true;
+						hasError = failure = true;
 						// execute callback for every element with wrong input; returns the ids of the elements
 						self._trigger("onError", null, id);
 					}
@@ -398,10 +418,10 @@ $.widget("ui.formValidator", {
 		}	
 		
 		// show error summery if enabled or only when form is submitted
-		if (options.errorSummery === true || (options.errorSummery == "onSubmit" && submitted)) self._showErrors({submitted: submitted, isError: isError, addError: addError, removeError: removeError, msgs: msgs});	
+		if (options.errorSummery === true || (options.errorSummery == "onSubmit" && submitted)) self._showErrors({submitted: submitted, hasError: hasError, addError: addError, removeError: removeError, msgs: msgs});	
 		
 		// no click events if no error is defined
-		if (isError) {
+		if (hasError) {
 			// Callback fired when error exists
 			self._trigger("onErrors", 0);
 		// send data if no errors found
@@ -423,8 +443,8 @@ $.widget("ui.formValidator", {
 		if (data["addError"] || data["removeError"]) aria += '"';	
 		
 		// build up HTML | no content if no error is found
-		var html = "\n";
-		if (data["isError"]) {
+		if (data["hasError"]) {
+			var html = "\n";
 			html += '			<div'+aria+' class="ui-state-highlight ui-state ui-corner-all">'+"\n";
 			html += '				<p id="ui-error-title-'+options.uid+'">'+"\n";
 			html += '					<span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>'+"\n";
@@ -433,28 +453,13 @@ $.widget("ui.formValidator", {
 			html += '				<ul aria-labelledby="ui-error-title-'+options.uid+'">'+"\n";
 			html += data["msgs"];
 			html += '				</ul>'+"\n";
-			html += '			</div>'+"\n\t\t";
-		}
-		// inject error HTML and make onclick event for direct error correction
-		errorElement = self.element.find(".ui-formular-error");
-		errorElement.html(html);
-		
-		// no click events if no error is defined
-		if (data["isError"]) {
-			// set link anchor to form
-			errorElement.click(function(event){
-				if ($(event.target).is("a")) {
-					// get id out of the href anchor				
-					var id = $(event.target).attr("href").split("#");
-					id = id[1];
-					// focus element or first element of a group
-					var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
-					target.focus();
-					return false;
-				}
-			});
+			html += '			</div>'+"\n\t\t";	
+			// inject error HTML and make onclick event for direct error correction
+			this.errorElement.html(html);			
 			// focus error box when form is submitted
-			if (data["submitted"]) errorElement.attr("tabindex",-1).focus();
+			if (data["submitted"]) this.errorElement.attr("tabindex",-1).focus();
+		} else {
+			this.errorElement.empty();
 		}
 
 		// Callback
