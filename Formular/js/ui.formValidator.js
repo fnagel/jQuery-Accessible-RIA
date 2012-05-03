@@ -442,14 +442,16 @@ $.widget("ui.formValidator", {
 		// no click events if no error is defined
 		if (data["isError"]) {
 			// set link anchor to form
-			errorElement.find("a").click(function(event){
-				// get id out of the href anchor				
-				var id = $(this).attr("href").split("#");
-				id = id[1];
-				// focus element or first element of a group
-				var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
-				target.focus();
-				return false;
+			errorElement.click(function(event){
+				if ($(event.target).is("a")) {
+					// get id out of the href anchor				
+					var id = $(event.target).attr("href").split("#");
+					id = id[1];
+					// focus element or first element of a group
+					var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
+					target.focus();
+					return false;
+				}
 			});
 			// focus error box when form is submitted
 			if (data["submitted"]) errorElement.attr("tabindex",-1).focus();
