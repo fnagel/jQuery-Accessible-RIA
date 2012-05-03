@@ -425,7 +425,7 @@ $.widget("ui.formValidator", {
 		// build up HTML | no content if no error is found
 		var html = "\n";
 		if (data["isError"]) {
-			html += '			<div'+aria+' class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
+			html += '			<div'+aria+' class="ui-state-highlight ui-state ui-corner-all">'+"\n";
 			html += '				<p id="ui-error-title-'+options.uid+'">'+"\n";
 			html += '					<span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>'+"\n";
 			html += '					'+options.errorsTitle+"\n";
@@ -541,7 +541,7 @@ $.widget("ui.formValidator", {
 		//build up HTML
 		var html = "\n";
 		html += '		<div class="ui-formular-success">'+"\n";
-		html += '			<div aria-live="assertive" class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
+		html += '			<div aria-live="assertive" class="ui-state-highlight ui-state ui-corner-all">'+"\n";
 		html += '				<p>'+"\n";
 		html += '					<span class="ui-icon ui-icon-'+icon+'" style="float: left; margin-right: 0.3em;"></span>'+"\n";
 		html += '					'+msg+"\n";
