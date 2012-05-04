@@ -60,11 +60,11 @@ input.radio {
 	margin: 0.1em 1em 0 0;
 }
 .pair {
-	clear: both;
 	margin: 0.5em 0;
 }
 .pair input{
 	margin: 0.25em 0.5em 0 0.3em;
+	position: relative;
 }
 *:first-child+html .pair input,
 *:first-child+html .pair input {
