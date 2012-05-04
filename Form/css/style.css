@@ -105,6 +105,11 @@ input.radio {
 	margin-right: 0.3em
 }
 
+.text.ui-state-hover, 
+.text.ui-state-focus {
+	background: none !important;
+}
+
 /* Chrome css bug (would change styles of other browsers too, only to see where the problem is */
 ´/* 
 select.ui-state-error, 
