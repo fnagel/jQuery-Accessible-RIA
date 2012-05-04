@@ -6,8 +6,10 @@
  * Copyright (c) 2010-2012 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: jQuery UI
- * Optional: jQuery Address Plugin
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ * 	Optional: jQuery Address Plugin
  */ 
 /*
  USAGE:::::::::::::
