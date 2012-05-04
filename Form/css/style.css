@@ -95,9 +95,16 @@ input.radio {
 .ui-formular-error li {
 	font-size: 0.8em;
 }
-.ui-formular-error .ui-state-highlight {
+.ui-formular-error .ui-state-highlight,
+.ui-formular-success .ui-state-highlight {
 	padding: 0.2em 0.5em;
 }
+.ui-formular-error span.ui-icon,
+.ui-formular-success span.ui-icon {
+	float: left; 
+	margin-right: 0.3em
+}
+
 /* Chrome css bug (would change styles of other browsers too, only to see where the problem is */
 ´/* 
 select.ui-state-error, 
