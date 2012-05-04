@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (02.04.12)
+ * jQuery UI AriaLightbox (04.05.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
