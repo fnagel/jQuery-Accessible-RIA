@@ -277,31 +277,15 @@ $.widget("ui.formValidator", {
 							var number = "";
 							switch (ruleValue) {
 								case "number":
-									number = self._number(elementValue);
-									break;
 								case "numberDE":
-									number = self._numberDE(elementValue);
-									break;
 								case "numberISO":
-									number = self._numberISO(elementValue);
-									break;
 								case "email":
-									number = self._email(elementValue);
-									break;
 								case "url":
-									number = self._url(elementValue);
-									break;
 								case "plz":
-									number = self._plz(elementValue);
-									break;
 								case "dateDE":
-									number = self._dateDE(elementValue);
-									break;
 								case "dateISO":
-									number = self._dateISO(elementValue);
-									break;
 								case "captcha":
-									number = self._captcha(elementValue);
+									number = self['_' + ruleValue](elementValue);
 									break;
 								// regular expression
 								default:
