@@ -32,12 +32,15 @@
 			});
 			$("#closelink1").click(function (event) { 
 				lightbox1.ariaLightbox('close');
+				return false;
 			});
 			$("#destroylink1").click(function (event) { 
 				lightbox1.ariaLightbox('destroy');
+				return false;
 			});	
 			$("#disablelink1").click(function (event) { 
 				lightbox1.ariaLightbox('disable');
+				return false;
 			});	
 			
 			var lightbox2 = $("#gallery").ariaLightbox({
@@ -57,21 +60,27 @@
 			});		
 			$("#destroylink2").click(function (event) { 
 				lightbox2.ariaLightbox('destroy');
+				return false;
 			});	
 			$("#disablelink2").click(function (event) { 
 				lightbox2.ariaLightbox('disable');
+				return false;
 			});	
 			$("#nextlink2").click(function (event) { 
 				lightbox2.ariaLightbox('next');
+				return false;
 			});	
 			$("#prevlink2").click(function (event) { 
 				lightbox2.ariaLightbox('prev');
+				return false;
 			});	
 			$("#gallerylink1").click(function (event) { 
 				lightbox2.ariaLightbox('startGallery', event);
+				return false;
 			});	
 			$("#gallerylink2").click(function (event) { 
 				lightbox2.ariaLightbox('startGallery', event, 1);
+				return false;
 			});	
 						
 			var lightbox3 = $("body").ariaLightbox({
