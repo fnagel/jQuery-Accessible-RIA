@@ -54,6 +54,9 @@ font-size: 0.6em;
 #ui-lightbox-image img{
 	display: none;
 }
+#ui-lightbox-description {
+	margin: 1em 0;
+}
 
 /* Picture Styles
 ----------------------------------*/
