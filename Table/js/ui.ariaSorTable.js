@@ -125,9 +125,7 @@ $.widget("ui.ariaSorTable", {
 				// get the th element
 				th = $(e.target).closest("th", theadTr);
 				if (!th.hasClass("ui-table-deactivate")) {	
-					// does not work in certain browsers
-					// self.rowSort(th.prevAll("th:visible").length); 
-					self.rowSort(self._getVisible(th.prevAll("th")).length);	
+					self.rowSort(th.prevAll("th:visible").length);
 					return false;
 				}
 			}
@@ -312,8 +310,7 @@ $.widget("ui.ariaSorTable", {
 	rowSort: function (index) {
 		var options = this.options, self = this;
 		// get all visible th elements
-		// var thArray = options.headers.filter(":visible");
-		var thArray = self._getVisible(options.headers);
+		var thArray = options.headers.filter(":visible");
 		// get new (clicked) th element
 		th = $(thArray[index]);	
 			
@@ -420,20 +417,6 @@ $.widget("ui.ariaSorTable", {
 		var x = a[sortIndex].toLowerCase();
 		var y = b[sortIndex].toLowerCase();
 		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-	},
-	
-	// jQuery :visible filter does not work with tables in certain browser (IE8, ?) so wee built our own function
-	// http://www.code-styling.de/deutsch/jquery-132-verursacht-probleme-im-ie-8
-	_getVisible: function (elements) {
-		var elReturn = [];
-		var i = 0;
-		elements.each(function(index){
-			if ($(this).css('display') != 'none') {
-				elReturn[i] = $(this);
-				i++;
-			}
-		});
-		return elReturn;
 	},
 	
 	// set keyboard control
