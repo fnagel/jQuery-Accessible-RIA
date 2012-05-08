@@ -36,6 +36,7 @@ disableHeight: 		max width of the screen
 useDimmer: 			boolean, activate or deactivate dimmer
 animationSpeed:		in millseconds or jQuery keywors aka "slow", "fast"
 zIndex: 			number: z-index for overlay elements
+dimmerOpacity: 		opacity of the dimmer div 0-1
 background: 		color in HTML notation
 opacity: 			decimal betwen 1-0
 makeHover: 			deactivate hover events for images
@@ -103,7 +104,7 @@ $.widget("ui.ariaLightbox", {
 		// misc
 		makeHover: true,
 		em: 0.0568182,
-		// don not alter this var
+		// do not alter this var
 		activeImage: 0,		
 		// jQuery Address (please note you need to init jqAddress with ?strict=0 parameter)
 		jqAddress: {
