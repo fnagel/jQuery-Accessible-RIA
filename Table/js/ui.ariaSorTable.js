@@ -477,7 +477,8 @@ $.widget("ui.ariaSorTable", {
 			}
 		});
 	},
-	// switchh selected col
+	
+	// switch selected col
 	colSwitch: function (dir) {
 		var options = this.options, self = this;
 		// get visible headers
@@ -493,6 +494,7 @@ $.widget("ui.ariaSorTable", {
 		// set focus 
 		if (el.find("a").length) { el.find("a").focus(); } else { el.focus(); }
 	},
+	
 	// removes instance and attributes
 	destroy: function() {
 		this.element
