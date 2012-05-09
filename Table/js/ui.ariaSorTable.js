@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (06.04.12)
+ * jQuery UI AriaSorTable (09.05.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
