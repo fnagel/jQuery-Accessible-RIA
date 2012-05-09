@@ -13,7 +13,7 @@
  */
 /*
  USAGE:::::::::::::
-* Take a look in the html file or the (german) pdf file delivered with this example
+* Take a look in the html file delivered with this example or visit the wiki (see above)
 * The widget gets all the elements in the document which matches choosen selector
 * There are to modes: singleview and galleryview defined with imageArray: []
 

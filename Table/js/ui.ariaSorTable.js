@@ -13,7 +13,7 @@
  */ 
 /*
  USAGE:::::::::::::
-* Take a look in the html file or the (german) pdf file delivered with this example
+* Take a look in the html file delivered with this example or visit the wiki (see above)
 * To set sorting method add css classes, default is text, alphabetically 
 
 * Sorting CSS classes (apply to th elements)

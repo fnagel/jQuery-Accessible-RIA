@@ -12,7 +12,7 @@
  */
 /*
 USAGE:::::::::::::::::::::::::::
-* Take a look in the html file or the (german) pdf file delivered with this example
+* Take a look in the html file delivered with this example or visit the wiki (see above)
 * To validate a form element specify its properties in the options forms array:
  options
 	forms
