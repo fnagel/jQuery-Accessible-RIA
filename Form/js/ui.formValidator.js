@@ -170,7 +170,7 @@ $.widget("ui.formValidator", {
 
 	// init a form field (events, hover effects, internal vars)
 	initField: function(id) {
-		var options = this.options, 
+		var options = this.options,
 			self = this;
 		// save element and which form type | add event handler | ARIA
 		//  search for "single" elements (which sould be defined by their ID)
@@ -256,7 +256,7 @@ $.widget("ui.formValidator", {
 
 	// called when interact with the form | validates the forms | manages which rule applies to which element
 	_validator: function(id) {
-		var options = this.options, 
+		var options = this.options,
 			self = this;
 		// do nothing if field is disabled
 		if (!options.forms[id].disabled) {
@@ -357,12 +357,12 @@ $.widget("ui.formValidator", {
 
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
 	_setErrors: function(submitted){
-		var options = this.options, 
+		var options = this.options,
 			self = this,
 			hasError = false,
 			addError = false,
 			removeError = false,
-			msgs = "", 
+			msgs = "",
 			msg = "";
 
 		// got trough every error form element
@@ -513,7 +513,7 @@ $.widget("ui.formValidator", {
 	// called when form is submitted
 	_showSuccess: function(value) {
 		var options = this.options,
-			msg = "", 
+			msg = "",
 			icon = "";
 		// reenable the widget
 		options.disabled = false;
