@@ -1,3 +1,4 @@
 #ignore thumbnails created by windows
 *.db
 *.pdf
+*.session
