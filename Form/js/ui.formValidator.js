@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (09.05.12)
+ * jQuery UI FormValidator (10.05.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -19,7 +19,7 @@ USAGE:::::::::::::::::::::::::::
 		ID [or class of the element]
 			rules
 			msgs
-			
+
 * Forms Array and its children are necessary, possbile values for rules and msg are:
 				required
 				lengthMin
@@ -27,7 +27,7 @@ USAGE:::::::::::::::::::::::::::
 				equalTo (id of to be checked element)
 				regEx (set your own regex)
 				custom (make your own validation function - the fast way)
-				
+
 * Use a regular expression or a predefined value for the RegEx rule:
 					number
 					numberDE
@@ -67,9 +67,9 @@ $.widget("ui.formValidator", {
 		submitError: "Something wen't wrong while sending your data. Please retry.",
 		submitSuccess: "Your data was succefully submitted, thank you!",
 		selectDefault: "default", // Define default value when using select options
-		noHover: false, 
-		
-		// callbacks		
+		noHover: false,
+
+		// callbacks
 		onInit: null,
 		onformSubmitted: null,
 		onError: null,
