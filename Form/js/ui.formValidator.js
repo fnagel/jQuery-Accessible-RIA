@@ -19,6 +19,7 @@ USAGE:::::::::::::::::::::::::::
 		ID [or class of the element]
 			rules
 			msgs
+			
 * Forms Array and its children are necessary, possbile values for rules and msg are:
 				required
 				lengthMin
@@ -26,6 +27,7 @@ USAGE:::::::::::::::::::::::::::
 				equalTo (id of to be checked element)
 				regEx (set your own regex)
 				custom (make your own validation function - the fast way)
+				
 * Use a regular expression or a predefined value for the RegEx rule:
 					number
 					numberDE
@@ -37,31 +39,6 @@ USAGE:::::::::::::::::::::::::::
 					dateISO
 					captcha (this is a callback for server side validation, look example)
 
-* Other widget options are:
-validateLive 			Boolean / String	turn on or off live validation;
-validateLiveMsg			Boolean				Disable the "click here to disable live validation" message
-validateTimeout			Number / String		time till live validation, use "blur" to validate on lost focus
-validateTimeoutCaptcha	Number				multiplied with validateTimeout to protect your server from to much load
-validateOff 			String				msg for disabling live validation
-validateOn 				String				msg for disabling live validation
-errorSummery			Boolean				deactivate error summery
-submitHowTo 			String 				ajax, iframe (for "ajax" and file upload), post (native)
-submitUrl 				String 				url for ajax and iframe submition
-submitError 			String 				predefined error msg
-submitSuccess 			String 				predefined succes msg
-disabled 				Boolean 			disable widget
-selectDefault			String				Define default value when using select options
-
-* Callbacks
-onInit
-onformSubmitted
-onError
-onErrors
-customError			returns a array with all information about the currectly validated element
-onShowErrors
-onShowSuccess 		returns true or a string
-checkCaptcha 		must deliver a boolean value
-
 * public Methods
 disable
 destroy
@@ -70,27 +47,37 @@ initField			parameter is string (name of added field); adds events and internal 
 formSubmitted		submits the form
 validate 			parameter is string (id attribut); validates a single form element
 
- */
+*/
 (function($) {
 
 $.widget("ui.formValidator", {
 
 	version: '1.8',
 	options: {
-		validateLive: true,
-		validateLiveMsg: true,
-		validateTimeout: 500, // or "blur"
-		validateTimeoutCaptcha: 3,
+		validateLive: true,	// turn on or off live validation
+		validateLiveMsg: true, // disable the "click here to disable live validation" message
+		validateTimeout: 500, // time till live validation, set to "blur" to validate on lost focus only
+		validateTimeoutCaptcha: 3, // multiplied with validateTimeout to protect your server from to much load
 		validateOff: "Please click here to deactivate live validating of this form.",
 		validateOn: "Please clkick here to activate live form validating.",
-		errorSummery: true,
+		errorSummery: true, // disable error summery
 		errorsTitle: "Please check the following errors:",
-		submitHowTo: "post",
-		submitUrl: "",
+		submitHowTo: "post", // ajax, iframe (for "ajax" and file upload), post (native)
+		submitUrl: "", // url for ajax and iframe submition
 		submitError: "Something wen't wrong while sending your data. Please retry.",
 		submitSuccess: "Your data was succefully submitted, thank you!",
-		selectDefault: "default",
-		noHover: false
+		selectDefault: "default", // Define default value when using select options
+		noHover: false, 
+		
+		// callbacks		
+		onInit: null,
+		onformSubmitted: null,
+		onError: null,
+		onErrors: null,
+		customError: null, // returns a array with all information about the currectly validated element
+		onShowErrors: null,
+		onShowSuccess: null, // returns true or a string
+		checkCaptcha: null // must deliver a boolean value
 	},
 
 	_create: function() {
