@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaSorTable (09.05.12)
+ * jQuery UI AriaSorTable (10.05.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -24,33 +24,8 @@ ui-table-number-de 		123,456
 ui-table-date 			07/28/2009
 ui-table-date-de		28.07.2009
 ui-table-date-iso		2009-07-28
- ui-table-deactivate 	deactivates sorting for this col
- ui-state-active 		class to set a col as pre sorted (server site)
-
- * Options
-rowToStart			row to start, begins with 1
-rowsToShow			How many rows to show? If not set, widget will show all rows
-colScopeRow			Which col has scope? Could be the UID or a names, begins with 1
-defaultSortBy		first sorting action sould sort ascending or descending?
-colsToHide			array; set value true if col should be hidden, example: colsToHide[3] = true;
-rowsToHide			array; set value true if row should be hidden, example: rowsToHide[3] = true;
-keyboard			activate default keyboard control
-pager				add default pager control; (do use with rowsToShow < all rows in the original table)
-textPager			String pager
-textAsc				String for sorting ascending
-textDesc			String for sorting descending
-disabled			deactivate the widget
-jqAddress			You need to add the add the jQuery Address file, please see demo file!
-	enable			enable browser history support
-	title
-		enable		enable title change
-		split		set delimiter string
-
-* Callbacks
-onInit
-onUpdateData
-onSetHTML
-onRowSort
+ui-table-deactivate 	deactivates sorting for this col
+ui-state-active 		class to set a col as pre sorted (server site)
 
 * public Methods
 updateData
@@ -72,26 +47,32 @@ $.widget("ui.ariaSorTable", {
 
 	version: '1.8',
 	options: {
-		rowToStart: 1,
-		rowsToShow: false,
-		colScopeRow: 1,
-		defaultSortBy: "asc",
-		colsToHide: false,
-		rowsToHide: false,
-		keyboard: true,
-		pager: false,
+		rowToStart: 1, // row to start, begins with 1
+		rowsToShow: false, // How many rows to show? If not set, widget will show all rows
+		colScopeRow: 1, // Which col has scope? Could be the UID or a names, begins with 1
+		defaultSortBy: "asc", // first sorting action sould sort ascending or descending?
+		colsToHide: false, // array; set value true if col should be hidden, example: colsToHide[3] = true;
+		rowsToHide: false, // array; set value true if row should be hidden, example: rowsToHide[3] = true;
+		keyboard: true, // activate default keyboard control
+		pager: false, // add default pager control (needs options.rowsToShow)
 		textPager: "Page:",
 		textAsc: "Sort ascending",
 		textDesc: "Sort descending",
-		// jQuery Address
+		// jQuery Address (please note you need to init jqAddress with ?strict=0 parameter)
 		jqAddress: {
-			enable: true,
+			enable: true, // enable browser history support
 			title: {
-				enable: true,
-				split: ' | '
+				enable: true, // enable title change
+				split: ' | ' // set delimiter string
 			},
-			changeRow: true
-		}
+			changeRow: true // include rowsToShow in anchor
+		},
+
+		// callbacks
+		onInit: null,
+		onUpdateData: null,
+		onSetHTML: null,
+		onRowSort: null
 	},
 
 	_create: function() {
