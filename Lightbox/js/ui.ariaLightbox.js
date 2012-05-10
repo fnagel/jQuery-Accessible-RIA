@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (09.05.12)
+ * jQuery UI AriaLightbox (10.05.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -15,45 +15,7 @@
  USAGE:::::::::::::
 * Take a look in the html file delivered with this example or visit the wiki (see above)
 * The widget gets all the elements in the document which matches choosen selector
-* There are to modes: singleview and galleryview defined with imageArray: []
-
- * Options
-imageArray:			activates galleryview of set to imageArray: []
-altText: 			which attr (within the image) as alt attr
-descText: 			which attr (within the image) as description text
-prevText: 			text on the button
-nextText: 			see above
-titleText: 			titleText of the lightbox
-pictureText: 		string: picture
-ofText: 			string: of
-closeText: 			string: close element
-pos: 				position of the lightbox, possbible values: auto, offset, or [x,y] (like pos: "100,300")
-autoHeight: 		margin to top when pos: auto is used
-offsetX: 			number: if pos:"offset" its the distance betwen lightbox and mousclick position
-offsetY:  			see above
-disableWidth: 		min width of the screen (otherwise widget is disabled)
-disableHeight: 		max width of the screen
-useDimmer: 			boolean, activate or deactivate dimmer
-animationSpeed:		in millseconds or jQuery keywors aka "slow", "fast"
-zIndex: 			number: z-index for overlay elements
-dimmerOpacity: 		opacity of the dimmer div 0-1
-background: 		color in HTML notation
-opacity: 			decimal betwen 1-0
-makeHover: 			deactivate hover events for images
-em: 				muliplicator for relative width (em) calculation, normally not to be edited
-jqAddress			You need to add the add the jQuery Address file, please see demo file!
-	enable			enable browser history support
-	title
-		enable		enable title change
-		split		set delimiter string
-
-
-* Callbacks
-onShow
-onChangePicture
-onClose
-onPrev
-onNext
+* There are to modes: singleview and galleryview (defined with options.imageArray: "a.image")
 
 * public Methods
 startGallery		parameter: event
@@ -65,14 +27,14 @@ enable
 disable
 destroy
 
- */
+*/
 (function($) {
 
 $.widget("ui.ariaLightbox", {
 
 	version: '1.8',
 	options: {
-		// text strings
+		// extract meta text strings
 		altText: function() {
 			// $(this) is the triggered element (in this case the link element)
 			return $(this).find("img").attr("alt");
@@ -83,37 +45,45 @@ $.widget("ui.ariaLightbox", {
 		titleText: function() {
 			return "Fullscreen";
 		},
+		// text strings
 		prevText: "previous picture",
 		nextText: "next picture",
 		pictureText: "Picture",
 		ofText: "of",
 		closeText: "Close [ESC]",
 		// positioning
-		pos: "auto",
-		autoHeight: 50,
-		offsetX: 10,
-		offsetY:  10,
+		pos: "auto", // position of the lightbox, possbible values: auto, offset, or [x,y] (like pos: "100,300")
+		autoHeight: 50, // margin to top when pos: auto is used
+		offsetX: 10, // number: if pos:"offset" its the distance betwen lightbox and mousclick position
+		offsetY:  10, // see above
 		// disable lightbox if screens below:
 		disableWidth: 550,
 		disableHeight: 550,
 		// config screen dimmer
-		useDimmer: true,
-		animationSpeed: "slow",
-		zIndex: 1000,
-		dimmerOpacity: 0.8,
+		useDimmer: true, // activate or deactivate dimmer
+		animationSpeed: "slow", // in millseconds or jQuery keywors aka "slow", "fast"
+		zIndex: 1000, // z-index for overlay elements
+		dimmerOpacity: 0.8, // opacity of the dimmer div
 		// misc
-		makeHover: true,
+		makeHover: true, // deactivate hover events for elements
 		em: 0.0568182,
 		// do not alter this var
 		activeImage: 0,
 		// jQuery Address (please note you need to init jqAddress with ?strict=0 parameter)
 		jqAddress: {
-			enable: true,
+			enable: true, // enable browser history support
 			title: {
-				enable: true,
-				split: ' | '
+				enable: true, // enable title change
+				split: ' | ' // set delimiter string
 			}
-		}
+		},
+
+		// callbacks
+		onShow: null,
+		onChangePicture: null,
+		onClose: null,
+		onPrev: null,
+		onNext: null
 	},
 
 	_create: function() {
