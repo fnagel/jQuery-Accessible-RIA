@@ -4,9 +4,6 @@ body {
 	font-family: "Arial","Verdana","sans-serif";
 	margin: 1em;
 }
-#wrapper {
-	width: 20em;
-}
 h1 {
 	font-family:"Trebuchet MS","Helvetica";
 	border-bottom: 1px solid #EEEEEE;
@@ -30,8 +27,13 @@ font-size: 0.6em;
 ----------------------------------*/
 fieldset {
 	border: 0;
-	margin: 0 0 1em 0;
+	margin: 0 1em 1em 0;
 	padding: 1em;
+	width: 18em;
+}
+#wrapper .left {
+	float: left;
+
 }
 legend {
 	padding: 0.1em 0.3em;
@@ -72,12 +74,10 @@ input.radio {
 .info {
 	margin: 0 0 1em 0;
 	padding: 0.2em 0.5em;
+	width: 40em;
 }
-.ui-formular-error{
-	position: absolute;
-	left: 22em;
-	top: 5.3em;
-	width: 20em;
+.ui-formular-error {
+	width: 41em;
 }
 .ui-formular-error li {
 	font-size: 0.8em;
