@@ -27,7 +27,8 @@
 					return $(this).find("img").attr("alt");
 				},		
 				useDimmer: false,
-				pos: "offset"
+				pos: "offset",
+				em: false
 			});
 			$("#closelink1").click(function (event) { 
 				lightbox1.ariaLightbox('close');
@@ -54,8 +55,7 @@
 				},		
 				titleText: function() {
 					return "Picture Gallery";
-				},
-				em: false
+				}
 			});		
 			$("#destroylink2").click(function (event) { 
 				lightbox2.ariaLightbox('destroy');
