@@ -85,7 +85,7 @@ $.widget("ui.ariaSorTable", {
 
 		// ARIA | make UID if no ID is set by default
 		var elementID = self.element.attr("id");
-		if (elementID != "") {
+		if (elementID) {
 			options.uid = elementID;
 		} else {
 			options.uid = Math.random().toString(16).slice(2, 10);
