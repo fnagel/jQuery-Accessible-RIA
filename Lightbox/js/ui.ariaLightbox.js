@@ -53,8 +53,8 @@ $.widget("ui.ariaLightbox", {
 		closeText: "Close [ESC]",
 		// positioning
 		pos: "auto", // position of the lightbox, possbible values: auto, offset, or [x,y] (like pos: "100,300")
-		autoHeight: 50, // margin to top when pos: auto is used
-		offsetX: 10, // number: if pos:"offset" its the distance betwen lightbox and mousclick position
+		autoHeight: true, // only if "pos: auto" is set: true for center vertically or a number for fixed margin to top
+		offsetX: 10, // number: if "pos: offset" its the distance betwen lightbox and mousclick position
 		offsetY:  10, // see above
 		// disable lightbox if screens below:
 		disableWidth: 550,
@@ -255,13 +255,13 @@ $.widget("ui.ariaLightbox", {
 		if ((!event || !event.pageX || !event.pageY) && options.pos == "offset") options.pos = "auto";
 		switch (options.pos) {
 			case "auto":
-				var viewPos = 	self._pageScroll();
-				var posLeft = 	viewPos[0] + (($(window).width() - options.wrapperElement.width())/2);
-				var posTop = 	viewPos[1] + options.autoHeight;
+				var viewPos = self._pageScroll();
+				var posLeft = viewPos[0] + (($(window).width() - options.wrapperElement.width())/2);
+				var posTop = (options.autoHeight === true) ? (viewPos[1] + (($(window).height() - options.wrapperElement.height())/2)) : (viewPos[1] + options.autoHeight);
 				break;
 			case "offset":
-				var posLeft = 	event.pageX + options.offsetX;
-				var posTop = 	event.pageY - options.offsetY;
+				var posLeft = event.pageX + options.offsetX;
+				var posTop = event.pageY - options.offsetY;
 				break;
 			default:
 				var position =  options.pos.split(",");
@@ -328,11 +328,15 @@ $.widget("ui.ariaLightbox", {
 						break;
 					case "auto":
 					default:
-						var viewPos = 	self._pageScroll();
-						options.wrapperElement.animate({
-							left: viewPos[0] + (( $( window ).width() - image.width ) / 2 ) + "px",
+						var viewPos = 	self._pageScroll();						
+						var coords = {
+							left: viewPos[0] + (( $( window ).width() - image.width ) / 2 ) + "px",							
 							width: calculatedX
-						}, options.animationSpeed);
+						};
+						if (options.autoHeight === true) {
+							coords.top = viewPos[1] + (( $( window ).height() - ( ( options.wrapperElement.height() - imageWrapper.height() ) + image.height ) ) / 2 ) + "px";
+						}
+						options.wrapperElement.animate(coords, options.animationSpeed);
 						break;
 				}
 				// resize the hight of the image wrapper to resize the lightbox element | wait till finished
