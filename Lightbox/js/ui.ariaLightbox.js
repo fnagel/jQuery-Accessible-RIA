@@ -335,6 +335,7 @@ $.widget("ui.ariaLightbox", {
 						coords.width = calculatedX;
 						
 						if (options.autoHeight === true && imageWrapperHeight != image.height) {
+							// TODO desc autoheight needs to be calculated with new value
 							coords.top = viewPos[1] + (( $( window ).height() - ( ( imageWrapperHeight - imageWrapper.height() ) + image.height + options.wrapperElement.find("#ui-lightbox-description").height() ) ) / 2 ) + "px";
 						}
 						break;
