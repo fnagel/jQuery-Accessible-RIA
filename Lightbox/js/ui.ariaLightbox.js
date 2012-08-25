@@ -335,7 +335,7 @@ $.widget("ui.ariaLightbox", {
 						coords.width = calculatedX;
 						
 						if (options.autoHeight === true && imageWrapperHeight != image.height) {
-							coords.top = viewPos[1] + (( $( window ).height() - ( ( imageWrapperHeight - imageWrapper.height() ) + image.height ) ) / 2 ) + "px";
+							coords.top = viewPos[1] + (( $( window ).height() - ( ( imageWrapperHeight - imageWrapper.height() ) + image.height + options.wrapperElement.find("#ui-lightbox-description").height() ) ) / 2 ) + "px";
 						}
 						break;
 				}
