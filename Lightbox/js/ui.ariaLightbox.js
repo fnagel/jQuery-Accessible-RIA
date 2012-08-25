@@ -1,5 +1,5 @@
 /*!
- * jQuery UI AriaLightbox (10.05.12)
+ * jQuery UI AriaLightbox (25.08.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -315,63 +315,66 @@ $.widget("ui.ariaLightbox", {
 					width: calculatedX,
 					height: calculatedY
 				});
-				// decide which position is set and animate the width of the ligthbox element
+				// decide which position is set and animate the width of the ligthbox element					
+				var coords = {					
+					width: calculatedX
+				};
 				switch (options.pos) {
 					case "offset":
-						topPos = (event) ? event.pageY : element.offset().top;
-						leftPos = (event) ? event.pageX : element.offset().left;
-						options.wrapperElement.animate({
-							left: leftPos + options.offsetX + "px",
-							top: topPos + options.offsetY + "px",
-							width: calculatedX
-						}, options.animationSpeed);
+						var topPos = (event) ? event.pageY : element.offset().top;
+						var leftPos = (event) ? event.pageX : element.offset().left;
+						coords.left = leftPos + options.offsetX + "px";
+						coords.top = topPos + options.offsetY + "px";
 						break;
 					case "auto":
 					default:
-						var viewPos = 	self._pageScroll();						
-						var coords = {
-							left: viewPos[0] + (( $( window ).width() - image.width ) / 2 ) + "px",							
-							width: calculatedX
-						};
-						if (options.autoHeight === true) {
-							coords.top = viewPos[1] + (( $( window ).height() - ( ( options.wrapperElement.height() - imageWrapper.height() ) + image.height ) ) / 2 ) + "px";
+						var viewPos = 	self._pageScroll(),
+							imageWrapperHeight = imageWrapper.height();
+						
+						coords.left = viewPos[0] + (( $( window ).width() - image.width ) / 2 ) + "px";						
+						coords.width = calculatedX;
+						
+						if (options.autoHeight === true && imageWrapperHeight != image.height) {
+							coords.top = viewPos[1] + (( $( window ).height() - ( ( imageWrapperHeight - imageWrapper.height() ) + image.height ) ) / 2 ) + "px";
 						}
-						options.wrapperElement.animate(coords, options.animationSpeed);
 						break;
 				}
+				options.wrapperElement.animate(coords, { duration: options.animationSpeed, queue: false });
 				// resize the hight of the image wrapper to resize the lightbox element | wait till finished
 				imageWrapper.animate({
 						height: calculatedY
-					},
-					options.animationSpeed,
-					function () {
-						// fade in the picture
-						imageElement.fadeIn(options.animationSpeed);
-						// change description of the picture
-						options.wrapperElement.find("#ui-lightbox-description")
-							.html(options.descText.call(element));
-						// if it is a gallery change the pager text
-						if (options.imageArray)
-						options.wrapperElement.find("#ui-lightbox-pager")
-							.text(options.pictureText +' '+ (options.activeImage+1) +' '+ options.ofText +' '+ options.imageArray.length);
-						// change title
-						options.wrapperElement.find("span#ui-dialog-title-dialog").html(options.titleText.call(element));
-						// check if lightbox popup changed body dimension
-						if (options.useDimmer)	self._dimmerResize();
-						// update screenreader buffer
-						self._updateVirtualBuffer();
-						// ARIA | manipulations finished
-						contentWrapper.attr("aria-busy", false);
+					}, { 
+						duration: options.animationSpeed, 
+						queue: false,
+						complete: function () {
+							// fade in the picture
+							imageElement.fadeIn(options.animationSpeed);
+							// change description of the picture
+							options.wrapperElement.find("#ui-lightbox-description")
+								.html(options.descText.call(element));
+							// if it is a gallery change the pager text
+							if (options.imageArray)
+							options.wrapperElement.find("#ui-lightbox-pager")
+								.text(options.pictureText +' '+ (options.activeImage+1) +' '+ options.ofText +' '+ options.imageArray.length);
+							// change title
+							options.wrapperElement.find("span#ui-dialog-title-dialog").html(options.titleText.call(element));
+							// check if lightbox popup changed body dimension
+							if (options.useDimmer)	self._dimmerResize();
+							// update screenreader buffer
+							self._updateVirtualBuffer();
+							// ARIA | manipulations finished
+							contentWrapper.attr("aria-busy", false);
 
-						// add jQuery Address stuff
-						if ($.address && options.jqAddress.enable) {
-							if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + options.altText.call(element));
-							$.address.value(element.attr("href"));
+							// add jQuery Address stuff
+							if ($.address && options.jqAddress.enable) {
+								if (options.jqAddress.title.enable) $.address.title($.address.title().split(options.jqAddress.title.split)[0] + options.jqAddress.title.split + options.altText.call(element));
+								$.address.value(element.attr("href"));
+							}
+
+							// Callback
+							self._trigger("onChangePicture", event, element);
+							// END of image changing
 						}
-
-						// Callback
-						self._trigger("onChangePicture", event, element);
-						// END of image changing
 					}
 				);
 				// IE specific, prevent animate gif failures | unload onload
