@@ -62,8 +62,7 @@ $.widget("ui.formValidator", {
 		validateOn: "Please clkick here to activate live form validating.",
 		errorSummery: true, // disable error summery
 		errorsTitle: "Please check the following errors:",
-		submitHowTo: "post", // ajax, iframe (for "ajax" and file upload), post (native)
-		submitUrl: "", // url for ajax and iframe submition
+		submitOptions: null, // add every &.ajax option you want, make sure to see addiotional ones of jQuery Form Plugin
 		submitError: "Something wen't wrong while sending your data. Please retry.",
 		submitSuccess: "Your data was succefully submitted, thank you!",
 		selectDefault: "default", // Define default value when using select options
@@ -87,9 +86,6 @@ $.widget("ui.formValidator", {
 
 		// set UID for later usage
 		options.uid = self.element.attr("id") || Math.random().toString(16).slice(2, 10);
-
-		// set sumitUrl to form action if no one is defined
-		if (options.submitUrl == "") options.submitUrl = self.element.attr("action");
 
 		// prevent submitting the form
 		self.element.submit( function (event) {
@@ -448,52 +444,25 @@ $.widget("ui.formValidator", {
 	_sendForm: function() {
 		var options = this.options, self = this;
 
-		switch (options.submitHowTo) {
-			default:
-			case "post":
-				// prevents revalidating but activates native form event
-				options.disabled = true;
-				// fire native form event
-				self.element.submit();
-				break;
-			case "ajax":
-				$.ajax({ // AJAX Request auslösen
-					data: self.element.serialize(),
-					type: "post",
-					url: options.submitUrl,
-					error: function(msg) {
-						self._showSuccess(msg);
-					},
-					success: function(msg) {
-						self._showSuccess(msg);
-					}
-				});
-				break;
-			case "iframe":
-				// save url the form would be submitted
-				options.originalUrl =  self.element.attr("action");
-				// change action to ajax server adress
-				self.element.attr("action", options.submitUrl)	;
-				// inject iframe
-				var frameName = ("upload"+(new Date()).getTime());
-				var uploadFrame = $('<iframe name="'+frameName+'"></iframe>');
-				uploadFrame.css("display", "none");
-				// when iframe is loaded get content
-				uploadFrame.load(function(data){
-					self._showSuccess($(this).contents().find("body").html());
-					// wait till DOM is ready
-					options.timeout = window.setTimeout(function() {
-						uploadFrame.remove();
-					}, 200);
-				});
-				$("body").append(uploadFrame);
-				// submit the form into the iframe
-				self.element.attr("target", frameName);
-				// prevents revalidating but activates native form event
-				options.disabled = true;
-				// fire native form event
-				self.element.submit();
-				break;
+		// TODO remove submitHowTo as its legacy support
+		if (options.submitHowTo == "post" || !$.fn.ajaxSubmit) {
+			// prevents revalidating but activates native form event
+			options.disabled = true;
+			// fire native form event
+			self.element.submit();
+		} else {
+			self.element.ajaxSubmit( $.extend( {}, {
+				// TODO remove this as its legacy support
+				iframe: (options.submitHowTo == "iframe") ? true : null,
+				// TODO remove this as its legacy support
+				url: options.submitUrl,
+				error: function(msg) {
+					self._showSuccess(msg);
+				},
+				success: function(msg) {
+					self._showSuccess(msg);
+				}
+			}, options.submitOptions ));
 		}
 	},
 
