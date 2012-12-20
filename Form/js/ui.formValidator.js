@@ -1,5 +1,5 @@
 /*!
- * jQuery UI FormValidator (10.05.12)
+ * jQuery UI FormValidator (20.12.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
@@ -470,7 +470,7 @@ $.widget("ui.formValidator", {
 	_showSuccess: function(value) {
 		var options = this.options,
 			msg = "",
-			icon = "";
+			icon = "check";
 		// reenable the widget
 		options.disabled = false;
 
@@ -485,9 +485,12 @@ $.widget("ui.formValidator", {
 				icon = "check";
 				break;
 			default:
-				if (value == "") msg = options.submitError;
-				else msg = value;
-				icon = "alert";
+				if (value == "") {
+					msg = options.submitError;
+					icon = "alert";
+				} else {
+					msg = value;
+				}
 				break;
 		}
 
