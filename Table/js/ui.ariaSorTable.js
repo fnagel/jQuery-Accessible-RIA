@@ -1,9 +1,9 @@
 /*!
- * jQuery UI AriaSorTable (10.05.12)
+ * jQuery UI AriaSorTable (05.09.13)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
- * Copyright (c) 2010-2012 Felix Nagel
+ * Copyright (c) 2010-2013 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
  * Depends:
