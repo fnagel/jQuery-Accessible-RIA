@@ -54,6 +54,9 @@ font-size: 0.6em;
 #ui-lightbox-image img{
 	display: none;
 }
+#ui-lightbox-description {
+	margin: 1em 0;
+}
 
 /* Picture Styles
 ----------------------------------*/
@@ -101,6 +104,3 @@ ul li.last,
 a.last{
 	margin: 0;
 }
-
-/* Overwrite Overlay */
-.ui-widget-overlay { opacity: .8; filter:Alpha(Opacity=80); }

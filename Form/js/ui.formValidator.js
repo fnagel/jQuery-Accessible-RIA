@@ -1,22 +1,25 @@
 /*!
- * jQuery UI FormValidator (24.12.10)
+ * jQuery UI FormValidator (20.12.12)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
- * Copyright (c) 2010-2011 Felix Nagel
+ * Copyright (c) 2010-2012 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: jQuery UI
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
  */
 /*
 USAGE:::::::::::::::::::::::::::
-* Take a look in the html file or the (german) pdf file delivered with this example
+* Take a look in the html file delivered with this example or visit the wiki (see above)
 * To validate a form element specify its properties in the options forms array:
  options
 	forms
 		ID [or class of the element]
 			rules
 			msgs
+
 * Forms Array and its children are necessary, possbile values for rules and msg are:
 				required
 				lengthMin
@@ -24,6 +27,7 @@ USAGE:::::::::::::::::::::::::::
 				equalTo (id of to be checked element)
 				regEx (set your own regex)
 				custom (make your own validation function - the fast way)
+
 * Use a regular expression or a predefined value for the RegEx rule:
 					number
 					numberDE
@@ -34,91 +38,71 @@ USAGE:::::::::::::::::::::::::::
 					dateDE
 					dateISO
 					captcha (this is a callback for server side validation, look example)
-		
-* Other widget options are:
-validateLive 			Boolean / String	turn on or off live validation; set to "blur" if validation should start when leaving form elements
-validateLiveMsg			Boolean				Disable the "click here to disable live validation" message
-validateTimeout			Number / String		time till live validation, use "Blur" to validate on lost focus
-validateTimeoutCaptcha	Number				multiplied with validateTimeout to protect your server from to much load
-validateOff 			String				msg for disabling live validation
-validateOn 				String				msg for disabling live validation
-errorSummery			Boolean				deactivate error summery
-submitHowTo 			String 				ajax, iframe (for "ajax" and file upload), post (native)
-submitUrl 				String 				url for ajax and iframe submition
-submitError 			String 				predefined error msg
-submitSuccess 			String 				predefined succes msg
-disabled 				Boolean 			disable widget
-selectDefault			String				Define default value when using select options
-
-* Callbacks
-onInit
-onformSubmitted
-onError
-onErrors
-customError			returns a array with all information about the currectly validated element
-onShowErrors
-onShowSuccess 		returns true or a string
-checkCaptcha 		must deliver a boolean value
 
 * public Methods
 disable
 destroy
 enable
 initField			parameter is string (name of added field); adds events and internal vars for validation
-formSubmitted		submits the form	
+formSubmitted		submits the form
 validate 			parameter is string (id attribut); validates a single form element
- 
- */
+
+*/
 (function($) {
 
 $.widget("ui.formValidator", {
 
 	version: '1.8',
-	options: {		
-		validateLive: true,
-		validateLiveMsg: true,
-		validateTimeout: 500, // or "blur"
-		validateTimeoutCaptcha: 3,
+	options: {
+		validateLive: true,	// turn on or off live validation
+		validateLiveMsg: true, // disable the "click here to disable live validation" message
+		validateTimeout: 500, // time till live validation, set to "blur" to validate on lost focus only
+		validateTimeoutCaptcha: 3, // multiplied with validateTimeout to protect your server from to much load
 		validateOff: "Please click here to deactivate live validating of this form.",
 		validateOn: "Please clkick here to activate live form validating.",
-		errorSummery: true,
-		errorsTitle: "Please check the following errors:",		
-		submitHowTo: "post",
-		submitUrl: "",
+		errorSummery: true, // disable error summery
+		errorsTitle: "Please check the following errors:",
+		submitOptions: null, // add every &.ajax option you want, make sure to see addiotional ones of jQuery Form Plugin
 		submitError: "Something wen't wrong while sending your data. Please retry.",
 		submitSuccess: "Your data was succefully submitted, thank you!",
-		selectDefault: "default",
-		noHover: false
+		selectDefault: "default", // Define default value when using select options
+		noHover: false,
+
+		// callbacks
+		onInit: null,
+		onformSubmitted: null,
+		onError: null,
+		onErrors: null,
+		customError: null, // returns a array with all information about the currectly validated element
+		onShowErrors: null,
+		onShowSuccess: null, // returns true or a string
+		checkCaptcha: null // must deliver a boolean value
 	},
 
-	_create: function() {	
-		var options = this.options, self = this;		
+	_create: function() {
+		var options = this.options, self = this;
 		// add virtual buffer form | should be added immediatly
 		self._updateVirtualBuffer();
-		
+
 		// set UID for later usage
 		options.uid = self.element.attr("id") || Math.random().toString(16).slice(2, 10);
-		
-		// set sumitUrl to form action if no one is defined
-		if (options.submitUrl == "") options.submitUrl = self.element.attr("action");
-		
+
 		// prevent submitting the form
-		self.element.submit( function (event) {	
+		self.element.submit( function (event) {
 			// check if widget is disabled or temp set to disabled by script cause we need to post data
 			if (!options.disabled) {
-				// event.preventDefault();
 				self.formSubmitted();
 			}
 			return options.disabled;
-			
+
 		});
 		// add info Text and provide link to prevent live validating
 		if(options.validateLive && !options.disabled && options.validateLiveMsg) {
 			// add the deactivate live validation message
 			self.element.find(".ui-formular-info").append("\t<p><a class=\"ui-formular-live\" href=\"#nogo\">"+ options.validateOff +"</a></p>\n\t\t");
-			
+
 			self._updateVirtualBuffer();
-		
+
 			// toggle live validating and text of the link
 			self.element.find(".ui-formular-live").toggle(
 				function () {
@@ -135,31 +119,49 @@ $.widget("ui.formValidator", {
 					.html(options.validateOff);
 					self._updateVirtualBuffer();
 				}
-			);		
+			);
 		}
-		
-		// set hover and focus for reset and submit buttons 
+
+		// show error summery if enabled or only when form is submitted
+		this.errorElement = self.element.find(".ui-formular-error");
+		if (options.errorSummery && this.errorElement.length) {
+			// set link anchor to form
+			this.errorElement.click(function(event){
+				// get id out of the href anchor
+				var id = $(event.target).closest("a").attr("href").split("#");
+				id = id[1];
+				// focus element or first element of a group
+				var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
+				target.focus();
+				return false;
+			});
+		} else {
+			options.errorSummery = false;
+		}
+
+		// set hover and focus for reset and submit buttons
 		if (!options.noHover) self._makeHover(self.element.find("input:submit, input:reset"));
-				
+
 		// go trough every given form element
 		$.each(options.forms, function(id){
 			self.initField(id);
-		});	
-		
+		});
+
 		// Callback
 		self._trigger("onInit", 0);
 	},
-	
+
 	// init a form field (events, hover effects, internal vars)
 	initField: function(id) {
-		var options = this.options, self = this;
+		var options = this.options,
+			self = this;
 		// save element and which form type | add event handler | ARIA
 		//  search for "single" elements (which sould be defined by their ID)
 		var element = self.element.find("#"+id);
 		//check if radio group or checkbox group or single checkbox (which sould be defined by their class)
 		if (!element.length) {
 			// get all group elements
-			element = self.element.find("input."+id);	
+			element = self.element.find("input."+id);
 			// no element found? Only developers should see this
 			if (!element.length) {
 				alert("Error: Configuration corrupted!\n\nCan't find element with id or class = "+id);
@@ -167,7 +169,7 @@ $.widget("ui.formValidator", {
 				value = "group";
 				// change label class when hover the label
 				if (!options.noHover) {
-					self._makeHover(element.next()); 
+					self._makeHover(element.next());
 					// change label class when hover the form element
 					element.bind("mouseenter", function(){ $(this).next().addClass('ui-state-hover'); })
 						.bind("mouseleave", function(){ $(this).next().removeClass('ui-state-hover'); })
@@ -192,8 +194,8 @@ $.widget("ui.formValidator", {
 		}
 		// save info
 		options.forms[id].element = element;
-		options.forms[id].type = value;			
-		
+		options.forms[id].type = value;
+
 		// we use blur as default, as we like to get a validation when a user leave a field empty when tabbing trough
 		var eventBinder = "blur ";
 		// which events should be set? only blur event?
@@ -204,7 +206,7 @@ $.widget("ui.formValidator", {
 				// please note that single slectboxes (size=1) handled different than multiple, thats why we need keyup
 				// this could be more effecient one day... (i will wait till UI 1.7.1 is not longer used)
 				// text input and textarea get only keyup
-				eventBinder +=  (options.forms[id].type == "select") ? "click change keyup" : "keyup"; 
+				eventBinder +=  (options.forms[id].type == "select") ? "click change keyup" : "keyup";
 			} else {
 				// radio buttons and checkboxes get this event
 				eventBinder += "click";
@@ -213,35 +215,39 @@ $.widget("ui.formValidator", {
 		// add event listener
 		// we always add the blur event, so a required field left empty triggers an error
 		options.forms[id].element.bind(eventBinder, function (e) {
-			// dont fire events if live validation or widget or form field is disabled	
+			// dont fire events if live validation or widget or form field is disabled
 			if (options.validateLive && !options.disabled) {
 				// if tab is pushed do not validate immediatly || if the event is blur do not use timeout
 				if (options.validateTimeout == "blur" || e.type == "blur") {
-					self.validate(id);			
+					// needed to make clicking on error anchors work
+					window.setTimeout(function() {
+						self.validate(id);
+					}, 150);
 				} else if (e.keyCode != $.ui.keyCode.TAB) {
 					// delete old timeout
-					if(options.forms[id].timeout) window.clearTimeout(options.forms[id].timeout);	
+					if(options.forms[id].timeout) window.clearTimeout(options.forms[id].timeout);
 					// extend timeout to prevent server overload
 					var time = (options.forms[id].rules["regEx"] == "captcha") ? options.validateTimeout*options.validateTimeoutCaptcha : options.validateTimeout;
 					// wait before fire event
 					options.forms[id].timeout = window.setTimeout(function() {
-						self.validate(id);		
+						self.validate(id);
 					}, time);
 				}
 			}
 		});
 	},
-	
+
 	// called when interact with the form | validates the forms | manages which rule applies to which element
 	_validator: function(id) {
-		var options = this.options, self = this;
+		var options = this.options,
+			self = this;
 		// do nothing if field is disabled
-		if (!options.forms[id].disabled) {		
+		if (!options.forms[id].disabled) {
 			// get or make error array
-			var errors = (options.forms[id].errors) ? options.forms[id].errors : [];			
+			var errors = (options.forms[id].errors) ? options.forms[id].errors : [];
 			// get value of the form element(s)
-			var elementValue = self._getValue(id);	
-			// got trough every rule and its ruleValue of every given form element 
+			var elementValue = self._getValue(id);
+			// got trough every rule and its ruleValue of every given form element
 			$.each(options.forms[id].rules, function(rule, ruleValue){
 				if (elementValue == "") {
 					// unset required error if no form value given and form is not required
@@ -256,31 +262,15 @@ $.widget("ui.formValidator", {
 							var number = "";
 							switch (ruleValue) {
 								case "number":
-									number = self._number(elementValue);
-									break;
 								case "numberDE":
-									number = self._numberDE(elementValue);
-									break;
 								case "numberISO":
-									number = self._numberISO(elementValue);
-									break;
 								case "email":
-									number = self._email(elementValue);
-									break;
 								case "url":
-									number = self._url(elementValue);
-									break;
 								case "plz":
-									number = self._plz(elementValue);
-									break;
 								case "dateDE":
-									number = self._dateDE(elementValue);
-									break;
 								case "dateISO":
-									number = self._dateISO(elementValue);
-									break;
 								case "captcha":
-									number = self._captcha(elementValue);
+									number = self['_' + ruleValue](elementValue);
 									break;
 								// regular expression
 								default:
@@ -297,38 +287,38 @@ $.widget("ui.formValidator", {
 							break;
 						case "equalTo":
 							errors[rule] = self._whichError(self._equalTo(elementValue, ruleValue), errors[rule]);
-							break; 
+							break;
 						case "custom":
 							errors[rule] = self._whichError(ruleValue(elementValue), errors[rule]);
 						   break;
-					}		
+					}
 				}
-			});			
+			});
 			// save errors
-			options.forms[id].errors = errors;		
-		}			
+			options.forms[id].errors = errors;
+		}
 		// callback for customized error messages
 		options.forms[id]["id"] = id;
-		self._trigger("customError", 0, options.forms[id]);	
+		self._trigger("customError", 0, options.forms[id]);
 	},
-	
+
 	// called when form is submitted
 	formSubmitted: function() {
 		var options = this.options, self = this;
 		// Callback
-		self._trigger("onformSubmitted", 0);	
-		
-		// delete success or error message 
+		self._trigger("onformSubmitted", 0);
+
+		// delete success or error message
 		self.element.find(".ui-formular-success").remove();
-		
-		// got trough every given form element 
+
+		// got trough every given form element
 		$.each(options.forms, function(id){
 			// is a group of radio buttons or checkboxes already validated?
 			var groupValidated = false;
 			// check if the defined id elements exist in the DOM
 			if (options.forms[id].type == "single")  {
-				self._validator(id);	
-			// if not it must be a radiobox group or a checkbox group				
+				self._validator(id);
+			// if not it must be a radiobox group or a checkbox group
 			} else {
 				// check if the is already validated
 				if (!groupValidated) {
@@ -336,25 +326,29 @@ $.widget("ui.formValidator", {
 					self._validator(id);
 				}
 			}
-		});		
+		});
 		self._setErrors(true);
 	},
-	
+
 	// validates a single element
 	validate: function(id) {
 		var options = this.options, self = this;
-		
-		self._validator(id);	
-		self._setErrors(false);	
+
+		self._validator(id);
+		self._setErrors(false);
 	},
-	
+
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
-	_setErrors: function(submitted){	
-		var options = this.options, self = this;
-		var isError, addError, removeError = false;
-		var msgs = "", msg = "";	
-		
-		// got trough every error form element 
+	_setErrors: function(submitted){
+		var options = this.options,
+			self = this,
+			hasError = false,
+			addError = false,
+			removeError = false,
+			msgs = "",
+			msg = "";
+
+		// got trough every error form element
 		for (var id in options.forms){
 			// needed to ensure error Class isn't removed if required error still exists
 			var failure = false;
@@ -363,7 +357,7 @@ $.widget("ui.formValidator", {
 				if (options.forms[id]["errors"][rule] == "corrected" || options.forms[id].disabled) {
 					var target = options.forms[id].element;
 					// ARIA
-					target.attr("aria-invalid", false);					
+					target.attr("aria-invalid", false);
 					// check for radio group or checkbox group
 					if (options.forms[id].type == "group") target = target.next();
 					// unhighlight error field
@@ -373,158 +367,116 @@ $.widget("ui.formValidator", {
 					// execute callback for every (really) corrected element ; returns the id of the element
 					if (!options.forms[id].disabled) self._trigger("onValid", null, id);
 				} else {
-					if (options.forms[id]["errors"][rule] == "new" || options.forms[id]["errors"][rule] == "old") {					
+					if (options.forms[id]["errors"][rule] == "new" || options.forms[id]["errors"][rule] == "old") {
 						if (options.errorSummery) msgs += '					<li><a href="#'+id+'">'+options.forms[id].msg[rule]+"</a></li>\n";
 						// there are errors to show
-						isError = failure = true;
+						hasError = failure = true;
 						// execute callback for every element with wrong input; returns the ids of the elements
 						self._trigger("onError", null, id);
 					}
 					if (options.forms[id]["errors"][rule] == "new") {
 						// ARIA: new error added
-						addError = true;				
-					}	
+						addError = true;
+					}
 				}
 			}
 			// check at last if there is an error so error class wont be removed
 			if (failure) {
-				var target = options.forms[id].element;			
-				target.attr("aria-invalid", true);					
+				var target = options.forms[id].element;
+				target.attr("aria-invalid", true);
 				// check for radio group or checkbox group
-				if (options.forms[id].type == "group") target = target.next(); 
+				if (options.forms[id].type == "group") target = target.next();
 				// highlight error field
 				target.addClass("ui-state-error");
-			}			
-		}	
-		
+			}
+		}
+
 		// show error summery if enabled or only when form is submitted
-		if (options.errorSummery === true || (options.errorSummery == "onSubmit" && submitted)) self._showErrors({submitted: submitted, isError: isError, addError: addError, removeError: removeError, msgs: msgs});	
-		
+		if (options.errorSummery === true || (options.errorSummery == "onSubmit" && submitted)) self._showErrors({submitted: submitted, hasError: hasError, addError: addError, removeError: removeError, msgs: msgs});
+
 		// no click events if no error is defined
-		if (isError) {
+		if (hasError) {
 			// Callback fired when error exists
 			self._trigger("onErrors", 0);
 		// send data if no errors found
 		} else if(submitted) {
 			self._sendForm();
 		}
-		
+
 		self._updateVirtualBuffer();
 	},
-	
+
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
-	_showErrors: function(data){	
-		var options = this.options, self = this;
+	_showErrors: function(data){
+		var options = this.options;
 		// take care of ARIA
 		var aria = ' aria-live="assertive"';
 		if (data["addError"] || data["removeError"]) aria += ' aria-relevant="text';
 		if (data["addError"]) aria += ' additions';
 		if (data["removeError"]) aria += ' removals';
-		if (data["addError"] || data["removeError"]) aria += '"';	
-		
+		if (data["addError"] || data["removeError"]) aria += '"';
+
 		// build up HTML | no content if no error is found
-		var html = "\n";
-		if (data["isError"]) {
-			html += '			<div'+aria+' class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
+		if (data["hasError"]) {
+			var html = "\n";
+			html += '			<div'+aria+' class="ui-state-highlight ui-state ui-corner-all">'+"\n";
 			html += '				<p id="ui-error-title-'+options.uid+'">'+"\n";
-			html += '					<span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em;"></span>'+"\n";
+			html += '					<span class="ui-icon ui-icon-alert"></span>'+"\n";
 			html += '					'+options.errorsTitle+"\n";
 			html += '				</p>'+"\n";
 			html += '				<ul aria-labelledby="ui-error-title-'+options.uid+'">'+"\n";
 			html += data["msgs"];
 			html += '				</ul>'+"\n";
 			html += '			</div>'+"\n\t\t";
-		}
-		// inject error HTML and make onclick event for direct error correction
-		errorElement = self.element.find(".ui-formular-error");
-		errorElement.html(html);
-		
-		// no click events if no error is defined
-		if (data["isError"]) {
-			// set link anchor to form
-			errorElement.find("a").click(function(event){
-				// get id out of the href anchor				
-				var id = $(this).attr("href").split("#");
-				id = id[1];
-				// focus element or first element of a group
-				var target = (options.forms[id].type == "single") ? options.forms[id].element : options.forms[id].element[0];
-				target.focus();
-				return false;
-			});
+			// inject error HTML and make onclick event for direct error correction
+			this.errorElement.html(html);
 			// focus error box when form is submitted
-			if (data["submitted"]) errorElement.attr("tabindex",-1).focus();
-			// Callback fired when error exists and form is shown
-			self._trigger("onErrors", 0);
-		// send data if no errors found
+			if (data["submitted"]) this.errorElement.attr("tabindex",-1).focus();
+		} else {
+			this.errorElement.empty();
 		}
 
 		// Callback
-		self._trigger("onShowErrors", 0);
+		this._trigger("onShowErrors", 0);
 	},
-	
+
 	// send form
 	_sendForm: function() {
 		var options = this.options, self = this;
-		
-		switch (options.submitHowTo) {
-			default:
-			case "post":
-				// prevents revalidating but activates native form event
-				options.disabled = true;
-				// fire native form event
-				self.element.submit();
-				break;
-			case "ajax":
-				$.ajax({ // AJAX Request auslösen
-					data: self.element.serialize(),
-					type: "post",
-					url: options.submitUrl,
-					error: function(msg) {
-						self._showSuccess(msg);
-					},
-					success: function(msg) { 
-						self._showSuccess(msg);
-					}
-				});
-				break;
-			case "iframe":
-				// save url the form would be submitted
-				options.originalUrl =  self.element.attr("action");
-				// change action to ajax server adress
-				self.element.attr("action", options.submitUrl)	;
-				// inject iframe				
-				var frameName = ("upload"+(new Date()).getTime());
-				var uploadFrame = $('<iframe name="'+frameName+'"></iframe>');
-				uploadFrame.css("display", "none");
-				// when iframe is loaded get content
-				uploadFrame.load(function(data){
-					self._showSuccess($(this).contents().find("body").html());
-					// wait till DOM is ready
-					options.timeout = window.setTimeout(function() {
-						uploadFrame.remove();	
-					}, 200);
-				});		
-				$("body").append(uploadFrame);
-				// submit the form into the iframe
-				self.element.attr("target", frameName);				
-				// prevents revalidating but activates native form event
-				options.disabled = true;
-				// fire native form event
-				self.element.submit();
-				break;
+
+		// TODO remove submitHowTo as its legacy support
+		if (options.submitHowTo == "post" || !$.fn.ajaxSubmit) {
+			// prevents revalidating but activates native form event
+			options.disabled = true;
+			// fire native form event
+			self.element.submit();
+		} else {
+			self.element.ajaxSubmit( $.extend( {}, {
+				// TODO remove this as its legacy support
+				iframe: (options.submitHowTo == "iframe") ? true : null,
+				// TODO remove this as its legacy support
+				url: options.submitUrl,
+				error: function(msg) {
+					self._showSuccess(msg);
+				},
+				success: function(msg) {
+					self._showSuccess(msg);
+				}
+			}, options.submitOptions ));
 		}
 	},
-	
+
 	// called when form is submitted
 	_showSuccess: function(value) {
-		var options = this.options, self = this;
-		var msg = "", icon = "";
-		// reenable the widget 
+		var options = this.options,
+			msg = "",
+			icon = "check";
+		// reenable the widget
 		options.disabled = false;
-		
+
 		// fix for safari bug
-		if (jQuery.browser.safari) self.element.find(".ui-formular-success").remove();
-		
+		if (jQuery.browser.safari) this.element.find(".ui-formular-success").remove();
+
 		// chose icon to show | choose message
 		switch (value) {
 			case "true":
@@ -532,76 +484,79 @@ $.widget("ui.formValidator", {
 				msg = options.submitSuccess;
 				icon = "check";
 				break;
-			default: 
-				if (value == "") msg = options.submitError;
-				else msg = value;
-				icon = "alert";
+			default:
+				if (value == "") {
+					msg = options.submitError;
+					icon = "alert";
+				} else {
+					msg = value;
+				}
 				break;
 		}
-		
+
 		//build up HTML
 		var html = "\n";
 		html += '		<div class="ui-formular-success">'+"\n";
-		html += '			<div aria-live="assertive" class="info ui-state-highlight ui-state ui-corner-all">'+"\n";
+		html += '			<div aria-live="assertive" class="ui-state-highlight ui-state ui-corner-all">'+"\n";
 		html += '				<p>'+"\n";
-		html += '					<span class="ui-icon ui-icon-'+icon+'" style="float: left; margin-right: 0.3em;"></span>'+"\n";
+		html += '					<span class="ui-icon ui-icon-'+icon+'"></span>'+"\n";
 		html += '					'+msg+"\n";
 		html += '				</p>'+"\n";
 		html += '			</div>'+"\n\t\t";
 		html += '		</div>'+"\n\t\t";
-		self.element.prepend(html); 
-		self.element.find(".ui-formular-success").attr("tabindex",-1).focus();	
-		self._updateVirtualBuffer();
+		this.element.prepend(html);
+		this.element.find(".ui-formular-success").attr("tabindex",-1).focus();
+		this._updateVirtualBuffer();
 		// Callback
-		self._trigger("onShowSuccess", null, value);
+		this._trigger("onShowSuccess", null, value);
 	},
-	
+
 	// decides if error is new, old or corrected
-	_whichError: function(error, array) {	
+	_whichError: function(error, array) {
 		var value = "";
 		if (!error) {
 			value = (array == "new" || array == "old") ? "old" : "new";
-		} else if (array == "new" || array == "old" ) { 
+		} else if (array == "new" || array == "old" ) {
 			value = "corrected";
 		}
 		return value;
-	},	
-	
+	},
+
 	// how many checked / selected options | which value
     _getValue: function(id) {
         var options = this.options,
             value = "";
-           
+
         switch(options.forms[id].type) {
             case "single":
                     value = options.forms[id].element.val();
                 break;
             case "group":
                     var result = options.forms[id].element.filter(':checked');
-                    if (result.length) value = result;   
+                    if (result.length) value = result;
                 break;
             case "select":
                     var result = options.forms[id].element.children("option").filter(':selected');
                     // check if we could select multiple elements
                     if (options.forms[id].element.attr("multiple")) {
                         value = result;
-                    } else {                   
+                    } else {
                         // if not multiple items selected, there could be a default option
                         value =  (result.val() == options.selectDefault) ? 0 : result.val();
                     }
                 break;
         }
         return value;
-    },    
-	
+    },
+
 	// make hover and focus effects
 	_makeHover: function(element) {
 		 element.bind("mouseenter", function(){ $(this).addClass('ui-state-hover'); })
 				.bind("mouseleave", function(){ $(this).removeClass('ui-state-hover'); })
 				.bind("focus", function(){ $(this).addClass('ui-state-focus'); })
 				.bind("blur", function(){ $(this).removeClass('ui-state-focus'); });
-	},	
-	
+	},
+
 	// Validators (return true when correct)
 	_regEx: function(elementValue, pattern) {
 		pattern = new RegExp(pattern);
@@ -639,14 +594,14 @@ $.widget("ui.formValidator", {
 	},
 	_equalTo: function(elementValue, ruleValue) {
 		return (elementValue == $("#"+ruleValue).val()) ? true : false;
-	},	
+	},
 	_captcha: function(elementValue, ruleValue) {
 		return this._trigger("checkCaptcha", null, elementValue);
-	},		
-	
+	},
+
 	// removes instance and attributes
 	destroy: function() {
-		var options = this.options;		
+		var options = this.options;
 		// go trougfh every form element
 		$.each(options.forms, function(id){
 			options.forms[id].element
@@ -664,27 +619,27 @@ $.widget("ui.formValidator", {
 					.removeAttr("aria-required")
 					// remove events
 					.unbind();
-			} 
-		});		
+			}
+		});
 		this.element
 			// remove events
 			.unbind(".formValidator")
 			.unbind("submit")
 			// remove data
 			.removeData('formValidator');
-			
+
 		// set original action url if changed
 		if (options.originalUrl != "") this.element.attr("action", options.originalUrl);
 		// remove injected elements
-		this.element.find(".ui-formular-live, .ui-formular-error, .ui-formular-success").remove();	
-		$("body>form #virtualBufferForm").parent().remove();	
+		this.element.find(".ui-formular-live, .ui-formular-error, .ui-formular-success").remove();
+		$("body>form #virtualBufferForm").parent().remove();
 		// call widget destroy function
 		$.Widget.prototype.destroy.apply(this, arguments);
-	},	
-	
+	},
+
 	// updates virtual buffer | for older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("body>form #virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1");
 		} else {

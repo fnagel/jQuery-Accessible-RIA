@@ -1,18 +1,20 @@
 /*!
- * jQuery UI AriaSorTable (24.12.10)
+ * jQuery UI AriaSorTable (05.09.13)
  * http://github.com/fnagel/jQuery-Accessible-RIA
  *
  * Copyright (c) 2009 Felix Nagel for Namics (Deustchland) GmbH
- * Copyright (c) 2010-2011 Felix Nagel
+ * Copyright (c) 2010-2013 Felix Nagel
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  *
- * Depends: jQuery UI
- * Optional: jQuery Address Plugin
- */ 
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ * 	Optional: jQuery Address Plugin
+ */
 /*
  USAGE:::::::::::::
-* Take a look in the html file or the (german) pdf file delivered with this example
-* To set sorting method add css classes, default is text, alphabetically 
+* Take a look in the html file delivered with this example or visit the wiki (see above)
+* To set sorting method add css classes, default is text, alphabetically
 
 * Sorting CSS classes (apply to th elements)
 ui-table-text			default: sorts text
@@ -21,34 +23,9 @@ ui-table-number 		123 or 123.456
 ui-table-number-de 		123,456
 ui-table-date 			07/28/2009
 ui-table-date-de		28.07.2009
-ui-table-date-iso		2009-07-28  
- ui-table-deactivate 	deactivates sorting for this col
- ui-state-active 		class to set a col as pre sorted (server site)
-
- * Options	
-rowToStart			row to start, begins with 1
-rowsToShow			How many rows to show? If not set, widget will show all rows
-colScopeRow			Which col has scope? Could be the UID or a names, begins with 1
-defaultSortBy		first sorting action sould sort ascending or descending?
-colsToHide			array; set value true if col should be hidden, example: colsToHide[3] = true;
-rowsToHide			array; set value true if row should be hidden, example: rowsToHide[3] = true;
-keyboard			activate default keyboard control
-pager				add default pager control; (do use with rowsToShow < all rows in the original table)
-textPager			String pager
-textAsc				String for sorting ascending
-textDesc			String for sorting descending
-disabled			deactivate the widget
-jqAddress			You need to add the add the jQuery Address file, please see demo file!
-	enable			enable browser history support
-	title
-		enable		enable title change
-		split		set delimiter string
-			
-* Callbacks
-onInit
-onUpdateData
-onSetHTML
-onRowSort
+ui-table-date-iso		2009-07-28
+ui-table-deactivate 	deactivates sorting for this col
+ui-state-active 		class to set a col as pre sorted (server site)
 
 * public Methods
 updateData
@@ -61,7 +38,7 @@ disable
 enable
 disable
 destroy
- 
+
  */
 (function($) {
 // necassary global var for STRING.sort() function clauses
@@ -70,28 +47,34 @@ $.widget("ui.ariaSorTable", {
 
 	version: '1.8',
 	options: {
-		rowToStart: 1,
-		rowsToShow: false,
-		colScopeRow: 1,
-		defaultSortBy: "asc",
-		colsToHide: false,
-		rowsToHide: false,
-		keyboard: true,
-		pager: false,
+		rowToStart: 1, // row to start, begins with 1
+		rowsToShow: false, // How many rows to show? If not set, widget will show all rows
+		colScopeRow: 1, // Which col has scope? Could be the UID or a names, begins with 1
+		defaultSortBy: "asc", // first sorting action sould sort ascending or descending?
+		colsToHide: false, // array; set value true if col should be hidden, example: colsToHide[3] = true;
+		rowsToHide: false, // array; set value true if row should be hidden, example: rowsToHide[3] = true;
+		keyboard: true, // activate default keyboard control
+		pager: false, // add default pager control (needs options.rowsToShow)
 		textPager: "Page:",
 		textAsc: "Sort ascending",
-		textDesc: "Sort descending",		
-		// jQuery Address
+		textDesc: "Sort descending",
+		// jQuery Address (please note you need to init jqAddress with ?strict=0 parameter)
 		jqAddress: {
-			enable: true,
+			enable: true, // enable browser history support
 			title: {
-				enable: true,
-				split: ' | '		
+				enable: true, // enable title change
+				split: ' | ' // set delimiter string
 			},
-			changeRow: true
-		}
+			changeRow: true // include rowsToShow in anchor
+		},
+
+		// callbacks
+		onInit: null,
+		onUpdateData: null,
+		onSetHTML: null,
+		onRowSort: null
 	},
-	
+
 	_create: function() {
 		var options = this.options, self = this;
 		// init vars
@@ -99,21 +82,21 @@ $.widget("ui.ariaSorTable", {
 		options.originalData = [];
 		options.selectedCol = 0;
 		options.activeCol = 0;
-		
+
 		// ARIA | make UID if no ID is set by default
 		var elementID = self.element.attr("id");
-		if (elementID != "") {
+		if (elementID) {
 			options.uid = elementID;
 		} else {
 			options.uid = Math.random().toString(16).slice(2, 10);
 			self.element.attr("id", "ui-table-"+options.uid);
-		}		
+		}
 		self.element.find("caption").attr("id", "ui-table-"+options.uid+"-caption");
 		self.element
 		.attr("role","grid")
 		.attr("aria-readonly","true")
 		.attr("aria-labelledby", "ui-table-"+options.uid+"-caption");
-			
+
 		// save header elements
 		var theadTr = self.element.find("thead tr");
 		// bubbling event for th link elements
@@ -122,29 +105,27 @@ $.widget("ui.ariaSorTable", {
 			if (!options.disabled) {
 				// get the th element
 				th = $(e.target).closest("th", theadTr);
-				if (!th.hasClass("ui-table-deactivate")) {	
-					// does not work in certain browsers
-					// self.rowSort(th.prevAll("th:visible").length); 
-					self.rowSort(self._getVisible(th.prevAll("th")).length);	
+				if (!th.hasClass("ui-table-deactivate")) {
+					self.rowSort(th.prevAll("th:visible").length);
 					return false;
 				}
 			}
 		})
 		.attr("role", "row");
-		
+
 		options.headers.each( function(index) {
 			// get single th element
 			var th = $(this);
-			
-			// ARIA 
+
+			// ARIA
 			th.attr("id","ui-table-" + options.uid + "-header-" + index)
 			.attr("role","columnheader")
 			.attr("scope","col");
-			
+
 			// select title text ( next sorting action)
-			var text = (options.defaultSortBy == "asc") ? options.textAsc : options.textDesc;			
+			var text = (options.defaultSortBy == "asc") ? options.textAsc : options.textDesc;
 			var thA = th.find("a").length;
-			if (!th.hasClass("ui-table-deactivate")) {	
+			if (!th.hasClass("ui-table-deactivate")) {
 				// no link but JS sort function? Add link
 				if (!thA) {
 					th.html('<a title="'+text+'" href="#ui-table-dummy">'+th.html()+'</a>');
@@ -157,8 +138,8 @@ $.widget("ui.ariaSorTable", {
 			//not activated th elements with no link are added to the tabindex by setting tabindex attribute
 			} else if (!thA) {
 				th.attr("tabindex", 0);
-			}	
-			
+			}
+
 			// save pre sorted (server site) ; aka active col | set attributes
 			if (th.hasClass("ui-state-active")) {
 				if (th.hasClass("ui-table-asc")) {
@@ -166,13 +147,13 @@ $.widget("ui.ariaSorTable", {
 				} else if (th.hasClass("ui-table-desc")) {
 					th.attr("aria-sort", "descending").children("a").attr("title", options.textAsc);
 				}
-				options.activeCol = index;				
+				options.activeCol = index;
 			}
-		});		
-		
+		});
+
 		// get all table data and save them
-		var rows = self.element.find("tbody tr");	
-		// go trough every row	
+		var rows = self.element.find("tbody tr");
+		// go trough every row
 		for (var x = 0; x < rows.length; x++) {
 			options.originalData[x] = [];
 			var cells = $(rows[x]).children("td");
@@ -185,10 +166,10 @@ $.widget("ui.ariaSorTable", {
 		// update data to delete hided rows and cols
 		self.updateData();
 		// pager?
-		if (options.pager) self.buildPager();			
+		if (options.pager) self.buildPager();
 		// activate Keyboard accessibility
 		if (options.keyboard) self._setKeyboard();
-		
+
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable && self._jqAddressHelper) {
 			// set inital state
@@ -201,12 +182,12 @@ $.widget("ui.ariaSorTable", {
 		}
 		startRow = (startRow) ? startRow : options.rowToStart;
 		// set new HTML (with ARIA)
-		self.setHTML(startRow, true);	 // true = initial	
+		self.setHTML(startRow, true);	 // true = initial
 		// Callback
 		self._trigger("onInit", 0);
-	},	
-	
-	
+	},
+
+
 	// make another "cleaned" version of the data array | delete hidden rows and cols
 	updateData: function () {
 		var options = this.options, self = this;
@@ -219,21 +200,21 @@ $.widget("ui.ariaSorTable", {
 					if (!options.colsToHide[y]) options.tableData[xIndex].push(options.originalData[x][y]);
 				}
 				xIndex++;
-			} 
+			}
 		}
 		// Callback
 		self._trigger("onUpdateData", 0);
-	},	
-	
+	},
+
 	// set new HTML with selected data
 	// init and forceFirst only necassary when using jqAddress
 	setHTML: function(newRowToStart, init, forceFirst) {
 		var options = this.options, self = this;
 		// var for diffrent row colors
 		var second = true;
-		var html = [];		
+		var html = [];
 		// backfall
-		if (!newRowToStart) newRowToStart = option.rowToStart;		
+		if (!newRowToStart) newRowToStart = options.rowToStart;
 		// set pager
 		if (options.pager) self.setPager(newRowToStart);
 		// make html
@@ -242,8 +223,8 @@ $.widget("ui.ariaSorTable", {
 			// check if row data exists
 			if (options.tableData[x]) {
 				// diffrent row css class
-				var rowClass = (second) ? "class=\"odd\"" : "";		
-				second = (second) ? false : true;		
+				var rowClass = (second) ? "class=\"odd\"" : "";
+				second = (second) ? false : true;
 				html.push(		"\t\t\t\t<tr role=\"row\""+rowClass+">\n");
 				// build table html (with ARIA and HTML table relation attributes)
 				for (var y = 0; y < options.tableData[x].length; y++) {
@@ -267,7 +248,7 @@ $.widget("ui.ariaSorTable", {
 			self.element.find("tbody").hide();
 			self.element.append(str);
 		}
-		
+
 		// show or hide header cols
 		if (options.colsToHide)
 		options.headers.each( function(index) {
@@ -276,13 +257,13 @@ $.widget("ui.ariaSorTable", {
 			} else {
 				$(this).hide();
 			}
-		});		
-		
+		});
+
 		// ARIA
 		$(options.headers[0]).parent().parent()
 		.attr("aria-live", "polite")
 		.attr("aria-relevant","text");
-		
+
 		// add jQuery Address stuff
 		if ($.address && options.jqAddress.enable) {
 			if (!init) {
@@ -296,26 +277,29 @@ $.widget("ui.ariaSorTable", {
 				}
 				$.address.value(options.uid + "/" + newRowToStart + "/" + (newRowToStart - 1 + options.rowsToShow));
 			}
-		}		
+		}
 		// update virtual Buffer
 		self._updateVirtualBuffer();
-		
+
 		// set new start point
-		options.rowToStart = newRowToStart;		
+		options.rowToStart = newRowToStart;
 		// Callback
 		self._trigger("onSetHTML", 0);
 	},
-	
+
 	// sort data, build and add the new html to the DOM
 	rowSort: function (index) {
-		var options = this.options, self = this;
-		// get all visible th elements
-		// var thArray = options.headers.filter(":visible");
-		var thArray = self._getVisible(options.headers);
-		// get new (clicked) th element
-		th = $(thArray[index]);	
-			
-		// set global index		
+		var options = this.options, 
+			self = this
+			// get all visible th elements
+			thArray = options.headers.filter(":visible"), 
+			// get new (clicked) th element
+			th = $(thArray[index]),
+			asc = th.hasClass("ui-table-asc"),
+			isText = false,
+			newSortBy = options.defaultSortBy;
+
+		// set global index
 		sortIndex = index;
 		// check the css class and sort the array
 		if (th.hasClass("ui-table-number")) {
@@ -330,23 +314,26 @@ $.widget("ui.ariaSorTable", {
 			options.tableData.sort(self._sortDateISO);
 		} else if (th.hasClass("ui-table-text-html")) {
 			options.tableData.sort(self._sortTextHTML);
-		} else { 
+			isText = true;
+		} else {
 			// default is text
 			options.tableData.sort(self._sortText);
+			isText = true;
+		}
+
+		// set new sorted by
+		if (asc || th.hasClass("ui-table-desc")) {
+			newSortBy = (asc) ? "desc" : "asc";
 		}
 		
-		// set new sorted by
-		var asc = th.hasClass("ui-table-asc");
-		if (asc || th.hasClass("ui-table-desc")) {		
-			var newSortBy = (asc) ? "desc" : "asc";
-		// no class found? set it by default
-		} else {
-			var newSortBy = options.defaultSortBy;
-		}		
+		// fix for alphabetic sorting, see #53
+		if ( isText ) {
+			options.tableData.reverse();
+		}
 		
 		// reverse array if necassary
 		if (newSortBy == "desc") options.tableData.reverse();
-			
+		
 		// get active col
 		var thActiveCol = $(thArray[options.activeCol]);
 		// set class to remove of the active col
@@ -357,10 +344,10 @@ $.widget("ui.ariaSorTable", {
 		.removeClass("ui-state-active")
 		// set ARIA-sort to none
 		.attr("aria-sort", "none");
-		
-		// remove focus classs from selected col		
-		$(thArray[options.selectedCol]).removeClass("ui-state-focus");	
-			
+
+		// remove focus classs from selected col
+		$(thArray[options.selectedCol]).removeClass("ui-state-focus");
+
 		// set new title text
 		var newSortByText = (newSortBy == "asc") ? options.textDesc : options.textAsc;
 		var newSortByARIA = (newSortBy == "asc") ? "ascending" : "descending";
@@ -369,16 +356,16 @@ $.widget("ui.ariaSorTable", {
 		.addClass("ui-table-" + newSortBy)
 		.attr("aria-sort", newSortByARIA)
 		.children("a").attr("title", newSortByText);
-		
+
 		// save new sorted and active col
-		options.activeCol = options.selectedCol = index;	
-		
+		options.activeCol = options.selectedCol = index;
+
 		// Callback
-		self._trigger("onRowSort", 0);				
-		// update HTML 
-		self.setHTML(options.rowToStart);	
+		self._trigger("onRowSort", 0);
+		// update HTML
+		self.setHTML(options.rowToStart);
 	},
-	
+
 	// sorting clauses function
 	_sortNumber: function (a, b) {
 		// 123.456
@@ -388,13 +375,13 @@ $.widget("ui.ariaSorTable", {
 		// 123,456
 		return (a[sortIndex].replace(",", ".") - b[sortIndex].replace(",", "."));
 	},
-	_sortDateDE: function (a, b) {	
+	_sortDateDE: function (a, b) {
 		// 28.07.2009
 		var x = Date.parse(a[sortIndex].substr(3,2) + "/" + a[sortIndex].substr(0,2) + "/" + a[sortIndex].substr(6,4));
-		var y = Date.parse(b[sortIndex].substr(3,2) + "/" + b[sortIndex].substr(0,2) + "/" + b[sortIndex].substr(6,4));	
+		var y = Date.parse(b[sortIndex].substr(3,2) + "/" + b[sortIndex].substr(0,2) + "/" + b[sortIndex].substr(6,4));
 		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
-	_sortDate: function (a, b) {	
+	_sortDate: function (a, b) {
 		// 07/28/2009
 		var x = Date.parse(a[sortIndex]);
 		var y = Date.parse(b[sortIndex]);
@@ -403,7 +390,7 @@ $.widget("ui.ariaSorTable", {
 	_sortDateISO: function (a, b) {
 		// 2009-07-28
 		var x = Date.parse(a[sortIndex].substr(5,2) + "/" + a[sortIndex].substr(8,2) + "/" + a[sortIndex].substr(0,4));
-		var y = Date.parse(b[sortIndex].substr(5,2) + "/" + b[sortIndex].substr(8,2) + "/" + b[sortIndex].substr(0,4));	
+		var y = Date.parse(b[sortIndex].substr(5,2) + "/" + b[sortIndex].substr(8,2) + "/" + b[sortIndex].substr(0,4));
 		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
 	_sortTextHTML: function (a, b) {
@@ -419,26 +406,12 @@ $.widget("ui.ariaSorTable", {
 		var y = b[sortIndex].toLowerCase();
 		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	},
-	
-	// jQuery :visible filter does not work with tables in certain browser (IE8, ?) so wee built our own function
-	// http://www.code-styling.de/deutsch/jquery-132-verursacht-probleme-im-ie-8
-	_getVisible: function (elements) {
-		var elReturn = [];
-		var i = 0;
-		elements.each(function(index){
-			if ($(this).css('display') != 'none') {
-				elReturn[i] = $(this);
-				i++;
-			}
-		});
-		return elReturn;
-	},
-	
+
 	// set keyboard control
-	_setKeyboard: function () {	
-		var options = this.options, self = this;	
+	_setKeyboard: function () {
+		var options = this.options, self = this;
 		self.element
-		.keydown( function(e){ 
+		.keydown( function(e){
 			if (!options.disabled) {
 				switch (e.keyCode) {
 					// go to next page
@@ -451,7 +424,7 @@ $.widget("ui.ariaSorTable", {
 					case $.ui.keyCode.UP:
 					case $.ui.keyCode.PAGE_UP:
 						// check if new value is in range and if there are any pages to show
-						if (options.rowToStart > 0 + options.rowsToShow && options.rowsToShow != options.tableData.length) self.setHTML(options.rowToStart - options.rowsToShow); 
+						if (options.rowToStart > 0 + options.rowsToShow && options.rowsToShow != options.tableData.length) self.setHTML(options.rowToStart - options.rowsToShow);
 						break;
 					// go to first page
 					case $.ui.keyCode.HOME:
@@ -465,20 +438,20 @@ $.widget("ui.ariaSorTable", {
 						break;
 					// go to next or previous page
 					case $.ui.keyCode.TAB:
-						if (e.shiftKey) { 
+						if (e.shiftKey) {
 							if (options.selectedCol > 0) { self.colSwitch(-1); } else { return true; }
-						} else { 
+						} else {
 							if (options.selectedCol < self._getVisible(options.headers).length-1) { self.colSwitch(1); } else { return true; }
-						}			
+						}
 						break;
 					// switch to left col
 					case $.ui.keyCode.LEFT:
-						if (options.selectedCol > 0) self.colSwitch(-1);	
-						break;	
+						if (options.selectedCol > 0) self.colSwitch(-1);
+						break;
 					// switch to right col
 					case $.ui.keyCode.RIGHT:
 						if (options.selectedCol < self._getVisible(options.headers).length-1) self.colSwitch(1);
-						break;	
+						break;
 					// start sorting
 					case $.ui.keyCode.SPACE:
 						var th = self._getVisible(options.headers);
@@ -488,11 +461,12 @@ $.widget("ui.ariaSorTable", {
 						return true;
 						break;
 				}
-				return false;	
+				return false;
 			}
 		});
 	},
-	// switchh selected col
+
+	// switch selected col
 	colSwitch: function (dir) {
 		var options = this.options, self = this;
 		// get visible headers
@@ -505,9 +479,10 @@ $.widget("ui.ariaSorTable", {
 		el = $(thArray[options.selectedCol]);
 		// set new focus
 		el.addClass("ui-state-focus");
-		// set focus 
+		// set focus
 		if (el.find("a").length) { el.find("a").focus(); } else { el.focus(); }
 	},
+
 	// removes instance and attributes
 	destroy: function() {
 		this.element
@@ -517,22 +492,22 @@ $.widget("ui.ariaSorTable", {
 		// remove attributes
 		.removeAttr("role")
 		.removeAttr("aria-readonly")
-		.removeAttr("aria-labelledby")		
+		.removeAttr("aria-labelledby")
 			// remove attributes of the caption
-			.find("caption").removeAttr("id")			
+			.find("caption").removeAttr("id")
 		// remove ARIA attributes from head element
-		.end().find("thead")		
+		.end().find("thead")
 		.removeAttr("aria-live")
-		.removeAttr("aria-relevant")		
+		.removeAttr("aria-relevant")
 			// remove event and role of the tr and show them all
 			.find("tr")
 			.removeAttr("role")
 			.unbind("click")
-			.end().end()			
+			.end().end()
 		// remove injected HTML
-		.find("tbody.ui-table-tbody-active").remove().end()		
+		.find("tbody.ui-table-tbody-active").remove().end()
 		// show hidden original html
-		.find("tbody").show();				
+		.find("tbody").show();
 		// th's
 		$.each(this.options.headers, function() {
 			$(this)
@@ -548,18 +523,18 @@ $.widget("ui.ariaSorTable", {
 				link.unbind("mouseenter mouseleave").removeAttr("title");
 				if (link.attr("href") == "#ui-table-dummy")	$(this).html(link.html());
 			}
-		});		
+		});
 		// pager
 		if (this.options.pager) $("#ui-table-pager").remove();
 		// remove virtual buffer form
 		$("body>form #virtualBufferForm").parent().remove();
 		// call widget destroy function
 		$.Widget.prototype.destroy.apply(this, arguments);
-	},	
-	
+	},
+
 	// updates virtual buffer | for older screenreader
 	_updateVirtualBuffer: function() {
-		var form = $("body>form #virtualBufferForm");		
+		var form = $("body>form #virtualBufferForm");
 		if(form.length) {
 			(form.val() == "1") ? form.val("0") : form.val("1");
 		} else {
@@ -572,34 +547,34 @@ $.widget("ui.ariaSorTable", {
 $.fn.extend($.ui.ariaSorTable.prototype,{
 	// this code is only needed if you like to use the pager, otherwise: delete it
 	// build a pager
-	buildPager: function () {		
+	buildPager: function () {
 		var options = this.options, self = this;
 		// build html to inject
 		var site = 0;
 		var y = 0;
 		var html = 	'<div class="ui-table-pager" aria-valuemin="1" aria-controls="ui-table-'+options.uid+'">'+"\n";
-			html += 	'<span id="ui-table-'+options.uid+'-pager-title" class="ui-corner-all">'+options.textPager+'</span>'+"\n";						
+			html += 	'<span id="ui-table-'+options.uid+'-pager-title" class="ui-corner-all">'+options.textPager+'</span>'+"\n";
 		while (y < options.tableData.length){
-			site++;			
+			site++;
 			html += '	<button title="'+options.textPager+' '+ site +'" type="button" class="ui-state-default ui-corner-all" aria-selected="false" aria-labelledby="ui-table-'+options.uid+'-pager-title">'+ site +'</button>'+"\n";
 			y = y + options.rowsToShow;
 		}
 			html += '</div>'+"\n";
 
-		options.pager = self.element.next(".ui-table-pager");	
+		options.pager = self.element.next(".ui-table-pager");
 		if (options.pager.length) options.pager.replaceWith(html);
 		else self.element.after(html);
 		// ARIA
 		options.pager = self.element.next(".ui-table-pager")
 		.attr("aria-valuemax", site);
-		
+
 		// set events | change css classes and sort table
 		options.pagerButtons = options.pager.find("button")
 		.each( function(index) {
 			$(this)
-			.bind("click", function(){ 
+			.bind("click", function(){
 				// calculate new start position
-				var newRowToStart = (options.rowsToShow * index == 0) ? 1 : (options.rowsToShow * index)+1;				
+				var newRowToStart = (options.rowsToShow * index == 0) ? 1 : (options.rowsToShow * index)+1;
 				// set new html
 				self.setHTML(newRowToStart);
 			})
@@ -607,52 +582,52 @@ $.fn.extend($.ui.ariaSorTable.prototype,{
 			.bind("mouseleave", function(){ $(this).removeClass('ui-state-hover'); })
 			.bind("focus", function(){ $(this).addClass('ui-state-focus'); })
 			.bind("blur", function(){ $(this).removeClass('ui-state-focus'); });
-		});	
+		});
 		// set active button after set events
 		self.setPager(options.rowToStart);
-	},	
-	
+	},
+
 	// sets active page | call befor setting new options.rowToStart with new row as parameter
-	setPager: function (newRow) {		
+	setPager: function (newRow) {
 		var options = this.options, self = this;
 		// calculate new start point and add or remove css classes and ARIA attributes
-		$(options.pagerButtons[Math.floor(options.rowToStart/options.rowsToShow)]).removeClass('ui-state-active').attr("aria-selected", false);				
+		$(options.pagerButtons[Math.floor(options.rowToStart/options.rowsToShow)]).removeClass('ui-state-active').attr("aria-selected", false);
 		$(options.pagerButtons[Math.floor(newRow/options.rowsToShow)]).addClass('ui-state-active').attr("aria-selected", true);
 		options.pager.attr("aria-valuenow", Math.floor(newRow/options.rowsToShow)+1);
 	},
-	
+
 	// this code is only needed if you like to use the jQuery Address support, otherwise: delete it
 	_jqAddressHelper: function (path) {
 		var options = this.options, self = this;
 		// check if anchor has valid values
 		if (path != "" && path[0] == options.uid) {
 			var start = parseInt(path[1]);
-			var end = parseInt(path[2]);				
+			var end = parseInt(path[2]);
 			// make this anchor control more fault-tolerant
 			if (isNaN(start)) {
 				return false;
-			} // -> start is a number			
-			if (start <=  options.tableData.length) {	
+			} // -> start is a number
+			if (start <=  options.tableData.length) {
 				// is end a number?
 				// start shall not be bigger than end
 				if (isNaN(end) || start > end) {
 					return start;
-				} // else -> both are valid numbers				
-				
-				var range = end - (start - 1);				
+				} // else -> both are valid numbers
+
+				var range = end - (start - 1);
 				// no need to update if already choosen rows should be displayed
 				if (options.rowToStart == start && options.rowsToShow == range) return false;
-										
+
 				if (options.jqAddress.changeRow) {
 					var temp_rowsToShow = options.rowsToShow;
 					options.rowsToShow = range;
 					// if we changed rows we need to rebuild pager
 					if (options.pager && temp_rowsToShow != options.rowsToShow) self.buildPager();
 				}
-				return start;			
-			} 								
+				return start;
+			}
 		}
-		return false;		
+		return false;
 	}
 });
 

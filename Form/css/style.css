@@ -4,9 +4,6 @@ body {
 	font-family: "Arial","Verdana","sans-serif";
 	margin: 1em;
 }
-#wrapper {
-	width: 20em;
-}
 h1 {
 	font-family:"Trebuchet MS","Helvetica";
 	border-bottom: 1px solid #EEEEEE;
@@ -30,17 +27,16 @@ font-size: 0.6em;
 ----------------------------------*/
 fieldset {
 	border: 0;
-	margin: 0 0 1em 0;
+	margin: 0 1em 1em 0;
 	padding: 1em;
+	width: 18em;
 }
-*:first-child+html fieldset {
-	margin: 0 0 2em 0;
+#wrapper .left {
+	float: left;
+
 }
 legend {
 	padding: 0.1em 0.3em;
-}
-*:first-child+html legend {
-	margin: -1.5em 0 1em 0;
 }
 label, input {
 	display:block;
@@ -60,18 +56,11 @@ input.radio {
 	margin: 0.1em 1em 0 0;
 }
 .pair {
-	clear: both;
 	margin: 0.5em 0;
 }
 .pair input{
 	margin: 0.25em 0.5em 0 0.3em;
-}
-*:first-child+html .pair input,
-*:first-child+html .pair input {
-	margin: -0.05em 0.5em 0 0.1em;
-}
-* html .pair input {
-	margin: -0.07em 0.3em 0 -0;
+	position: relative;
 }
 .submit {
 	float: left;
@@ -85,17 +74,29 @@ input.radio {
 .info {
 	margin: 0 0 1em 0;
 	padding: 0.2em 0.5em;
+	width: 40em;
+}
+.ui-formular-error {
+	width: 41em;
 }
 .ui-formular-error li {
 	font-size: 0.8em;
 }
-
-.ui-formular-error{
-	position: absolute;
-	left: 22em;
-	top: 5.3em;
-	width: 20em;
+.ui-formular-error .ui-state-highlight,
+.ui-formular-success .ui-state-highlight {
+	padding: 0.2em 0.5em;
 }
+.ui-formular-error span.ui-icon,
+.ui-formular-success span.ui-icon {
+	float: left; 
+	margin-right: 0.3em
+}
+
+.text.ui-state-hover, 
+.text.ui-state-focus {
+	background: none !important;
+}
+
 /* Chrome css bug (would change styles of other browsers too, only to see where the problem is */
 ´/* 
 select.ui-state-error, 

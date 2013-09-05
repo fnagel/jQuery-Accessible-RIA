@@ -1,23 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+<!--[if lt IE 7 ]> <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> <!--<![endif]-->
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
-	<meta name="language" content="DE, AT, CH" scheme="DCTERMS.RFC3066" />
+	<meta name="language" content="EN" scheme="DCTERMS.RFC3066" />
 	<meta name="creator" content="Felix Nagel, http://www.felixnagel.com for Namics (Deutschland) GmbH, http://www.namics.com" />
-	<title>ui.formValidator - standard demo - jQuery UI - Felix Nagel</title>
+	<title>ui.formValidator - custom error demo - jQuery UI - Felix Nagel</title>
 	
 	<link rel="stylesheet" href="../jquery/themes/base/jquery.ui.all.css">
-	<script src="../jquery/jquery-1.4.4.js"></script>
+	<script src="../jquery/jquery-1.7.2.js"></script>
 	<script src="../jquery/ui/jquery.ui.core.js"></script>
 	<script src="../jquery/ui/jquery.ui.widget.js"></script>
-	<script src="../jquery/ui/jquery.ui.tabs.js"></script>
 		
+	<link type="text/css" href="css/tooltip.css" rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 	<!--[if gte IE 6]>	
 		<style type="text/css">@import url(css/style_ie.css);</style>
 	<![endif]-->		
-	
+		
+	<script src="js/jquery.form.js"></script>
 	<script src="js/ui.formValidator.js"></script>
+	<script src="../jquery/ui/jquery.ui.position.js"></script>
+	<script src="js/jquery.ui.tooltip.js"></script>
 	<script type="text/javascript">	
 		$(function() {			
 			var formular = $("#form").formValidator({
@@ -97,118 +104,66 @@
 						msg: {
 							required: "Please select a salutation."
 						}
-					},
-					mycustom: {
-						rules: {
-							custom:	function (elementValue) {
-									return ((elementValue % 2 ) == 0) ? true : false; 
-								}
-						},
-						msg: {
-						   custom: "Please enter a number which can be devided by 2."
-						}
-					},
-					upload: {
-						rules: {
-							regEx: ".(?:jpg|jpeg|gif|png)"
-						},
-						msg: {
-							regEx: "Please select a picture (jpg, gif, png) as a file upload."
-						}
-					},					
-					confirm: {
-						rules: {
-							required: true
-						},
-						msg: {
-							required: "Please check your input again."
-						}
-					},							
-					captcha: {
-						rules: {
-							required: true,
-							regEx: "captcha"
-						},
-						msg: {
-							required: "Please enter the captcha code.",
-							regEx: "Please reenter the captcha code."
-						}
 					}
 				},
 				validateLive: true,
+				errorSummery: "onSubmit",
 				disabled: false,
 				submitHowTo: "iframe",
-				submitUrl: "server.php",				
-				onInit: function(){ 
-					//console.warn("Init abgeschloßen");
-				},
-				onError: function(event, id){ 
-					//console.warn("onError was found in element: "+id);	
-				},
-				onErrors: function(event){ 
-					//console.warn("onErrors was found");	
-				},
-				/*
-				// this is a example how to fade the form out after submitting succesfully
-				onShowSuccess: function(event, value){ 
-						if (value == "true") {
-							window.setTimeout(function() {
-								formular.fadeOut();
-							}, 1000);		
-						} else {
-							console.warn("Server said: not sended :-(");
+				submitUrl: "server.php",					
+				customError: function(event, data){ 
+					for (var error in data["errors"]){
+						if (data.errors[error] == "new") {	
+							// we need to check for a context which is not a checkbox so we use to the parent element (which is div.pair)
+							var selector = (data.type == "group") ? data.element.first().parent() : data.element;
+							// did we set a tooltip?
+							if (!data.tooltip) {	
+								data.tooltip = selector.tooltip({
+									content: function() {
+										// use the error message
+										return data.msg[error];
+									},
+									// ui.position settings
+									position: {
+										my: "left top",
+										at: "right top",
+										offset: "35 0",
+										of: selector
+									},
+									tooltipClass: "ui-widget-content"
+								// no hover effects as we do this on our own
+								}).unbind(".tooltip");								
+							} else {	
+								// as the tooltip is already existent we only need to change the message
+								data.tooltip.tooltip("option", "content", function(){ return data.msg[error] });
+							}
+							// open our tooltip
+							data.tooltip.tooltip("open", selector); // para is target (of)
+						} else if (data.errors[error] == "corrected") {
+							data.tooltip.tooltip("close");			
 						}
-				},
-				*/
-				checkCaptcha: function(event, value){ 
-					return (value == "123456") ? true : false;					
-				}			
-			});	
-			
-			$("#destroy").click(function (event) { 
-				formular.formValidator('destroy');
-			});		
-			$("#disable").click(function (event) { 
-				formular.formValidator('disable');
-			});		
-			$("#send").click(function (event) { 
-				formular.formValidator('formSubmitted');
-			});			
-			$("#validate").click(function (event) { 
-				formular.formValidator('validate', "inputtext");
-			});			
-			
-			
-			// add themeswitcher
-			$(function(){ 
-				var ts = $('<div class="ui-button ui-widget ui-state-default ui-corner-all" style="font-size: 0.6em; padding: 2px 5px; position: absolute; top: 20px; right: 10px;">Click here to add Themeswitcher!</div>')
-				.appendTo('body')
-				.bind("click", function() {
-					ts.text("Loading Themeswitcher...");
-					$.getScript('http://ui.jquery.com/applications/themeroller/themeswitchertool/', function() {
-						ts.removeClass("ui-button ui-widget ui-state-default ui-corner-all").text("").unbind("click").themeswitcher(); 
-					});
-				}); 
-			});			
+					}					
+				}		
+			});				
 		});		
 	</script>
 </head>
 <body>
-<h1>jQuery UI - standard demo - ui.formValidator</h1>
+<h1>jQuery UI - custom error demo - ui.formValidator</h1>
 <div id="controls">
-	<a href="custom-error.html">Custom error demo</a> | <a href="multiple.html">multiple demo</a> | <a href="#" id="destroy">destroy</a> | <a href="#" id="disable">disable</a> | <a href="#" id="send">send</a> | <a href="#" id="validate">validate email</a>
+	<a href="index.html">Standard demo</a> | <a href="multiple.html">multiple demo</a>
 </div>
 <div id="wrapper">
 	<div id="switcher"></div>
 	<br />
 	<form id="form" action="ui.formValidator.html" method="post" enctype="multipart/form-data">
-		<div class="ui-formular-info info ui-state-highlight ui-corner-all">
+		<div id="ui-formular-info" class="info ui-state-highlight ui-corner-all">
 			<p>
 				<span class="ui-icon ui-icon-info" style="float: left; margin-right: 0.3em;"></span>
 				Fields with an asterix (<em>*</em>) are needed.
 			</p>
 		</div>
-		<div class="ui-formular-error"></div>
+		<div id="ui-formular-error"></div>
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Input's</legend>
 			
@@ -259,13 +214,7 @@
                 <label class="ui-widget-content ui-corner-all" for="vote_3">Option 3</label>	
 			</div>			
 		</fieldset>	
-					
-		<fieldset class="ui-widget-content ui-corner-all">
-			<legend class="ui-widget-header ui-corner-all">Custom Validating</legend>
-			<label for="mycustom">Custom check field (even number = 0,2,4,6,8,...)</label>
-			<input type="text" id="mycustom" name="mycustom" class="text ui-widget-content ui-corner-all" />
-		</fieldset>	
-					
+				
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Others</legend>
 
@@ -285,20 +234,10 @@
 				<option value="Ms.">Ms.</option>
 				<option value="Mrs.">Mrs.</option>
 			</select>
-			
-			<label for="upload">File-Upload</label>
-			<input type="file" name="upload-name" id="upload"  class="ui-widget-content" accept="image/jpeg, image/gif, image/png" />
 		</fieldset>		
 		
 		<fieldset class="ui-widget-content ui-corner-all">
 			<legend class="ui-widget-header ui-corner-all">Buttons</legend>
-			<div class="pair">
-				<input type="checkbox" id="confirm-checkbox" name="confirm-checkbox" class="radio confirm" />
-                <label class="ui-widget-content ui-corner-all" for="confirm-checkbox">Please check your input <em title="Needed">*</em></label>	
-			</div>	
-			
-			<label for="captcha">Capctha ( = 123456) <em title="Needed">*</em></label>
-			<input type="text" id="captcha" name="captcha" class="text ui-widget-content ui-corner-all" />
 			
 			<input type="submit" id="submit" value="Send" class="submit ui-state-default ui-corner-all" />
 			<input type="reset" value="Reset" class="submit ui-state-default ui-corner-all" />
@@ -306,7 +245,7 @@
 	</form>
 </div>
 <div id="copyright"> 
-Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
+Copyright (c) 2009-2012 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 </div>
 </body>

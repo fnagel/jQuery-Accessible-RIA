@@ -7,7 +7,7 @@
 	<title>ui.ariaSorTable - jQuery UI - Felix Nagel</title>
 	
 	<link rel="stylesheet" href="../jquery/themes/base/jquery.ui.all.css">
-	<script src="../jquery/jquery-1.7.2.js"></script>
+	<script src="../jquery/jquery-1.4.4.js"></script>
 	<script src="../jquery/ui/jquery.ui.core.js"></script>
 	<script src="../jquery/ui/jquery.ui.widget.js"></script>
 	<script src="../jquery/ui/jquery.ui.tabs.js"></script>
@@ -17,48 +17,45 @@
 		<style type="text/css">@import url(css/style_ie.css);</style>
 	<![endif]-->		
 	
-	<script src="../jquery/plugins/jquery.address-1.3.1.js?strict=0"></script>
-	<script src="js/ui.ariaSorTable.js"></script>	
+	<script src="js/ui.ariaSorTable.js"></script>
 	<script type="text/javascript">	
 		$(function() {			
-			$("#table1").ariaSorTable({
-				rowsToShow: 10,
-				pager: true,
-				colsToHide: {
-					5: true,
-					6: true,
-					7: true
-				}
-			});			
-			$("#table2").ariaSorTable({
-				rowsToShow: 5,
-				pager: true,
-				colsToHide: {
-					1: true
-				}
+			var table1 = $("table").ariaSorTable({
+				rowsToShow: 10
+			});
+			
+			$("#update").click(function(){
+				var data = table1.ariaSorTable('option', 'originalData');
+				$.each(data, function(index, row) {
+					// change first 5 rows string
+					if (index < 5) {
+						data[index][6] = "new string #" + index;
+					}
+				});
+				
+				table1.ariaSorTable('option', 'originalData', data);
+				table1.ariaSorTable('updateData');
+				table1.ariaSorTable('setHTML');
 			});
 		});		
 	</script>
 </head>
 <body>
-<h1>jQuery UI - ui.ariaSorTable - Multiple Demo</h1>
-<div id="controls">
-	<a href="index_history.html">History Demo</a> | <a href="performance.html">Performance Demo</a> | <a href="index.html">Functional Demo</a>
-</div>
+<h1>jQuery UI - ui.ariaSorTable - Update data Demo</h1>
 <div id="wrapper">
 	<div id="table-wrapper">
-		<table id="table1" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
-			<caption class="ui-state-highlight ui-corner-all">Table 1</caption>
+		<table summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
+			<caption class="ui-state-highlight ui-corner-all">Update data demo table</caption>
 			<thead>
 				<tr>
-					<th class="ui-table-asc ui-state-active ui-table-number" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
-					<th class="ui-table-number" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
-					<th class="ui-table-number-de" style="min-width: 10em;">Decimal DE</th>
-					<th class="ui-table-number" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
-					<th class="ui-table-date-de" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
-					<th class="ui-table-date-iso ui-table-deactivate" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
-					<th class="ui-table-text" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
-					<th class="ui-table-deactivate" style="min-width: 12em;"><a href="#server_site_order_only">false</a></th>
+					<th class="ui-table-asc ui-state-active ui-table-number ui-state-default" style="min-width: 4.2em;"><a href="#server_site_order">UID</a></th>
+					<th class="ui-table-number ui-state-default" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
+					<th class="ui-table-number-de ui-state-default" style="min-width: 10em;">Decimal DE</th>
+					<th class="ui-table-number ui-state-default" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
+					<th class="ui-table-date-de ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
+					<th class="ui-table-date-iso ui-state-default" style="min-width: 8em;"><a href="#server_site_order">Date ISO</a></th>
+					<th class="ui-table-text ui-state-default" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
+					<th class="ui-table-deactivate ui-state-default" style="min-width: 12em;"><a href="#server_site_order_only">false</a></th>
 				</tr>
 			</thead>
 			<tbody>  
@@ -674,195 +671,13 @@
 				</tr>
 			</tbody>  
 		</table>
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<table id="table2" summary="This table holds sample data to test sorting and paging. Please feel free to sort colums by cicking their headers and see all data by clicking at the pager.">
-			<caption class="ui-state-highlight ui-corner-all">Table 2</caption>
-			<thead>
-				<tr>
-					<th class="ui-table-asc ui-state-active ui-table-number" style="min-width: 4.2em;"><a href="#server_site_order">#</a></th>
-					<th class="ui-table-number" style="min-width: 10em;"><a href="#server_site_order">Number</a></th>
-					<th class="ui-table-number" style="min-width: 6em;"><a href="#server_site_order">Decimal</a></th>
-					<th class="ui-table-date-de" style="min-width: 8em;"><a href="#server_site_order">Date DE</a></th>
-					<th class="ui-table-text" style="min-width: 10em;"><a href="#server_site_order">String</a></th>
-				</tr>
-			</thead>
-			<tbody>  
-				<tr>
-					<td>19</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>29</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>39</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>49</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>59</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>69</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>79</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>89</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>99</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>119</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>229</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>339</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>449</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>559</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>669</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>779</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>889</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-				<tr>
-					<td>999</td>
-					<td>999999999</td>
-					<td>999.999</td>
-					<td>09.09.2009</td>
-					<td>Lorum ipsum</td>
-				</tr>
-			</tbody>  
-		</table>
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
+		
+		<button id="update" class="ui-button ui-state-default ui-corner-all">Update Table</button>
+		
 	</div>	
 </div>
 <div id="copyright"> 
-Copyright (c) 2009-2012 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
+Copyright (c) 2009-2011 <a href="http://www.felixnagel.com">Felix Nagel</a></a>.<br />
 <a href="http://github.com/fnagel/jQuery-Accessible-RIA">jQuery Acessible RIA</a> are licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.
 </div>	
 </body>
