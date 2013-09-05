@@ -289,11 +289,15 @@ $.widget("ui.ariaSorTable", {
 
 	// sort data, build and add the new html to the DOM
 	rowSort: function (index) {
-		var options = this.options, self = this;
-		// get all visible th elements
-		var thArray = options.headers.filter(":visible");
-		// get new (clicked) th element
-		th = $(thArray[index]);
+		var options = this.options, 
+			self = this
+			// get all visible th elements
+			thArray = options.headers.filter(":visible"), 
+			// get new (clicked) th element
+			th = $(thArray[index]),
+			asc = th.hasClass("ui-table-asc"),
+			isText = false,
+			newSortBy = options.defaultSortBy;
 
 		// set global index
 		sortIndex = index;
@@ -310,23 +314,26 @@ $.widget("ui.ariaSorTable", {
 			options.tableData.sort(self._sortDateISO);
 		} else if (th.hasClass("ui-table-text-html")) {
 			options.tableData.sort(self._sortTextHTML);
+			isText = true;
 		} else {
 			// default is text
 			options.tableData.sort(self._sortText);
+			isText = true;
 		}
 
 		// set new sorted by
-		var asc = th.hasClass("ui-table-asc");
 		if (asc || th.hasClass("ui-table-desc")) {
-			var newSortBy = (asc) ? "desc" : "asc";
-		// no class found? set it by default
-		} else {
-			var newSortBy = options.defaultSortBy;
+			newSortBy = (asc) ? "desc" : "asc";
 		}
-
+		
+		// fix for alphabetic sorting, see #53
+		if ( isText ) {
+			options.tableData.reverse();
+		}
+		
 		// reverse array if necassary
 		if (newSortBy == "desc") options.tableData.reverse();
-
+		
 		// get active col
 		var thActiveCol = $(thArray[options.activeCol]);
 		// set class to remove of the active col
