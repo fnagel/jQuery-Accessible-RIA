@@ -332,10 +332,8 @@ $.widget("ui.formValidator", {
 
 	// validates a single element
 	validate: function(id) {
-		var options = this.options, self = this;
-
-		self._validator(id);
-		self._setErrors(false);
+		this._validator(id);
+		this._setErrors(false);
 	},
 
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
@@ -351,11 +349,12 @@ $.widget("ui.formValidator", {
 		// got trough every error form element
 		for (var id in options.forms){
 			// needed to ensure error Class isn't removed if required error still exists
-			var failure = false;
+			var failure = false,
+				target = options.forms[id].element;
+				
 			for (var rule in options.forms[id]["errors"]){
 				// set error as corrected
 				if (options.forms[id]["errors"][rule] == "corrected" || options.forms[id].disabled) {
-					var target = options.forms[id].element;
 					// ARIA
 					target.attr("aria-invalid", false);
 					// check for radio group or checkbox group
@@ -380,9 +379,9 @@ $.widget("ui.formValidator", {
 					}
 				}
 			}
-			// check at last if there is an error so error class wont be removed
+			
+			// check at least if there is an error so error class wont be removed
 			if (failure) {
-				var target = options.forms[id].element;
 				target.attr("aria-invalid", true);
 				// check for radio group or checkbox group
 				if (options.forms[id].type == "group") target = target.next();
@@ -408,9 +407,10 @@ $.widget("ui.formValidator", {
 
 	// called when forms are validated | write errorsArray to DOM | Take care of ARIA
 	_showErrors: function(data){
-		var options = this.options;
-		// take care of ARIA
-		var aria = ' aria-live="assertive"';
+		var options = this.options,
+			// take care of ARIA
+			aria = ' aria-live="assertive"';
+			
 		if (data["addError"] || data["removeError"]) aria += ' aria-relevant="text';
 		if (data["addError"]) aria += ' additions';
 		if (data["removeError"]) aria += ' removals';
